@@ -84,11 +84,10 @@ ANTHROPIC_API_KEY=sk-... npm run refresh    # pull live data into data/
 
 ## Deploy
 
-Static files from the repo root, no build step. The live site is served by Cloudflare and redeploys
-on every push to `main` (about 30 seconds). Any static host works.
+Static files from the repo root, no build step. Any static host works.
 
-- **Search engines are kept out:** `_headers` sends `X-Robots-Tag: noindex, nofollow`, and
-  `robots.txt` blocks crawlers.
+- **Search engines are kept out:** `index.html` sets `<meta name="robots" content="noindex, nofollow">`,
+  and `robots.txt` blocks crawlers.
 - **Link previews still work:** `robots.txt` allows the preview bots (X, LinkedIn, Facebook, Slack,
   Discord) so shared links unfurl with the preview image.
 
