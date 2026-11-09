@@ -60,6 +60,15 @@ body {
   font: 15px/1.55 var(--sans);
   -webkit-font-smoothing: antialiased;
   transition: background .25s ease, color .25s ease;
+  padding-bottom: calc(64px + var(--fb-h, 40px)); /* keep the last content clear of the tab bar + feedback bar */
+}
+
+/* feedback bar: fixed to the bottom on every screen; app.js keeps --fb-h at its height */
+.feedback-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  text-align: center; font-size: 13px; font-weight: 600; line-height: 1.4;
+  color: var(--accent-ink); background: var(--accent);
 }
 
 /* micro-label: uppercase mono, wide tracking (Wealthora's "RETIRE 67" labels) */
@@ -138,17 +147,16 @@ body {
   .loader { transition: none; }
 }
 
-/* centered money button + emoji confetti */
+/* money view: big emoji button + emoji confetti */
+.money-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .money-btn {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  background: none; border: 0; padding: 6px; cursor: pointer; line-height: 1;
-  font-size: 32px; border-radius: 50%; transition: transform .12s ease;
+  background: none; border: 0; padding: 12px; cursor: pointer; line-height: 1;
+  font-size: 120px; border-radius: 50%; transition: transform .12s ease;
 }
-.money-btn:hover { transform: translate(-50%, -50%) scale(1.18); }
-.money-btn:active { transform: translate(-50%, -50%) scale(.9); }
+.money-btn:hover { transform: scale(1.12); }
+.money-btn:active { transform: scale(.9); }
 .money-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* the centered emoji would collide with the header subtitle below ~1090px; re-measure if the subtitle changes */
-@media (max-width: 1100px) { .money-btn { display: none; } }
+.money-hint { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
 /* positioned each frame by the physics loop in app.js */
 .money-piece {
@@ -207,10 +215,10 @@ html[data-theme="light"] .ts-stars { opacity: 0; }
 html[data-theme="light"] .ts-clouds { opacity: .95; }
 
 main {
-  display: grid; grid-template-columns: 1.7fr 1fr; gap: 24px;
-  max-width: 1300px; margin: 0 auto; padding: 26px 30px;
+  /* one view at a time (see the tab bar), so a single column; capped so lines stay readable on desktop */
+  display: grid; gap: 24px;
+  max-width: 960px; margin: 0 auto; padding: 26px 30px;
 }
-@media (max-width: 880px) { main { grid-template-columns: 1fr; } }
 
 .col-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .col-head h2 { font-family: var(--mono); font-size: 15px; text-transform: uppercase; letter-spacing: .12em; color: var(--header); margin: 0; font-weight: 600; }
@@ -239,10 +247,11 @@ main {
 .hl-head { font-weight: 600; color: var(--text); }
 .hl-why { color: var(--muted); }
 
-#controls { margin-bottom: 18px; }
+/* news filters: one box each for update type, company type and region */
+#controls { margin-bottom: 18px; display: flex; flex-direction: column; gap: 12px; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.subfilters { margin-top: 10px; }
-.spacer { flex: 1; }
+#controls .filters { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+#controls .label { flex-basis: 100%; }
 .select {
   background: var(--panel); border: 1px solid var(--line); color: var(--text);
   padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-family: var(--sans); cursor: pointer; max-width: 200px;
@@ -259,39 +268,24 @@ main {
 #brief, #news-stream, #events-calendar { scroll-margin-top: calc(var(--header-h, 80px) + 12px); }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 
-/* back-to-top: bottom center, fades in after scrolling down; hidden on phones (they have the tab bar) */
-.to-top {
-  position: fixed; left: 50%; bottom: 24px; z-index: 20;
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 9px 16px 9px 13px; border-radius: 999px; cursor: pointer;
-  font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--accent-ink);
-  background: var(--accent); border: 1px solid var(--accent); box-shadow: var(--shadow);
-  opacity: 0; visibility: hidden; transform: translate(-50%, 12px);
-  transition: opacity .2s ease, transform .2s ease, visibility .2s;
-}
-.to-top.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
-.to-top:hover { filter: brightness(1.06); }
-.to-top:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
-.to-top svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-@media (max-width: 640px) { .to-top { display: none; } }
-@media (prefers-reduced-motion: reduce) { .to-top { transition: none; } }
-
-/* mobile tab bar: fixed to the bottom of the screen, shown only on narrow screens */
-.jump-menu { display: none; }
+/* tab bar (every screen size): fixed to the bottom, sitting on the feedback bar; tabs stay
+   centred within 720px on wide screens instead of stretching edge to edge */
 .jump-menu {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  grid-auto-flow: column; grid-auto-columns: 1fr;
-  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  position: fixed; left: 0; right: 0; bottom: var(--fb-h, 40px); z-index: 20;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px;
+  padding: 6px max(8px, calc((100% - 720px) / 2));
   background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(12px);
   border-top: 1px solid var(--line);
 }
-.jump-menu a {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+.jump-menu a, .jump-menu .tab-theme {
+  display: flex; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
   min-height: 48px; border-radius: 12px; color: var(--muted); text-decoration: none;
   font-size: 11.5px; letter-spacing: .02em; -webkit-tap-highlight-color: transparent;
 }
 .jump-menu a[hidden] { display: none; }
 .jump-menu svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.jump-menu .tab-emoji { font-size: 20px; line-height: 22px; }
+.jump-menu .theme-switch { zoom: .75; } /* 30px switch -> ~22px, the height of the tab icons */
 .jump-menu a[aria-current] { color: var(--header); background: var(--accent-soft); font-weight: 600; }
 .jump-menu a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 
@@ -346,9 +340,66 @@ html[data-theme="light"] .event .when .d { color: #000; }
 
 .empty { color: var(--muted); font-size: 13px; padding: 22px; text-align: center; border: 1px dashed var(--line); border-radius: var(--radius); font-family: var(--mono); letter-spacing: .04em; }
 
-footer { max-width: 1300px; margin: 0 auto; padding: 10px 30px 36px; color: var(--muted); font-size: 11.5px; font-family: var(--mono); letter-spacing: .03em; }
+footer { max-width: 960px; margin: 0 auto; padding: 10px 30px 36px; text-align: center; color: var(--muted); font-size: 11.5px; font-family: var(--mono); letter-spacing: .03em; }
 .seedbadge { color: var(--accent-ink); background: var(--accent); padding: 2px 8px; border-radius: 6px; font-weight: 600; letter-spacing: .06em; }
 footer code { font-family: var(--mono); color: var(--text); }
+
+/* views: one section at a time (brief, news or events), picked in the tab bar; body[data-view] is set by app.js */
+[data-view="brief"] .news-col > :not(#brief), [data-view="brief"] .events-col,
+[data-view="news"] #brief, [data-view="news"] .events-col,
+[data-view="events"] .news-col,
+[data-view="money"] .news-col, [data-view="money"] .events-col,
+body:not([data-view="money"]) .money-col, [data-view="money"] #footnote { display: none; }
+
+/* brief + money views: content sits in the middle of the screen (between header and tab bar); a brief
+   taller than the screen just starts at the top */
+/* viewport units get zoomed too, so undo the kiosk --zoom to keep this exactly one screen tall */
+[data-view="brief"], [data-view="money"] { min-height: calc(100dvh / var(--zoom, 1)); display: flex; flex-direction: column; }
+[data-view="brief"] main, [data-view="money"] main { flex: 1; width: 100%; align-content: center; }
+[data-view="brief"] footer, [data-view="money"] footer { width: 100%; }
+
+/* news + events views on wider screens: list on the left, filters in a panel on the right that stays
+   vertically centred in the visible area while the list scrolls. Phones keep their dropdowns above the list. */
+@media (min-width: 900px) {
+  [data-view="news"] .news-col, [data-view="events"] .events-col {
+    display: grid; grid-template-columns: minmax(0, 1fr) 240px; column-gap: 24px; align-items: start;
+  }
+  .news-col > .col-head, .events-col > .col-head { grid-column: 1 / -1; }
+  #news, #events { grid-column: 1; grid-row: 2; }
+  #controls, #eventControls {
+    grid-column: 2; grid-row: 2; margin: 0;
+    /* sticky top: 50% = middle of the viewport; nudge by the bars so it's the middle of the *visible* area */
+    position: sticky; top: calc(50% + (var(--header-h, 80px) - 64px - var(--fb-h, 40px)) / 2);
+    transform: translateY(-50%);
+  }
+  /* the news panel is the three filter boxes; the events panel is one box of full-width stacked chips */
+  #eventControls {
+    flex-direction: column; align-items: stretch;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px;
+  }
+  #controls .select { width: 100%; max-width: none; }
+  /* each news filter box: chips stacked, all the box's width */
+  #controls .filters { flex-direction: column; align-items: stretch; }
+}
+
+/* QR popup (native <dialog>; Esc and backdrop click close it) */
+.qr-modal {
+  width: min(420px, calc(100% - 32px)); padding: 24px; text-align: center;
+  background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.qr-modal::backdrop { background: rgba(0, 0, 0, .6); backdrop-filter: blur(4px); }
+.qr-modal h3 { margin: 4px 24px 16px; font-weight: 500; font-size: 18px; line-height: 1.3; }
+.qr-code { background: #fff; border-radius: 12px; padding: 8px; width: min(280px, 100%); margin: 0 auto; } /* scanners need dark-on-light */
+.qr-code svg { display: block; width: 100%; height: auto; }
+.qr-hint { margin: 14px 0 2px; font-size: 13px; color: var(--muted); }
+.qr-url { margin: 0; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.qr-close {
+  position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%;
+  background: none; border: 0; color: var(--muted); font-size: 18px; cursor: pointer;
+}
+.qr-close:hover { color: var(--text); background: var(--panel-2); }
+.qr-close:focus-visible { outline: 2px solid var(--accent); }
 
 /* phones: compact header, and filter chips become dropdowns */
 @media (max-width: 640px) {
@@ -358,17 +409,10 @@ footer code { font-family: var(--mono); color: var(--text); }
   .brand { flex: 1; min-width: 0; gap: 10px; }
   .brand h1 { font-size: 20px; }
   .brand .sub { font-size: 11.5px; line-height: 1.3; }
-  /* the two halves sit on one line, and the second drops below when there's no room */
-  .jump-menu { display: grid; }
-  /* one view at a time, picked in the tab bar (body[data-view] is set by app.js) */
-  [data-view="brief"] .news-col > :not(#brief), [data-view="brief"] .events-col,
-  [data-view="news"] #brief, [data-view="news"] .events-col,
-  [data-view="events"] .news-col { display: none; }
   /* daily brief: date on its own line under the "Daily brief" heading */
   .brief-sep { display: none; }
   .brief-date { display: block; margin-top: 4px; }
-  /* keep the last content clear of the tab bar */
-  body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .feedback-bar { font-size: 12px; padding-top: 8px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
   .meta { flex-basis: 100%; display: flex; flex-wrap: wrap; column-gap: .6em; text-align: left; }
   .meta span { white-space: nowrap; }
 
@@ -379,7 +423,7 @@ footer code { font-family: var(--mono); color: var(--text); }
   /* news filters: two-column grid of dropdowns (type + sector, company + region) */
   #controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   #controls .filters { display: contents; }
-  .filters .chip, .filters .spacer { display: none; }
+  .filters .chip, #controls .label { display: none; }
   .chip-select { display: block; width: 100%; max-width: none; padding: 9px 12px; font-size: 16px; }
   #bankFilter { width: 100%; max-width: none; padding: 9px 12px; font-size: 16px; order: 3; }
   .chip-select[data-group="cat"] { order: 1; }
@@ -387,3 +431,37 @@ footer code { font-family: var(--mono); color: var(--text); }
   .chip-select[data-group="region"] { order: 4; }
   #eventControls { margin-bottom: 14px; }
 }
+
+/* 55" portrait touchscreen (1080×1920, or 2160×3840 on 4K panels). Phones are never this wide, and
+   landscape desktops aren't portrait, so neither is affected. */
+@media (orientation: portrait) and (min-width: 1000px) {
+  /* ponytail: scale the whole UI rather than resizing every rule. 1080px wide → 720 CSS px, so the
+     smallest 10px labels land at ~7mm cap height, readable at arm's length. Tune this one number per panel. */
+  :root { --zoom: 1.5; }
+  html { zoom: var(--zoom); }
+
+  main { padding: 22px 24px; }
+
+  /* tab bar: bigger targets and labels than on phones */
+  .jump-menu { padding-block: 8px; gap: 12px; }
+  .jump-menu a, .jump-menu .tab-theme { min-height: 64px; font-size: 14px; gap: 5px; }
+  .jump-menu .theme-switch { zoom: .95; }
+  .jump-menu svg { width: 28px; height: 28px; }
+  .jump-menu .tab-emoji { font-size: 26px; line-height: 28px; }
+  body { padding-bottom: calc(84px + var(--fb-h, 40px)); }
+
+  /* header: subtitle and update info won't fit beside each other at 720px, so the meta drops a row */
+  .topbar { flex-wrap: wrap; gap: 10px 16px; }
+  .brand { flex: 1 1 100%; }
+  .topbar-right { flex: 1; justify-content: space-between; }
+  .meta { text-align: left; }
+
+  /* finger-sized targets */
+  .chip, .select { padding: 10px 18px; font-size: 14px; }
+  #search { padding: 12px 16px; font-size: 14px; width: 300px; }
+
+  /* touch has no hover: stop tapped cards staying lifted */
+  .card:hover { transform: none; box-shadow: none; }
+}
+/* 4K panels: same 720 CSS px layout, twice the pixels */
+@media (orientation: portrait) and (min-width: 2000px) { :root { --zoom: 3; } }

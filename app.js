@@ -210,6 +210,29 @@ $("#eventControls").addEventListener("click", (ev) => {
   activateChip(btn);
   renderEvents();
 });
+// news + event cards: show a QR code for the link in a popup instead of opening it
+// (cmd/ctrl/middle-click still open it in a new tab)
+const qrModal = $("#qrModal");
+function openQR(ev) {
+  const a = ev.target.closest("a.card");
+  if (!a || ev.metaKey || ev.ctrlKey || ev.shiftKey || !window.qrcode) return; // no library -> plain link
+  ev.preventDefault();
+  const qr = qrcode(0, "L"); // lowest error correction = fewest modules; Google News links are long
+  qr.addData(a.href);
+  qr.make();
+  $("#qrCode").innerHTML = qr.createSvgTag({ cellSize: 4, margin: 4, scalable: true });
+  $("#qrTitle").textContent = a.querySelector("h3")?.textContent || "";
+  $("#qrUrl").textContent = a.hostname.replace(/^www\./, "");
+  $("#qrHint").textContent = ev.currentTarget.id === "events"
+    ? "Scan to learn more about this event"
+    : "Scan to open & read the article";
+  qrModal.showModal();
+}
+$("#news").addEventListener("click", openQR);
+$("#events").addEventListener("click", openQR);
+qrModal.querySelector(".qr-close").addEventListener("click", () => qrModal.close());
+qrModal.addEventListener("click", (e) => { if (e.target === qrModal) qrModal.close(); }); // backdrop click
+
 $("#bankFilter").addEventListener("change", (e) => { state.bank = e.target.value; renderNews(); });
 $("#search").addEventListener("input", (e) => { state.q = e.target.value; renderNews(); });
 
@@ -228,12 +251,11 @@ toggle.addEventListener("click", () => {
 });
 syncToggle();
 
-// mobile views: on phones the tab bar shows one section at a time (brief, news or events).
+// views: on every screen size the tab bar shows one section at a time (brief, news, events or money).
 // The view lives in the URL hash, so the back button steps between views. Each view keeps
-// its own scroll position. On desktop body[data-view] is ignored and both columns show.
+// its own scroll position.
 const TABS = [...document.querySelectorAll("#jumpMenu a")];
-const VIEWS = { "#brief": "brief", "#news-stream": "news", "#events-calendar": "events" };
-const isPhone = () => matchMedia("(max-width: 640px)").matches;
+const VIEWS = { "#brief": "brief", "#news-stream": "news", "#events-calendar": "events", "#money": "money" };
 const scrollPos = {};
 history.scrollRestoration = "manual"; // views restore their own scroll position
 function showView(view) {
@@ -244,7 +266,7 @@ function showView(view) {
   document.body.dataset.view = view;
   TABS.forEach((a) => VIEWS[a.getAttribute("href")] === view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   // next frame, so it lands after the browser's own jump to the #hash target
-  if (isPhone()) requestAnimationFrame(() => scrollTo({ top: scrollPos[view] || 0, behavior: "instant" }));
+  requestAnimationFrame(() => scrollTo({ top: scrollPos[view] || 0, behavior: "instant" }));
 }
 const viewFromHash = () => VIEWS[location.hash] || "brief";
 $("#jumpMenu").addEventListener("click", (e) => {
@@ -261,16 +283,9 @@ addEventListener("popstate", () => showView(viewFromHash()));
 // the header is sticky, so jump targets land below it: keep --header-h at its current height
 const topbar = $(".topbar");
 new ResizeObserver(() => document.documentElement.style.setProperty("--header-h", topbar.offsetHeight + "px")).observe(topbar);
-
-// back-to-top button (desktop): shown once the reader has scrolled a screenful-ish down
-const toTop = $("#toTop");
-const syncToTop = () => toTop.classList.toggle("show", scrollY > 300);
-addEventListener("scroll", syncToTop, { passive: true });
-syncToTop();
-toTop.addEventListener("click", () => {
-  scrollTo({ top: 0 }); // smooth via html { scroll-behavior } unless reduced motion is on
-  toTop.blur();
-});
+// same for the fixed feedback bar: content and the tab bar sit above it (it wraps on phones)
+const feedbackBar = $("#feedbackBar");
+new ResizeObserver(() => document.documentElement.style.setProperty("--fb-h", feedbackBar.offsetHeight + "px")).observe(feedbackBar);
 
 // money button: shows a random money emoji, bursts emoji confetti on click
 const MONEY = ["💰", "💵", "💸", "🤑", "💴", "💶", "💷", "🪙", "🏦", "💎"];
@@ -338,8 +353,8 @@ moneyBtn.addEventListener("click", () => {
     el.textContent = pickMoney();
     el.style.fontSize = Math.round(rand(32, 60)) + "px";
     document.body.appendChild(el);
-    // ponytail: fan sideways/down since the button sits at the top edge; widen to full 2π if it moves
-    const angle = rand(-0.2, 1.2) * Math.PI, speed = rand(450, 1200);
+    // button sits mid-screen in the money view, so burst in every direction
+    const angle = rand(0, 2 * Math.PI), speed = rand(450, 1200);
     pieces.push({
       el, x: cx, y: cy, rot: rand(0, 360), spin: rand(-540, 540),
       vx: Math.cos(angle) * speed,

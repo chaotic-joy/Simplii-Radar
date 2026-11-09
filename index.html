@@ -68,13 +68,7 @@
         <p class="sub">Bank, fintech &amp; exchange product news &amp; events from across the Americas · Updated daily</p>
       </div>
     </div>
-    <button id="moneyBtn" class="money-btn" type="button" aria-label="Make it rain money">💰</button>
     <div class="topbar-right">
-      <button id="themeToggle" class="theme-switch" type="button" role="switch" aria-label="Toggle light/dark theme">
-        <span class="ts-stars"></span>
-        <span class="ts-clouds"></span>
-        <span class="ts-knob"></span>
-      </button>
       <div class="meta" id="meta">loading…</div>
     </div>
   </header>
@@ -88,23 +82,27 @@
         <input id="search" type="search" placeholder="Search companies, features, offers…" />
       </div>
 
+      <!-- three filter boxes: update type, company type (+ company), region -->
       <div id="controls">
-        <div class="filters">
+        <div class="filters" role="group" aria-labelledby="fl-type">
+          <span class="label" id="fl-type">Update type</span>
           <button class="chip active" data-group="cat" data-value="all">All</button>
           <button class="chip" data-group="cat" data-value="product">Product updates</button>
           <button class="chip" data-group="cat" data-value="offer">Offers</button>
           <button class="chip" data-group="cat" data-value="service">Service updates</button>
-          <span class="spacer"></span>
-          <select id="bankFilter" class="select" aria-label="Filter by company">
-            <option value="all">All companies</option>
-          </select>
         </div>
-        <div class="filters subfilters">
+        <div class="filters" role="group" aria-labelledby="fl-sector">
+          <span class="label" id="fl-sector">Company type</span>
           <button class="chip active" data-group="sector" data-value="all">All sectors</button>
           <button class="chip" data-group="sector" data-value="bank">Banks</button>
           <button class="chip" data-group="sector" data-value="fintech">Fintech</button>
           <button class="chip" data-group="sector" data-value="exchange">Exchanges &amp; trading</button>
-          <span class="spacer"></span>
+          <select id="bankFilter" class="select" aria-label="Filter by company">
+            <option value="all">All companies</option>
+          </select>
+        </div>
+        <div class="filters" role="group" aria-labelledby="fl-region">
+          <span class="label" id="fl-region">Region</span>
           <button class="chip active" data-group="region" data-value="all">All regions</button>
           <button class="chip" data-group="region" data-value="NA">N. America</button>
           <button class="chip" data-group="region" data-value="SA">S. America</button>
@@ -119,19 +117,19 @@
       <div id="eventControls" class="filters"></div>
       <div id="events" class="list"></div>
     </section>
+
+    <!-- easter egg view: tap the emoji for a money explosion -->
+    <section class="col money-col" id="money">
+      <button id="moneyBtn" class="money-btn" type="button" aria-label="Make it rain money">💰</button>
+      <p class="money-hint">Tap for payday</p>
+    </section>
   </main>
 
   <footer>
     <span id="footnote"></span>
   </footer>
 
-  <!-- desktop only: appears once the page is scrolled down -->
-  <button id="toTop" class="to-top" type="button">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
-    Back to top
-  </button>
-
-  <!-- phones only: tab bar fixed to the bottom of the screen -->
+  <!-- tab bar (all screen sizes), fixed above the feedback bar -->
   <nav id="jumpMenu" class="jump-menu" aria-label="Sections">
     <a href="#brief">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
@@ -145,8 +143,53 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
       <span>Events</span>
     </a>
+    <a href="#money">
+      <span class="tab-emoji" aria-hidden="true">💰</span>
+      <span>Money</span>
+    </a>
+    <!-- the label names the switch and makes the whole tab clickable -->
+    <label class="tab-theme" for="themeToggle">
+      <button id="themeToggle" class="theme-switch" type="button" role="switch">
+        <span class="ts-stars"></span>
+        <span class="ts-clouds"></span>
+        <span class="ts-knob"></span>
+      </button>
+      <span>Dark mode</span>
+    </label>
   </nav>
 
+  <div id="feedbackBar" class="feedback-bar" role="note">
+    If you have any feedback or recommendations for Bank Radar, contact Ray Khan.
+  </div>
+
+  <!-- QR popup: news + event cards open this instead of the link (scan it to read on your phone) -->
+  <dialog id="qrModal" class="qr-modal" aria-labelledby="qrTitle">
+    <button class="qr-close" type="button" aria-label="Close" autofocus>✕</button>
+    <h3 id="qrTitle"></h3>
+    <div class="qr-code" id="qrCode"></div>
+    <p class="qr-hint" id="qrHint"></p>
+    <p class="qr-url" id="qrUrl"></p>
+  </dialog>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"
+    integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="app.js"></script>
+
+  <!-- Agentation (dev only): click-to-annotate UI feedback for the coding agent, sent to the local
+       agentation MCP server on :4747. It's a React component; this site has no React or bundler, so
+       it's loaded from esm.sh with pinned versions, and only on localhost (never on a deployed site). -->
+  <script type="module">
+    if (["localhost", "127.0.0.1"].includes(location.hostname)) {
+      const deps = "?deps=react@18.3.1,react-dom@18.3.1";
+      const [{ createElement }, { createRoot }, { Agentation }] = await Promise.all([
+        import("https://esm.sh/react@18.3.1"),
+        import("https://esm.sh/react-dom@18.3.1/client" + deps),
+        import("https://esm.sh/agentation@3.1.2" + deps),
+      ]);
+      const host = document.body.appendChild(document.createElement("div"));
+      createRoot(host).render(createElement(Agentation, { endpoint: "http://localhost:4747" }));
+    }
+  </script>
 </body>
 </html>
