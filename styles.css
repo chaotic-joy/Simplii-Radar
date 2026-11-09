@@ -1,52 +1,55 @@
-/* Bank Radar — styling adapted from the Wealthora aesthetic:
-   ink/cream two-tone, lime accent, serif display + mono micro-labels. */
+/* Simplii Radar: Simplii Financial's Oct 2026 "calm" rebrand. Orchid #D059F8 (logo + primary buttons,
+   black text), navy #0B283D, off-white #F5FAFC and Inter come from simplii.com's live CSS/logo; the lavender sky
+   and deep sage tones are sampled from the rebrand hero illustration. */
 
 :root {
-  --serif: "Newsreader", Georgia, "Times New Roman", serif;
-  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* ponytail: Inter everywhere, as simplii.com does; old var names kept so no rule changes were needed */
+  --serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius: 16px;
 
-  /* dark (default) */
-  --bg: #0f141c;
-  --panel: #161c26;
-  --panel-2: #1c232f;
-  --line: #283140;
-  --text: #f2f0e8;
-  --muted: #97a1b0;
-  --accent: #c6f24e;
-  --accent-ink: #141a07;
-  --accent-soft: rgba(198, 242, 78, .14);
-  --header: #d4fd5c; /* vibrant, readable on dark */
-  --shadow: 0 12px 34px rgba(0, 0, 0, .34);
-  --bg-image: url("light.webp"); /* grainy gradient backdrop (grain baked into the image) */
-  --bg-overlay: rgba(10, 13, 19, .68); /* darken backdrop so text/panels stay readable */
+  /* dark (default): the deep sage hills of the rebrand art, orchid actions, lavender headings */
+  --bg: #1b201a;
+  --panel: #21271d;
+  --panel-2: #2a3125;
+  --line: #3b4337;
+  --text: #f5fafc;
+  --muted: #a9b0a6;
+  --accent: #d059f8;
+  --accent-ink: #000000;
+  --accent-soft: rgba(208, 89, 248, .14);
+  --header: #ecc9f4; /* dusk-pink sky from the hero art */
+  --shadow: 0 12px 34px rgba(0, 0, 0, .4);
+  --bg-image: linear-gradient(180deg, #2b2733 0%, #1b201a 45%);
+  --bg-overlay: transparent;
 
-  --tag-product: #8fb9ff;   --tag-product-bg: rgba(99, 152, 255, .16);
-  --tag-offer: #c6f24e;     --tag-offer-bg: rgba(198, 242, 78, .16);
-  --tag-service: #d6b4ff;   --tag-service-bg: rgba(168, 85, 247, .18);
-  --tag-news: #c3ccd8;      --tag-news-bg: rgba(150, 163, 180, .16);
+  --tag-product: #c3c9f7;   --tag-product-bg: rgba(215, 219, 248, .12);
+  --tag-offer: #bccbab;     --tag-offer-bg: rgba(160, 180, 140, .16);
+  --tag-service: #e7a6fb;   --tag-service-bg: rgba(208, 89, 248, .18);
+  --tag-news: #c3c8c0;      --tag-news-bg: rgba(160, 168, 156, .16);
 }
 
 html[data-theme="light"] {
-  --bg: #f1efe6;
-  --panel: #faf9f3;
-  --panel-2: #eceadd;
-  --line: #dedbce;
-  --text: #161a20;
-  --muted: #5f6675;
-  --accent: #aadb15;
-  --accent-ink: #1a2208;
-  --accent-soft: rgba(150, 197, 20, .18);
-  --header: #4a7c0a; /* deep lime, readable on cream */
-  --shadow: 0 12px 30px rgba(20, 24, 30, .08);
-  --bg-image: url("light.webp");
-  --bg-overlay: rgba(248, 247, 240, .60); /* brighten backdrop so text/panels stay readable */
+  /* light: off-white with a lavender-sky wash, orchid actions, navy headings */
+  --bg: #f5fafc;
+  --panel: #ffffff;
+  --panel-2: #f1f2fc;
+  --line: #dde0ee;
+  --text: #121418;
+  --muted: #5b6158;
+  --accent: #d059f8;
+  --accent-ink: #000000;
+  --accent-soft: rgba(208, 89, 248, .12);
+  --header: #0b283d;
+  --shadow: 0 12px 30px rgba(11, 40, 61, .08);
+  --bg-image: linear-gradient(180deg, #dfe3fa 0%, #f1e4f8 20%, #f5fafc 50%);
+  --bg-overlay: transparent;
 
-  --tag-product: #2360cc;   --tag-product-bg: rgba(37, 99, 235, .12);
-  --tag-offer: #5a7d12;     --tag-offer-bg: rgba(120, 170, 20, .18);
-  --tag-service: #7c3aed;   --tag-service-bg: rgba(124, 58, 237, .12);
-  --tag-news: #51596a;      --tag-news-bg: rgba(90, 100, 120, .12);
+  --tag-product: #0b283d;   --tag-product-bg: rgba(11, 40, 61, .08);
+  --tag-offer: #3f5a2e;     --tag-offer-bg: rgba(75, 110, 55, .12);
+  --tag-service: #8a1fb3;   --tag-service-bg: rgba(208, 89, 248, .12);
+  --tag-news: #4b5147;      --tag-news-bg: rgba(75, 81, 71, .1);
 }
 
 * { box-sizing: border-box; }
@@ -88,7 +91,7 @@ body {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
   background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(12px);
   transition: opacity .45s ease, visibility .45s;
-  --radar: var(--header); /* bright lime in dark mode, deep green in light mode */
+  --radar: var(--header); /* lavender in dark mode, navy in light mode */
   --ring: color-mix(in srgb, var(--radar) 32%, transparent);
 }
 .loader.done { opacity: 0; visibility: hidden; }
@@ -332,7 +335,7 @@ html[data-theme="light"] .bank { color: var(--header); }
 }
 .event .when .m { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--accent); letter-spacing: .08em; line-height: 1; }
 .event .when .d { font-family: var(--serif); font-size: 22px; font-weight: 500; line-height: 1; margin-bottom: -3px; }
-/* light mode: green date square, white month, black day */
+/* light mode: orchid date square, black month and day (as on simplii.com buttons) */
 html[data-theme="light"] .event .when { background: var(--accent); border-color: var(--accent); }
 html[data-theme="light"] .event .when .m { color: #000; font-weight: 700; }
 html[data-theme="light"] .event .when .d { color: #000; }
