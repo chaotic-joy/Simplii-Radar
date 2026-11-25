@@ -1,42 +1,63 @@
 #!/usr/bin/env node
-// Aggregates bank, fintech and exchange product news + events into data/news.json and data/events.json.
+// Builds the Simplii Strategic Market Intelligence data in data/ for the static site.
 //
-// Pipeline: RSS feeds (safety net, never misses what has a feed)
-//   -> Claude classifies each item (category + region + relevance)   [needs ANTHROPIC_API_KEY]
-//   -> Claude web-search pass finds offers + events RSS can't surface  [needs ANTHROPIC_API_KEY]
-//   -> merge + dedupe with existing data -> write JSON.
+// Pipeline (rules for what qualifies live in prompt.md, not here):
+//   RSS feeds -> Claude Haiku drops obvious noise -> data/candidates.json (21-day pool of leads)
+//   -> Claude Opus + web search curates the leads against prompt.md, two views:
+//        Weekly Brief: the last completed Mon–Fri (Eastern), published once and never changed
+//                      (data/editions/<monday>.json, listed in data/editions/index.json)
+//        Last 7 Days:  rebuilt every run (data/rolling.json)
+//   -> Claude Opus + web search: upcoming strategic calendar, next 4 weeks (data/calendar.json)
 //
-// No API key? Falls back to RSS-only (items kept as category "news", unclassified).
+// Each step is best-effort: a failed step keeps that step's previous data.
 // Run:  npm run refresh     Self-check:  npm run selftest
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DATA = join(ROOT, "data");
-const MODEL_FAST = "claude-haiku-5-5";     // cheap classification
-const MODEL_SMART = "claude-sonnet-5-5";   // web-search discovery
-const CATEGORIES = ["product", "offer", "service", "news"];
-const SECTORS = ["bank", "fintech", "exchange"]; // exchange = stock/crypto/derivatives exchanges + trading platforms
+const MODEL_FAST = "claude-haiku-5-5"; // cheap first-pass filter
+const MODEL = "claude-opus-5-5";       // curation + calendar
+const POOL_DAYS = 21;                  // how long feed leads stay in the candidate pool
+const MAX_TIER1 = 8, MAX_TIER2 = 10, MAX_TOTAL = 15, MAX_EVENTS = 8;
+
+const GEOS = ["Canada", "U.S.", "U.K. & Europe", "Other international"];
+const PEERS = ["Canadian bank", "Canadian digital & fintech", "International digital & fintech", "Big Tech & payments", "Regulator"];
+const TYPES = ["Product & proposition", "Pricing & value", "Business model", "Partnership & M&A", "Market entry",
+  "Payments & cards", "Technology", "Regulation & policy", "Customer behaviour"];
+const EVENT_TYPES = ["Investor day", "Product event", "Keynote", "Conference", "Industry event"];
 
 // --- pure helpers (covered by --selftest) ----------------------------------
 
-const normTitle = (s) =>
-  (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-
+const normTitle = (s) => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 // strip a trailing " - Publisher" / " | Publisher" suffix (Google News adds these)
 const cleanTitle = (s) => (s || "").replace(/\s[-–—|]\s[^-–—|]*$/, "").trim();
+const idFor = (item) => createHash("sha1").update(item.url || normTitle(item.title)).digest("hex").slice(0, 12);
+const isDirect = (u) => u && !/news\.google\./.test(u);
+const pick = (v, allowed, fallback) => (allowed.includes(v) ? v : fallback);
+const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
 
-const idFor = (item) =>
-  createHash("sha1").update(item.url || normTitle(item.title)).digest("hex").slice(0, 12);
+// Dates are YYYY-MM-DD strings in Eastern Time; string comparison orders them.
+const etDate = (d = new Date()) => d.toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+const addDays = (iso, n) => {
+  const d = new Date(iso + "T12:00:00Z");
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+const mondayOf = (iso) => addDays(iso, -((new Date(iso + "T12:00:00Z").getUTCDay() + 6) % 7));
+// "Week of Nov 16–20, 2026", or "Week of Nov 30–Dec 4, 2026" across a month end
+function weekLabel(monday) {
+  const fri = addDays(monday, 4);
+  const mon = (iso) => new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
+  const endMonth = mon(fri) === mon(monday) ? "" : mon(fri) + " ";
+  return `Week of ${mon(monday)} ${+monday.slice(8)}–${endMonth}${+fri.slice(8)}, ${fri.slice(0, 4)}`;
+}
 
-const daysAgo = (iso) => (Date.now() - new Date(iso).getTime()) / 86400000;
-
-// Pull JSON out of an LLM reply that may wrap it in a ```json fence or narrate
-// around it (web-search answers interleave citations). Prefers a fenced block,
-// else the outermost {...} or [...]. Throws if nothing parses.
+// Pull JSON out of an LLM reply that may wrap it in a ```json fence or narrate around it
+// (web-search answers interleave citations). Prefers a fenced block, else the outermost {...} or [...].
 function extractJson(text) {
   const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
   const candidates = [];
@@ -45,7 +66,6 @@ function extractJson(text) {
   const a = text.indexOf("["), ac = text.lastIndexOf("]");
   const obj = o !== -1 && oc > o ? text.slice(o, oc + 1) : null;
   const arr = a !== -1 && ac > a ? text.slice(a, ac + 1) : null;
-  // try the outermost container first (whichever bracket opens earliest)
   if (arr && (o === -1 || a < o)) { candidates.push(arr); if (obj) candidates.push(obj); }
   else { if (obj) candidates.push(obj); if (arr) candidates.push(arr); }
   for (const c of candidates) {
@@ -54,132 +74,121 @@ function extractJson(text) {
   throw new Error("no parseable JSON in model reply");
 }
 
-// Merge new items into existing, dedupe by cleaned title (collapses the same
-// story arriving from Google News and the AI discovery pass), newest first,
-// drop anything older than maxAgeDays, cap to limit. On a collision keep the
-// best of each field: direct source URL, a real category, the longer summary.
-// Translated items are keyed by their ORIGINAL title, so the same story arriving
-// again untranslated from its RSS feed merges into it and keeps the English text.
-const isDirect = (u) => u && !/news\.google\./.test(u);
-
-// Combine two copies of one story, keeping the best of each field.
-function combine(prev, it) {
-  const keepXlat = prev.lang && !it.lang; // already translated; don't let a raw re-fetch undo it
-  const merged = {
-    ...prev, ...it,
-    category: it.category !== "news" ? it.category : prev.category,
-    url: isDirect(it.url) ? it.url : (isDirect(prev.url) ? prev.url : (it.url || prev.url)),
-    summary: keepXlat ? prev.summary
-      : (it.summary || "").length >= (prev.summary || "").length ? it.summary : prev.summary,
-    bank: it.bank || prev.bank,
-    sector: it.sector || prev.sector,
-    region: it.region || prev.region,
-    ...(keepXlat && { title: prev.title, titleOriginal: prev.titleOriginal, lang: prev.lang }),
-  };
-  merged.id = idFor(merged);
-  return merged;
-}
-
-// Words that don't identify a story, ignored when comparing headlines.
-const STOP = new Set(("a an and the of for to in on at by with from as is are its it new now via " +
-  "launch launches launched announce announces announced unveil unveils unveiled introduce introduces " +
-  "introduced plan plans offer offers make makes add adds roll rolls out").split(" "));
-const headlineWords = (it) => {
-  const bank = new Set(normTitle(it.bank).split(" "));
-  return new Set(normTitle(cleanTitle(it.title)).split(" ").filter((w) => w && !STOP.has(w) && !bank.has(w)));
-};
-// Same story if they share at least half of the shorter headline's distinctive words.
-// ponytail: word-overlap heuristic; swap for embeddings if it starts merging distinct stories.
-function sameStory(a, b) {
-  const A = headlineWords(a), B = headlineWords(b);
-  const small = Math.min(A.size, B.size);
-  if (!small) return false;
-  let shared = 0;
-  for (const w of A) if (B.has(w)) shared++;
-  return shared / small >= 0.5;
-}
-
-function mergeNews(existing, incoming, { maxAgeDays, limit }) {
+// Candidate pool: merge new feed leads into the existing pool, collapsing the same headline from
+// several feeds (keeps the direct URL over a Google News redirect, and the longer summary), and
+// dropping leads dated before `since`. Newest first. The curator dedupes on the underlying
+// development, so this only has to stop the obvious repeats.
+function mergeCandidates(existing, incoming, since) {
   const byKey = new Map();
   for (const it of [...existing, ...incoming]) {
-    if (!it.title || !it.date) continue;
-    if (daysAgo(it.date) > maxAgeDays) continue;
-    const key = normTitle(cleanTitle(it.titleOriginal || it.title)).slice(0, 80);
+    if (!it.title || !it.date || it.date < since) continue;
+    const key = normTitle(cleanTitle(it.title)).slice(0, 80);
     if (!key) continue;
     const prev = byKey.get(key);
-    byKey.set(key, prev ? combine(prev, it) : { ...it, id: idFor(it) });
+    const m = prev
+      ? {
+          ...prev, ...it,
+          url: isDirect(it.url) ? it.url : isDirect(prev.url) ? prev.url : it.url || prev.url,
+          summary: (it.summary || "").length >= (prev.summary || "").length ? it.summary : prev.summary,
+          firstSeen: prev.firstSeen || it.firstSeen,
+        }
+      : { ...it };
+    m.id = idFor(m);
+    byKey.set(key, m);
   }
-  // Second pass: web-search discovery can return one article several times under reworded
-  // headlines (same URL, different titles). Collapse those, but keep genuinely different
-  // stories from one roundup article (e.g. two separate product launches) as separate cards.
-  const out = [];
-  for (const it of byKey.values()) {
-    const twin = out.findIndex((o) => o.url && o.url === it.url && sameStory(o, it));
-    if (twin === -1) out.push(it);
-    else out[twin] = combine(out[twin], it);
-  }
-  return out
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, limit);
+  return [...byKey.values()].sort((a, b) => b.date.localeCompare(a.date));
 }
 
-// Apply one translation result to an item. Always records the language (so the
-// item is never sent again); for non-English items swaps in the English title
-// and summary and keeps the original title for search and dedupe.
-function applyTranslation(it, r) {
-  const lang = String(r?.lang || "").toLowerCase().slice(0, 2);
-  if (!lang) return it;
-  if (lang === "en" || !r.title_en) return { ...it, lang };
+// Turn the curator's raw answer into dashboard items: validate every field, keep item ids stable
+// across runs (so "new since your last visit" works), enforce the tier caps, map themes to ids.
+//   known:      Map of id -> item already on the dashboard (previous Last 7 Days + recent editions)
+//   editionIds: ids already published in a Weekly Brief
+//   weekly:     true when building a Weekly Brief, which must not repeat a published development
+//               unless it is marked as an update (then it gets its own id)
+function finalize(raw, { from, to, known, editionIds, weekly, now }) {
+  const items = [];
+  const seen = new Set();
+  for (const [i, r] of (raw?.items || []).entries()) {
+    const statement = String(r?.statement || "").trim();
+    const date = String(r?.date || "").slice(0, 10);
+    const tier = Number(r?.tier);
+    const sources = (Array.isArray(r?.sources) ? r.sources : [])
+      .filter((s) => /^https?:\/\//.test(s?.url || ""))
+      .slice(0, 3)
+      .map((s) => ({ url: s.url, publisher: String(s.publisher || "").trim() || hostOf(s.url) }));
+    if (!statement || !sources.length || !(date >= from && date <= to) || (tier !== 1 && tier !== 2)) continue;
+    const prev = known.get(r.same_as);
+    const published = prev && editionIds.has(prev.id);
+    if (weekly && published && !r.update) continue; // already in an earlier brief, nothing new
+    const reuse = prev && !(weekly && published);
+    const id = reuse ? prev.id : idFor({ title: statement });
+    if (seen.has(id)) continue;
+    seen.add(id);
+    items.push({
+      i, id, tier, rank: Number(r.rank) || 99, statement, date,
+      geography: pick(r.geography, GEOS, "Other international"),
+      companies: (Array.isArray(r.companies) ? r.companies : []).map(String).filter(Boolean).slice(0, 4),
+      peerGroup: pick(r.peer_group, PEERS, ""),
+      type: pick(r.type, TYPES, ""),
+      update: !!r.update,
+      sources,
+      firstSeen: (reuse && prev.firstSeen) || now,
+    });
+  }
+  items.sort((a, b) => a.tier - b.tier || a.rank - b.rank);
+  const t1 = items.filter((x) => x.tier === 1).slice(0, MAX_TIER1);
+  const t2 = items.filter((x) => x.tier === 2).slice(0, Math.min(MAX_TIER2, MAX_TOTAL - t1.length));
+  const kept = [...t1, ...t2];
+  for (const list of [t1, t2]) list.forEach((x, n) => { x.rank = n + 1; });
+  const idAt = new Map(kept.map((x) => [x.i, x.id]));
+  const themes = (Array.isArray(raw?.themes) ? raw.themes : [])
+    .map((t) => ({ label: String(t?.label || "").trim(), ids: (t?.items || []).map((n) => idAt.get(Number(n))).filter(Boolean) }))
+    .filter((t) => t.label && t.ids.length)
+    .slice(0, 5);
   return {
-    ...it,
-    lang,
-    titleOriginal: it.titleOriginal || it.title,
-    title: r.title_en.trim(),
-    summary: r.summary_en ? r.summary_en.trim() : it.summary,
+    summary: String(raw?.summary || "").trim(),
+    themes,
+    items: kept.map(({ i, ...x }) => x),
   };
 }
 
-// Sector for a company name from the feeds.json lists, or null if it isn't listed.
-function sectorOf(name, cfg) {
-  const n = (name || "").toLowerCase();
-  if (!n) return null;
-  for (const [sector, names] of Object.entries(cfg.companies || {}))
-    if (names.some((c) => c.toLowerCase() === n)) return sector;
-  return null;
-}
-
-// Make sure every item has a valid sector: keep the model's tag, else look the company up,
-// else "bank" (everything on the board before sectors existed was bank news).
-const withSector = (it, cfg) =>
-  SECTORS.includes(it.sector) ? it : { ...it, sector: sectorOf(it.bank, cfg) || "bank" };
-
-function mergeEvents(existing, incoming) {
-  const byKey = new Map();
-  for (const ev of [...existing, ...incoming]) {
-    if (!ev.name || !ev.date) continue;
-    if (daysAgo(ev.date) > 90) continue; // keep upcoming + last ~90 days
-    const key = normTitle(ev.name) + ev.date.slice(0, 7);
-    byKey.set(key, { ...byKey.get(key), ...ev, id: idFor({ title: ev.name + ev.date }) });
+// Calendar: only dated events in the window, no earnings, one entry per event, soonest first.
+function cleanEvents(events, from, to) {
+  const out = [];
+  const seen = new Set();
+  const list = (Array.isArray(events) ? events : []).filter((e) => /^\d{4}-\d{2}-\d{2}$/.test(e?.date || ""));
+  for (const e of list.sort((a, b) => a.date.localeCompare(b.date))) {
+    const name = String(e.name || "").trim();
+    const endDate = /^\d{4}-\d{2}-\d{2}$/.test(e.end_date || "") && e.end_date >= e.date ? e.end_date : e.date;
+    const key = normTitle(name);
+    if (!name || seen.has(key) || endDate < from || e.date > to) continue;
+    if (/earning|quarterly results|results call|conference call/i.test(`${name} ${e.type}`)) continue;
+    seen.add(key);
+    out.push({
+      date: e.date, endDate, tbc: !!e.tbc, name,
+      organization: String(e.organization || "").trim(),
+      location: String(e.location || "").trim(),
+      type: pick(e.type, EVENT_TYPES, "Conference"),
+      watch: String(e.watch || "").trim().split(/\s+/).slice(0, 15).join(" "),
+      url: /^https?:\/\//.test(e.url || "") ? e.url : "",
+    });
   }
-  return [...byKey.values()].sort((a, b) => new Date(a.date) - new Date(b.date));
+  return out.slice(0, MAX_EVENTS);
 }
 
 // --- I/O --------------------------------------------------------------------
 
 async function loadJson(name, fallback) {
-  try {
-    return JSON.parse(await readFile(join(DATA, name), "utf8"));
-  } catch {
-    return fallback;
-  }
+  try { return JSON.parse(await readFile(join(DATA, name), "utf8")); } catch { return fallback; }
+}
+async function writeJson(name, value) {
+  await mkdir(dirname(join(DATA, name)), { recursive: true });
+  await writeFile(join(DATA, name), JSON.stringify(value, null, 2) + "\n");
 }
 
 async function fetchRss(feeds) {
   const { default: Parser } = await import("rss-parser");
-  const parser = new Parser({
-    timeout: 15000,
-    headers: { "User-Agent": "Mozilla/5.0 (compatible; BankRadar/1.0; +https://github.com/chaotic-joy/Bank-Radar)" },
-  });
+  const parser = new Parser({ timeout: 15000, headers: { "User-Agent": "Mozilla/5.0 (compatible; SimpliiRadar/1.0)" } });
   const out = [];
   for (const { url, source } of feeds) {
     try {
@@ -193,9 +202,6 @@ async function fetchRss(feeds) {
           source,
           summary: (e.contentSnippet || e.content || "").replace(/\s+/g, " ").trim().slice(0, 400),
           date: new Date(date).toISOString().slice(0, 10),
-          category: "news",
-          bank: null,
-          region: "NA",
         });
       }
       console.log(`  rss ok: ${source} (${feed.items?.length ?? 0})`);
@@ -206,295 +212,199 @@ async function fetchRss(feeds) {
   return out;
 }
 
-// --- AI passes (no-ops without a key) ---------------------------------------
+// --- Claude calls -------------------------------------------------------------
 
-function makeClient() {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
-  return import("@anthropic-ai/sdk").then((m) => new m.default());
-}
-
-const REAL_CATS = ["product", "offer", "service"]; // raw RSS "news" is noise; only these reach the board
-
-// Forced tool => the API guarantees schema-valid structured output, instead of
-// us parsing free text (Haiku was intermittently returning non-JSON prose).
-const VERDICT_TOOL = {
-  name: "record_verdicts",
-  description: "Record one classification verdict per item.",
+// Haiku keeps any headline that could plausibly qualify; Opus applies the real bar later.
+// Forced tool => schema-valid output. A failed batch is dropped (those leads come back tomorrow).
+const KEEP_TOOL = {
+  name: "record_keep",
+  description: "Record the indexes of the items worth a closer look.",
   input_schema: {
     type: "object",
-    properties: {
-      verdicts: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            i: { type: "integer", description: "the item's index" },
-            category: { type: "string", enum: ["product", "offer", "service", "drop"] },
-            region: { type: "string", enum: ["NA", "SA"] },
-            bank: { type: "string", description: "short company name (bank, fintech or exchange), or empty" },
-            sector: { type: "string", enum: SECTORS, description: "bank (incl. its digital brands), fintech (neobank, payments, wallet, lending, investing app), or exchange (stock/crypto/derivatives exchange or trading platform/brokerage)" },
-          },
-          required: ["i", "category"],
-        },
-      },
-    },
-    required: ["verdicts"],
+    properties: { keep: { type: "array", items: { type: "integer" } } },
+    required: ["keep"],
   },
 };
 
-// Classify RSS items in small batches, returning ONLY items tagged
-// product/offer/service; a failed batch is dropped, not kept-raw.
-// No key -> nothing (unclassified RSS is just noise).
-async function classify(client, items, cfg) {
-  if (!client || items.length === 0) return [];
-  const anthropic = await client;
-  const BATCH = 40;
+async function prefilter(anthropic, items) {
+  const BATCH = 50;
   const kept = [];
-  let failed = 0;
   for (let start = 0; start < items.length; start += BATCH) {
     const slice = items.slice(start, start + BATCH);
-    const batchInput = slice.map((it, i) => ({ i, title: it.title, summary: (it.summary || "").slice(0, 180), source: it.source }));
+    const input = slice.map((it, i) => ({ i, title: it.title, summary: (it.summary || "").slice(0, 160) }));
     const prompt =
-      `Classify these financial-services headlines for a Simplii Financial product-team dashboard, via record_verdicts.\n` +
-      `Relevant = a company in the Americas that is a retail/consumer BANK, a FINTECH (neobank, payments, wallet, lending, ` +
-      `investing app), or a trading EXCHANGE / trading platform (stock, crypto, derivatives exchange or brokerage) doing one of: ` +
-      `${cfg.topics.join("; ")}.\n` +
-      `Drop companies based outside North/South America (e.g. African, European, Asian firms), even when a fintech outlet covers them.\n` +
-      `Banks of interest (not exhaustive): ${cfg.companies.bank.join(", ")}.\n` +
-      `Fintechs of interest (not exhaustive): ${cfg.companies.fintech.join(", ")}.\n` +
-      `Exchanges and trading platforms of interest (not exhaustive): ${cfg.companies.exchange.join(", ")}.\n\n` +
-      `One verdict per item. category: "product" (feature/platform/app launch, new trading product or asset listing), ` +
-      `"offer" (rate/discount/bonus/promo), "service" (new service, fee change, access/eligibility, trading hours or market access), ` +
-      `or "drop" for anything not about a specific company's product/service/offer (generic macro news, market moves, ` +
-      `stock or crypto price action, earnings results, regulation think-pieces, sports/unrelated noise).\n` +
-      `region: "NA" or "SA". bank: the company's short name or "". sector: "bank", "fintech" or "exchange".\n\n` +
-      `ITEMS:\n${JSON.stringify(batchInput)}`;
+      `These headlines are leads for a strategic market-intelligence brief for Simplii Financial, CIBC's digital-only bank ` +
+      `in Canada. Via record_keep, list the indexes worth a closer look: concrete new developments by banks, digital banks, ` +
+      `fintechs, payments networks, Big Tech in finance, or regulators that touch consumer banking or payments (launches, ` +
+      `pricing or fee changes, new business models, partnerships, acquisitions, market entry, regulation, payments ` +
+      `infrastructure, customer-behaviour data). Drop routine earnings and results, stock or crypto price moves, opinion and ` +
+      `explainers, promotions, awards, executive interviews, and anything unrelated. When unsure, keep it.\n\n` +
+      `ITEMS:\n${JSON.stringify(input)}`;
     try {
       const resp = await anthropic.messages.create({
         model: MODEL_FAST,
         max_tokens: 2000,
-        tools: [VERDICT_TOOL],
-        tool_choice: { type: "tool", name: "record_verdicts" },
+        tools: [KEEP_TOOL],
+        tool_choice: { type: "tool", name: "record_keep" },
         messages: [{ role: "user", content: prompt }],
       });
       const tu = resp.content.find((c) => c.type === "tool_use");
-      for (const v of tu?.input?.verdicts || []) {
-        const it = slice[v.i];
-        if (!it || !REAL_CATS.includes(v.category)) continue;
-        kept.push({ ...it, category: v.category, region: v.region || it.region, bank: v.bank || it.bank, sector: v.sector });
-      }
+      for (const i of tu?.input?.keep || []) if (slice[i]) kept.push(slice[i]);
     } catch (err) {
-      failed++;
-      console.warn(`  classify batch @${start} dropped: ${err.message}`);
+      console.warn(`  prefilter batch @${start} dropped: ${err.message}`);
     }
   }
-  console.log(`  classified: kept ${kept.length}/${items.length}${failed ? ` (${failed} batches failed)` : ""}`);
+  console.log(`  prefilter: kept ${kept.length}/${items.length}`);
   return kept;
 }
 
-// Web-search discovery: offers + events RSS won't have. Best-effort; never fatal.
-async function discover(client, cfg) {
-  const empty = { news: [], events: [] };
-  if (!client) return empty;
-  const anthropic = await client;
-  const today = new Date().toISOString().slice(0, 10);
-  const prompt =
-    `Today is ${today}. Use web search to compile, for a Simplii Financial product-team dashboard, ` +
-    `news and events about companies in the Americas in three sectors:\n` +
-    `- "bank": retail banks and their digital brands. Of interest: ${cfg.companies.bank.join(", ")}.\n` +
-    `- "fintech": neobanks, payments, wallets, lending and investing apps. Of interest: ${cfg.companies.fintech.join(", ")}.\n` +
-    `- "exchange": stock, crypto and derivatives exchanges and trading platforms. Of interest: ${cfg.companies.exchange.join(", ")}.\n` +
-    `Cover all three sectors, not just banks.\n\n` +
-    `Find items from the LAST 60 DAYS in three buckets, plus upcoming events:\n` +
-    `A) PRODUCT news — a company launching a feature, platform update, app capability, new trading product or asset listing (category "product").\n` +
-    `B) OFFERS — welcome bonuses, savings/GIC rate promos, credit-card offers, discounts (category "offer").\n` +
-    `C) SERVICE news — new services, fee changes, access/eligibility changes, trading-hours or market-access changes (category "service").\n` +
-    `D) EVENTS — recent and UPCOMING banking/fintech/trading conferences, keynotes, investor days, earnings calls in ` +
-    `North AND South America (Money20/20, Finovate, Consensus, bank and exchange investor days, Wealthsimple keynotes, LatAm fintech events).\n\n` +
-    `Aim for 20-30 news items and 8-15 events. Only include items with a REAL source URL and a concrete date; ` +
-    `prefer primary sources (the company's own newsroom). Set region "NA" or "SA" and sector "bank", "fintech" or "exchange".\n\n` +
-    `Output your final answer as a SINGLE JSON object in a \`\`\`json fenced code block, nothing after it:\n` +
-    `\`\`\`json\n{"news":[{"title":"","summary":"","url":"","source":"","bank":"company name","sector":"bank|fintech|exchange","category":"product|offer|service","region":"NA","date":"YYYY-MM-DD"}],` +
-    `"events":[{"name":"","type":"conference|keynote|investor-call|earnings","organizer":"","url":"","location":"","region":"NA","date":"YYYY-MM-DD","endDate":"YYYY-MM-DD"}]}\n\`\`\``;
-  try {
-    const resp = await anthropic.messages.create({
-      model: MODEL_SMART,
-      max_tokens: 8000,
-      tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 8 }],
-      messages: [{ role: "user", content: prompt }],
-    });
-    const text = resp.content.map((c) => c.text || "").join("");
-    const parsed = extractJson(text);
-    const news = (parsed.news || [])
-      .filter((n) => n.url && n.date)
-      .map((n) => ({ region: "NA", bank: null, ...n, category: CATEGORIES.includes(n.category) ? n.category : "news" }));
-    const events = (parsed.events || []).filter((e) => e.date && e.name);
-    console.log(`  discovered: ${news.length} news, ${events.length} events`);
-    return { news, events };
-  } catch (err) {
-    console.warn(`  discovery skipped: ${err.message}`);
-    return empty;
+// One Opus request with web search, continued while the server pauses a long search turn.
+// Server-side fallback reruns a declined request on another model inside the same call.
+async function askWithSearch(anthropic, system, user, maxSearches) {
+  const messages = [{ role: "user", content: user }];
+  for (let turn = 0; turn < 5; turn++) {
+    const msg = await anthropic.beta.messages
+      .stream({
+        model: MODEL,
+        max_tokens: 32000,
+        betas: ["server-side-fallback-2026-07-01"],
+        fallbacks: "default",
+        output_config: { effort: "high" },
+        system,
+        tools: [{ type: "web_search_20260209", name: "web_search", max_uses: maxSearches }],
+        messages,
+      })
+      .finalMessage();
+    if (msg.stop_reason === "pause_turn") {
+      messages.push({ role: "assistant", content: msg.content });
+      continue;
+    }
+    if (msg.stop_reason === "refusal") throw new Error(`declined (${msg.stop_details?.category ?? "no category"})`);
+    if (msg.stop_reason === "max_tokens") throw new Error("reply hit max_tokens");
+    return msg.content.filter((b) => b.type === "text").map((b) => b.text).join("");
   }
+  throw new Error("search turn still paused after 5 continuations");
 }
 
-// Translate non-English items to English (LatAm feeds are Portuguese/Spanish).
-// Runs on the merged board and only touches items with no `lang` yet: new
-// items each day, plus a one-time backfill of anything from before this existed.
-// Best-effort: a failed batch leaves those items untouched for the next run.
-const XLAT_TOOL = {
-  name: "record_translations",
-  description: "Record the language of each item and, if it isn't English, an English translation.",
-  input_schema: {
-    type: "object",
-    properties: {
-      items: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            i: { type: "integer", description: "the item's index" },
-            lang: { type: "string", description: "ISO 639-1 code of the item's language, e.g. en, pt, es" },
-            title_en: { type: "string", description: "English translation of the title; only if lang is not en" },
-            summary_en: { type: "string", description: "English translation of the summary; only if lang is not en and a summary was given" },
-          },
-          required: ["i", "lang"],
-        },
-      },
-    },
-    required: ["items"],
-  },
-};
+const ITEM_SHAPE =
+  `{"summary":"","themes":[{"label":"","items":[0]}],"items":[{"same_as":"","update":false,"tier":1,"rank":1,` +
+  `"statement":"","date":"YYYY-MM-DD","geography":"","companies":[""],"peer_group":"","type":"","sources":[{"url":"","publisher":""}]}]}`;
 
-async function translate(client, items) {
-  const todo = items.map((it, idx) => ({ it, idx })).filter(({ it }) => !it.lang);
-  if (!client || todo.length === 0) return items;
-  const anthropic = await client;
-  const out = [...items];
-  const BATCH = 25;
-  let translated = 0, failed = 0;
-  for (let start = 0; start < todo.length; start += BATCH) {
-    const slice = todo.slice(start, start + BATCH);
-    const batchInput = slice.map(({ it }, i) => ({ i, title: it.title, summary: it.summary || "" }));
-    const prompt =
-      `These are bank, fintech and exchange news headlines (with summaries) for an English-speaking product team, via record_translations.\n` +
-      `For each item give its language as an ISO 639-1 code. If it is NOT English, also translate the title and the ` +
-      `summary into natural, concise English. Keep bank, product, program and brand names exactly as written ` +
-      `(e.g. Nubank, Itaú, Pix, Nu Smart Invest, Mercado Pago, Personnalité). Translate only; don't add or drop facts.\n\n` +
-      `ITEMS:\n${JSON.stringify(batchInput)}`;
-    try {
-      const resp = await anthropic.messages.create({
-        model: MODEL_FAST,
-        max_tokens: 6000,
-        tools: [XLAT_TOOL],
-        tool_choice: { type: "tool", name: "record_translations" },
-        messages: [{ role: "user", content: prompt }],
-      });
-      const tu = resp.content.find((c) => c.type === "tool_use");
-      for (const r of tu?.input?.items || []) {
-        const target = slice[r.i];
-        if (!target) continue;
-        out[target.idx] = applyTranslation(target.it, r);
-        if (out[target.idx].titleOriginal && !target.it.titleOriginal) translated++;
-      }
-    } catch (err) {
-      failed++;
-      console.warn(`  translate batch @${start} skipped: ${err.message}`);
-    }
-  }
-  console.log(`  languages tagged for ${todo.length} items; translated ${translated}${failed ? ` (${failed} batches failed)` : ""}`);
+async function curate(anthropic, system, { weekly, label, from, to, today, pool, known, editionIds }) {
+  const leads = pool
+    .filter((c) => c.date >= addDays(from, -3) && c.date <= to)
+    .map((c) => ({ title: c.title, summary: (c.summary || "").slice(0, 240), url: c.url, source: c.source, date: c.date }));
+  const onBoard = [...known.values()].map((it) => ({
+    id: it.id, statement: it.statement, date: it.date,
+    ...(editionIds.has(it.id) && { in_published_weekly_brief: true }),
+  }));
+  const user =
+    `Today is ${today}. Build the ${weekly ? `Weekly Brief for ${label}` : "Last 7 Days view"}.\n` +
+    `Period: developments dated ${from} to ${to}, inclusive` +
+    (weekly ? " (Monday to Friday, plus the weekend before, which rolls into this edition).\n\n" : ".\n\n") +
+    `LEADS below come from news feeds. They are leads, not facts, and most will not qualify. Use web search to check the ` +
+    `ones that might, to find the primary source and the date of the development itself, and to find qualifying ` +
+    `developments in the period that the leads missed: Canadian banks, digital banks and regulators first, then ` +
+    `international digital banks, payments networks and Big Tech. State only facts you confirmed in a source.\n\n` +
+    `ALREADY ON THE DASHBOARD below. If you select one of these developments, set "same_as" to its id. ` +
+    (weekly
+      ? `Developments marked in_published_weekly_brief must not be repeated unless something materially new happened; ` +
+        `then include the new phase with "update": true.`
+      : `Developments marked in_published_weekly_brief may appear again if they fall in the period.`) +
+    `\n\nAnswer with ONLY a JSON object in a \`\`\`json fence, nothing after it, in this shape:\n${ITEM_SHAPE}\n` +
+    `- tier: 1 (Top Strategic Development) or 2 (Broader Strategic Signal); rank starts at 1 within each tier.\n` +
+    `- geography: one of ${GEOS.join(" / ")}. peer_group: one of ${PEERS.join(" / ")}. type: one of ${TYPES.join(" / ")}.\n` +
+    `- companies: the primary organizations, names only. sources: primary first, at most 3, URLs you found.\n` +
+    `- date: the date of the development, not the article. update: true only for a new phase of an earlier development.\n` +
+    `- themes: 3-5 short labels, each listing the 0-based indexes of the items it covers.\n` +
+    `- summary: per the weekly summary rules. If nothing qualifies, return no items and say it was a quiet period.\n\n` +
+    `LEADS:\n${JSON.stringify(leads)}\n\nALREADY ON THE DASHBOARD:\n${JSON.stringify(onBoard)}`;
+  const raw = extractJson(await askWithSearch(anthropic, system, user, 15));
+  const out = finalize(raw, { from, to, known, editionIds, weekly, now: new Date().toISOString() });
+  console.log(`  ${weekly ? "weekly" : "last 7 days"}: ${out.items.length} items (${out.items.filter((x) => x.tier === 1).length} top)`);
   return out;
 }
 
-// Daily brief: themes + highlights worth reacting to, from the final board.
-// Best-effort; returns null (frontend hides the block) on no key / failure.
-async function summarize(client, news) {
-  if (!client || news.length === 0) return null;
-  const anthropic = await client;
-  const recent = [...news]
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 60)
-    .map((n) => ({ title: n.title, company: n.bank, sector: n.sector, category: n.category, region: n.region, date: n.date, summary: (n.summary || "").slice(0, 200) }));
-  const prompt =
-    `You are briefing the Simplii Financial product team on competitor news. ` +
-    `Below is today's tracked news across banks, fintechs and trading exchanges in the Americas.\n\n` +
-    `Write a sharp, skimmable brief:\n` +
-    `- "tldr": 1-2 sentences capturing the state of play today.\n` +
-    `- "themes": 3-5 short phrases naming common threads across the items (e.g. "AI assistants in mobile apps", "savings-rate competition", "24-hour trading").\n` +
-    `- "highlights": 2-4 items genuinely worth reacting to, each {"headline": the development, "why": one line on why it matters to Simplii's product team}. ` +
-    `Prefer moves by direct competitors (CIBC, RBC, TD, Scotiabank, BMO, Wealthsimple, EQ Bank, Tangerine, Chime), ` +
-    `fintech or exchange moves that set new customer expectations, or clear category shifts.\n\n` +
-    `Base it ONLY on the items below; do not invent. Output a SINGLE JSON object in a \`\`\`json fence:\n` +
-    `\`\`\`json\n{"tldr":"","themes":["",""],"highlights":[{"headline":"","why":""}]}\n\`\`\`\n\n` +
-    `ITEMS:\n${JSON.stringify(recent)}`;
-  try {
-    const resp = await anthropic.messages.create({
-      model: MODEL_SMART,
-      max_tokens: 1500,
-      messages: [{ role: "user", content: prompt }],
-    });
-    const text = resp.content.map((c) => c.text || "").join("");
-    const s = extractJson(text);
-    const brief = {
-      tldr: String(s.tldr || ""),
-      themes: Array.isArray(s.themes) ? s.themes.map(String).slice(0, 6) : [],
-      highlights: Array.isArray(s.highlights) ? s.highlights.filter((h) => h && h.headline).slice(0, 4) : [],
-    };
-    console.log(`  brief: ${brief.themes.length} themes, ${brief.highlights.length} highlights`);
-    return brief;
-  } catch (err) {
-    console.warn(`  brief skipped: ${err.message}`);
-    return null;
-  }
+async function buildCalendar(anthropic, system, today, current) {
+  const to = addDays(today, 28);
+  const user =
+    `Today is ${today}. Build the Upcoming Strategic Calendar: events from ${today} to ${to}. Use web search to confirm ` +
+    `each event's dates on an official page. The current calendar is below: re-check it, drop what no longer fits the ` +
+    `rules or the window, and add what is missing.\n\nCURRENT:\n${JSON.stringify(current)}\n\n` +
+    `Answer with ONLY a JSON object in a \`\`\`json fence, nothing after it:\n` +
+    `{"events":[{"date":"YYYY-MM-DD","end_date":"YYYY-MM-DD","tbc":false,"name":"","organization":"","location":"city, or Virtual",` +
+    `"type":"${EVENT_TYPES.join("|")}","watch":"what to watch for, 15 words max","url":"official page"}]}`;
+  const raw = extractJson(await askWithSearch(anthropic, system, user, 10));
+  const events = cleanEvents(raw.events, today, to);
+  console.log(`  calendar: ${events.length} events`);
+  return events;
 }
 
 // --- main -------------------------------------------------------------------
 
 async function main() {
+  const { default: Anthropic } = await import("@anthropic-ai/sdk");
+  const anthropic = new Anthropic();
   const cfg = JSON.parse(await readFile(join(ROOT, "feeds.json"), "utf8"));
-  const client = makeClient();
+  const system = await readFile(join(ROOT, "prompt.md"), "utf8");
+  const today = etDate();
+  const now = new Date().toISOString();
+  let ok = 0;
 
   console.log("Fetching RSS…");
-  const rss = await fetchRss(cfg.feeds);
+  const leads = mergeCandidates([], await fetchRss(cfg.feeds), addDays(today, -10)).slice(0, 250);
+  console.log("Prefiltering…");
+  const fresh = (await prefilter(anthropic, leads)).map((c) => ({ ...c, firstSeen: now }));
+  const pool = mergeCandidates(await loadJson("candidates.json", []), fresh, addDays(today, -POOL_DAYS));
+  await writeJson("candidates.json", pool);
 
-  // dedupe + keep the newest ~140 unique candidates before classifying (keeps
-  // each batch small and the API cost bounded)
-  const seen = new Set();
-  const candidates = [];
-  for (const it of rss.sort((a, b) => new Date(b.date) - new Date(a.date))) {
-    const k = normTitle(cleanTitle(it.title)).slice(0, 80);
-    if (!k || seen.has(k)) continue;
-    seen.add(k);
-    candidates.push(it);
-    if (candidates.length >= 140) break;
+  const index = await loadJson("editions/index.json", []);
+  const editions = (await Promise.all(index.slice(0, 4).map((e) => loadJson(`editions/${e.id}.json`, null)))).filter(Boolean);
+  const editionIds = new Set(editions.flatMap((e) => e.items.map((it) => it.id)));
+  const rollingPrev = await loadJson("rolling.json", { items: [] });
+  const known = new Map([...editions.flatMap((e) => e.items), ...rollingPrev.items].map((it) => [it.id, it]));
+
+  // Weekly Brief for the last completed Mon–Fri, published once. Not there yet (first Monday run,
+  // or an earlier run failed) -> build it now; once written it is never rebuilt.
+  const monday = addDays(mondayOf(today), -7);
+  if (!index.some((e) => e.id === monday)) {
+    console.log("Weekly Brief…");
+    const label = weekLabel(monday);
+    const from = addDays(monday, -2), to = addDays(monday, 4);
+    try {
+      const ed = await curate(anthropic, system, { weekly: true, label, from, to, today, pool, known, editionIds });
+      await writeJson(`editions/${monday}.json`, { id: monday, label, from, to, published: now, ...ed });
+      await writeJson("editions/index.json", [{ id: monday, label }, ...index].sort((a, b) => b.id.localeCompare(a.id)));
+      for (const it of ed.items) { editionIds.add(it.id); known.set(it.id, it); }
+      ok++;
+    } catch (err) {
+      console.warn(`  weekly brief not published: ${err.message}`);
+    }
   }
-  const classified = await classify(client, candidates, cfg);
 
-  console.log("Discovery pass…");
-  const found = await discover(client, cfg);
+  console.log("Last 7 Days…");
+  try {
+    const from = addDays(today, -6);
+    const r = await curate(anthropic, system, { weekly: false, from, to: today, today, pool, known, editionIds });
+    for (const it of r.items) it.newThisWeek = !editionIds.has(it.id);
+    await writeJson("rolling.json", { updated: now, from, to: today, ...r });
+    ok++;
+  } catch (err) {
+    console.warn(`  last 7 days not updated: ${err.message}`);
+  }
 
-  const existingNews = await loadJson("news.json", []);
-  const existingEvents = await loadJson("events.json", []);
+  console.log("Calendar…");
+  try {
+    const current = (await loadJson("calendar.json", { events: [] })).events;
+    const events = await buildCalendar(anthropic, system, today, current);
+    await writeJson("calendar.json", { updated: now, events });
+    ok++;
+  } catch (err) {
+    console.warn(`  calendar not updated: ${err.message}`);
+  }
 
-  const merged = mergeNews(existingNews, [...classified, ...found.news], {
-    maxAgeDays: cfg.maxAgeDays ?? 120,
-    limit: cfg.maxNewsItems ?? 150,
-  }).filter((n) => REAL_CATS.includes(n.category)) // board shows only categorized items
-    .map((n) => withSector(n, cfg));
-  const events = mergeEvents(existingEvents, found.events);
-
-  console.log("Translating…");
-  const news = await translate(client, merged);
-
-  console.log("Writing brief…");
-  const brief = await summarize(client, news);
-
-  const stamp = { updated: new Date().toISOString() };
-  await writeFile(join(DATA, "news.json"), JSON.stringify(news, null, 2));
-  await writeFile(join(DATA, "events.json"), JSON.stringify(events, null, 2));
-  // keep the previous brief if this run couldn't make one
-  if (brief) await writeFile(join(DATA, "summary.json"), JSON.stringify({ ...stamp, ...brief }, null, 2));
-  await writeFile(join(DATA, "meta.json"), JSON.stringify({ ...stamp, news: news.length, events: events.length, aiEnabled: !!client }, null, 2));
-  console.log(`Done. ${news.length} news, ${events.length} events. AI=${!!client}`);
+  console.log(`Done. ${ok} of the views updated.`);
+  if (!ok) process.exitCode = 1; // nothing worked: fail the run so it shows up in Actions
 }
 
 // --- self-check -------------------------------------------------------------
@@ -502,85 +412,69 @@ async function main() {
 function selftest() {
   const assert = (c, m) => { if (!c) throw new Error("FAIL: " + m); };
 
-  // extractJson: fenced block wins over surrounding narration
-  assert(extractJson('Here are results:\n```json\n{"a":1}\n```').a === 1, "extractJson reads fenced block");
-  assert(extractJson('I searched the web. Final answer: {"news":[],"events":[]} done.').news.length === 0, "extractJson reads bare object amid prose");
-  assert(extractJson('[{"i":0,"category":"product"}]')[0].category === "product", "extractJson reads bare array");
+  // extractJson: fenced block wins over narration; bare objects and arrays work; garbage throws
+  assert(extractJson('Here:\n```json\n{"a":1}\n```').a === 1, "extractJson reads fenced block");
+  assert(extractJson('I searched. Final: {"items":[]} done.').items.length === 0, "extractJson reads bare object amid prose");
+  assert(extractJson('[{"i":0}]')[0].i === 0, "extractJson reads bare array");
   let threw = false; try { extractJson("no json here"); } catch { threw = true; }
   assert(threw, "extractJson throws when nothing parses");
 
-  // cross-source title dedupe: same story from Google News + discovery collapses,
-  // keeping the direct URL, the real category, and the longer summary
-  const merged = mergeNews([], [
-    { title: "BMO launches AI agent - BMO Newsroom", url: "https://news.google.com/rss/articles/abc", date: "2026-11-01", category: "news", summary: "short" },
-    { title: "BMO launches AI agent", url: "https://bmo.com/press/ai", date: "2026-11-01", category: "product", summary: "a much longer summary with detail" },
-  ], { maxAgeDays: 999999, limit: 10 });
-  assert(merged.length === 1, "cross-source title dedupe");
-  assert(merged[0].url === "https://bmo.com/press/ai", "prefers direct url over google news redirect");
-  assert(merged[0].category === "product", "prefers classified category");
-  assert(/longer/.test(merged[0].summary), "keeps the longer summary");
+  // dates: Monday of a week, week labels within and across months
+  assert(mondayOf("2026-11-25") === "2026-11-23" && mondayOf("2026-11-23") === "2026-11-23" && mondayOf("2026-11-29") === "2026-11-23", "mondayOf");
+  assert(weekLabel("2026-11-16") === "Week of Nov 16–20, 2026", `weekLabel same month (${weekLabel("2026-11-16")})`);
+  assert(weekLabel("2026-11-30") === "Week of Nov 30–Dec 4, 2026", `weekLabel across months (${weekLabel("2026-11-30")})`);
 
-  // age filter
-  const old = mergeNews([], [{ title: "old", url: "u", date: "2000-01-01", category: "news" }], { maxAgeDays: 120, limit: 10 });
-  assert(old.length === 0, "drops items older than maxAgeDays");
+  // candidate pool: same headline from two feeds collapses, direct URL and longer summary win; old leads drop
+  const pool = mergeCandidates([], [
+    { title: "BMO launches AI agent - BMO Newsroom", url: "https://news.google.com/rss/articles/abc", date: "2026-11-20", summary: "short", firstSeen: "t1" },
+    { title: "BMO launches AI agent", url: "https://bmo.com/press/ai", date: "2026-11-20", summary: "a much longer summary", firstSeen: "t2" },
+    { title: "Old story", url: "https://x.example", date: "2026-10-01" },
+  ], "2026-11-04");
+  assert(pool.length === 1, "pool dedupes by headline and drops old leads");
+  assert(pool[0].url === "https://bmo.com/press/ai" && /longer/.test(pool[0].summary) && pool[0].firstSeen === "t1", "pool keeps best fields + first sighting");
 
-  // sort newest first
-  const sorted = mergeNews([], [
-    { title: "a", url: "a", date: "2026-10-01", category: "news" },
-    { title: "b", url: "b", date: "2026-11-01", category: "news" },
-  ], { maxAgeDays: 999999, limit: 10 });
-  assert(sorted[0].title === "b", "sorts newest first");
-
-  // translation: English items just get tagged; others swap in English and keep the original
-  const en = applyTranslation({ title: "BMO launches AI agent", summary: "s" }, { i: 0, lang: "en" });
-  assert(en.lang === "en" && en.title === "BMO launches AI agent" && !en.titleOriginal, "english item only tagged");
-  const pt = applyTranslation(
-    { title: "Itaú lança cartão World Legend - Valor", summary: "O banco lançou um cartão" },
-    { i: 0, lang: "pt", title_en: "Itaú launches World Legend card - Valor", summary_en: "The bank launched a card" });
-  assert(pt.lang === "pt" && pt.title.startsWith("Itaú launches") && pt.titleOriginal.startsWith("Itaú lança"), "non-english item translated, original kept");
-  assert(pt.summary === "The bank launched a card", "summary translated");
-  assert(applyTranslation({ title: "x" }, { i: 0 }).lang === undefined, "no lang in result leaves item untouched");
-
-  // the same story re-fetched untranslated from RSS merges into the translated one and keeps the English
-  const again = mergeNews(
-    [{ ...pt, url: "https://news.google.com/rss/articles/itau", date: "2026-11-05", category: "product" }],
-    [{ title: "Itaú lança cartão World Legend - Valor", summary: "O banco lançou um cartão de altíssima renda", url: "https://news.google.com/rss/articles/itau", date: "2026-11-05", category: "product" }],
-    { maxAgeDays: 999999, limit: 10 });
-  assert(again.length === 1, "translated item and its untranslated re-fetch dedupe");
-  assert(again[0].title.startsWith("Itaú launches") && again[0].lang === "pt", "re-fetch doesn't overwrite the English title");
-  assert(again[0].summary === "The bank launched a card", "re-fetch doesn't overwrite the English summary (even if longer)");
-
-  // same URL: reworded copies of one story collapse; different stories from one roundup article stay
-  const ws = "https://www.fintech.ca/2026/11/05/wealthsimple-unveils-penny-ai-assistant";
-  const roundup = mergeNews([], [
-    { title: "Wealthsimple to launch CADD stablecoin with 3.25% annual reward", url: ws, date: "2026-11-05", category: "product", bank: "Wealthsimple" },
-    { title: "Wealthsimple announces CADD, a Canadian-dollar-backed stablecoin with 3.25% reward", url: ws, date: "2026-11-05", category: "product", bank: "Wealthsimple" },
-    { title: "Wealthsimple unveils Penny AI assistant at 'Wealthsimple Presents'", url: ws, date: "2026-11-05", category: "product", bank: "Wealthsimple" },
-    { title: "Wealthsimple launches Penny, an AI assistant for banking and trading", url: ws, date: "2026-11-05", category: "product", bank: "Wealthsimple" },
-  ], { maxAgeDays: 999999, limit: 10 });
-  assert(roundup.length === 2, `reworded same-URL copies collapse to one card per story (got ${roundup.length})`);
-  assert(roundup.some((n) => /CADD/.test(n.title)) && roundup.some((n) => /Penny/.test(n.title)), "distinct stories in one roundup stay separate");
-  const otherUrl = mergeNews([], [
-    { title: "Wealthsimple to launch CADD stablecoin", url: "https://a.example", date: "2026-11-05", category: "product", bank: "Wealthsimple" },
-    { title: "Wealthsimple to launch CADD stablecoin soon", url: "https://b.example", date: "2026-11-05", category: "product", bank: "Wealthsimple" },
-  ], { maxAgeDays: 999999, limit: 10 });
-  assert(otherUrl.length === 2, "similar headlines at different URLs are not merged by the URL pass");
-
-  // sector: model's tag wins, else the feeds.json lists, else "bank" (pre-sector items)
-  const scfg = { companies: { bank: ["RBC"], fintech: ["Wealthsimple"], exchange: ["Coinbase"] } };
-  assert(withSector({ bank: "Coinbase", sector: "fintech" }, scfg).sector === "fintech", "keeps a valid model sector");
-  assert(withSector({ bank: "coinbase" }, scfg).sector === "exchange", "looks sector up by company name, case-insensitive");
-  assert(withSector({ bank: "Wealthsimple", sector: "bogus" }, scfg).sector === "fintech", "replaces an invalid sector");
-  assert(withSector({ bank: "Unknown Co" }, scfg).sector === "bank", "unlisted company defaults to bank");
-
-  // events: dedupe same name+month, keep chronological
-  const evs = mergeEvents([], [
-    { name: "Money20/20 USA", date: "2026-12-20" },
-    { name: "Money20/20 USA", date: "2026-12-21", location: "Las Vegas" },
-    { name: "Finovate", date: "2026-12-01" },
+  // finalize
+  const src = [{ url: "https://example.com/a", publisher: "Example" }];
+  const item = (o) => ({ tier: 1, rank: 1, statement: "S", date: "2026-11-18", geography: "Canada", companies: ["KOHO"], peer_group: "Canadian digital & fintech", type: "Business model", sources: src, ...o });
+  const known = new Map([
+    ["old1", { id: "old1", statement: "Published", firstSeen: "2026-11-10T00:00:00Z" }],
+    ["roll1", { id: "roll1", statement: "Rolling", firstSeen: "2026-11-19T00:00:00Z" }],
   ]);
-  assert(evs.length === 2, "event dedupe by name+month");
-  assert(evs[0].name === "Finovate", "events sorted ascending");
+  const ctx = { from: "2026-11-14", to: "2026-11-20", known, editionIds: new Set(["old1"]), now: "NOW" };
+  const w = finalize({
+    summary: "x",
+    themes: [{ label: "Subscriptions", items: [0, 5] }, { label: "Empty", items: [1] }],
+    items: [
+      item({ statement: "KOHO premium tier", same_as: "roll1" }),
+      item({ statement: "Out of window", date: "2026-11-01" }),
+      item({ statement: "No source", sources: [{ url: "not a url" }] }),
+      item({ statement: "Republished", same_as: "old1" }),
+      item({ statement: "Approved now", same_as: "old1", update: true, tier: 2 }),
+      item({ statement: "Bad enums", geography: "Mars", tier: 2, rank: 2 }),
+    ],
+  }, { ...ctx, weekly: true });
+  const ids = w.items.map((x) => x.statement);
+  assert(ids.join("|") === "KOHO premium tier|Approved now|Bad enums", `weekly finalize keeps the right items (${ids.join("|")})`);
+  assert(w.items[0].id === "roll1" && w.items[0].firstSeen === "2026-11-19T00:00:00Z", "reuses a known id + firstSeen");
+  assert(w.items[1].id !== "old1" && w.items[1].update && w.items[1].firstSeen === "NOW", "an update to a published item gets a new id");
+  assert(w.items[2].geography === "Other international" && w.items[2].rank === 2, "invalid enum falls back; ranks renumbered per tier");
+  assert(w.themes.length === 1 && w.themes[0].ids.length === 2 && w.themes[0].ids[0] === "roll1", "themes map indexes to kept ids, empty themes dropped");
+  const r = finalize({ items: [item({ statement: "Republished", same_as: "old1" })] }, { ...ctx, weekly: false });
+  assert(r.items.length === 1 && r.items[0].id === "old1", "last 7 days may show a published development under its id");
+  const many = finalize({ items: Array.from({ length: 20 }, (_, n) => item({ statement: `S${n}`, tier: n < 10 ? 1 : 2, rank: n })) }, { ...ctx, weekly: false });
+  assert(many.items.filter((x) => x.tier === 1).length === MAX_TIER1 && many.items.length === MAX_TOTAL, "tier caps enforced");
+
+  // calendar: window, no earnings, dedupe by name, sorted, watch note capped at 15 words
+  const evs = cleanEvents([
+    { date: "2026-12-10", name: "Money20/20 Europe Preview", type: "Conference", watch: "w ".repeat(30) },
+    { date: "2026-12-02", name: "Scotiabank Q4 2026 Earnings Call", type: "Investor day" },
+    { date: "2026-12-03", name: "RBC Investor Day", type: "Investor day" },
+    { date: "2026-12-03", name: "RBC investor day", type: "Investor day" },
+    { date: "2027-02-01", name: "Too far", type: "Conference" },
+    { date: "TBC", name: "No date" },
+  ], "2026-11-25", "2026-12-23");
+  assert(evs.map((e) => e.name).join("|") === "RBC Investor Day|Money20/20 Europe Preview", `calendar cleaned (${evs.map((e) => e.name).join("|")})`);
+  assert(evs[1].watch.split(" ").length === 15, "watch note capped");
 
   console.log("selftest OK");
 }

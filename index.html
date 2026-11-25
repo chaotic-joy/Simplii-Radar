@@ -5,38 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <script>
-    // set theme before paint to avoid a flash
-    (function () {
-      try {
-        var t = localStorage.getItem("theme") ||
-          (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-        document.documentElement.setAttribute("data-theme", t);
-      } catch (e) { document.documentElement.setAttribute("data-theme", "dark"); }
-    })();
+    // follow the system light/dark setting (set before paint to avoid a flash)
+    document.documentElement.setAttribute("data-theme", matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
   </script>
-  <title>Bank Radar · Bank, Fintech &amp; Exchange News + Events</title>
+  <title>Simplii Strategic Market Intelligence</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="48x48" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#1b201a" />
-  <meta name="description" content="Bank, fintech &amp; exchange product news &amp; events from across the Americas, with a daily AI brief." />
+  <meta name="description" content="Curated weekly strategic market intelligence for Simplii Financial leaders: the top banking, fintech, payments and regulatory developments, ranked by relevance to Simplii." />
   <link rel="canonical" href="https://bank-radar.raykhan.me/" />
   <!-- link previews (Slack, LinkedIn, iMessage, X, etc.); image source: docs/og-image.html -->
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Bank Radar" />
+  <meta property="og:site_name" content="Simplii Strategic Market Intelligence" />
   <meta property="og:locale" content="en_CA" />
   <meta property="og:url" content="https://bank-radar.raykhan.me/" />
-  <meta property="og:title" content="Bank Radar" />
-  <meta property="og:description" content="Bank, fintech &amp; exchange product news &amp; events from across the Americas, with a daily AI brief." />
+  <meta property="og:title" content="Simplii Strategic Market Intelligence" />
+  <meta property="og:description" content="Curated weekly strategic market intelligence for Simplii Financial leaders: the top banking, fintech, payments and regulatory developments, ranked by relevance to Simplii." />
   <meta property="og:image" content="https://bank-radar.raykhan.me/og-image.jpg" />
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Bank Radar: bank and fintech product news and events from across the Americas, with a radar graphic." />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Bank Radar" />
-  <meta name="twitter:description" content="Bank, fintech &amp; exchange product news &amp; events from across the Americas, with a daily AI brief." />
+  <meta name="twitter:title" content="Simplii Strategic Market Intelligence" />
+  <meta name="twitter:description" content="Curated weekly strategic market intelligence for Simplii Financial leaders: the top banking, fintech, payments and regulatory developments, ranked by relevance to Simplii." />
   <meta name="twitter:image" content="https://bank-radar.raykhan.me/og-image.jpg" />
   <meta name="twitter:image:alt" content="Bank Radar: bank and fintech product news and events from across the Americas, with a radar graphic." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,7 +40,7 @@
 </head>
 <body>
   <!-- loading overlay: removed by app.js once the data has rendered -->
-  <div id="loader" class="loader" role="status" aria-label="Loading Bank Radar">
+  <div id="loader" class="loader" role="status" aria-label="Loading">
     <div class="radar" aria-hidden="true">
       <div class="radar-sweep"></div>
       <!-- blips: position = angle/distance from center; --d = when the sweep reaches that angle (angle/360 × 2.4s) -->
@@ -56,107 +50,65 @@
       <span class="blip" style="left:17%;top:41%;--d:1.9s"></span>
       <span class="blip" style="left:43%;top:38%;--d:2.2s"></span>
     </div>
-    <p class="loader-title">Bank Radar</p>
-    <p class="loader-sub">Scanning the Americas…</p>
+    <p class="loader-title">Simplii Radar</p>
+    <p class="loader-sub">Scanning the market…</p>
   </div>
 
   <header class="topbar">
     <div class="brand">
       <span class="dot"></span>
       <div>
-        <h1>Bank Radar</h1>
-        <p class="sub">Bank, fintech &amp; exchange product news &amp; events from across the Americas · Updated daily</p>
+        <h1>Simplii Strategic Market Intelligence</h1>
+        <p class="sub" id="edition">Loading…</p>
       </div>
     </div>
-    <div class="topbar-right">
-      <div class="meta" id="meta">loading…</div>
+    <div class="view-toggle" role="group" aria-label="Time window">
+      <button type="button" data-view="weekly" aria-pressed="true">Weekly Brief</button>
+      <button type="button" data-view="rolling" aria-pressed="false">Last 7 Days</button>
     </div>
   </header>
 
   <main>
-    <section class="col news-col">
-      <div id="brief" class="brief"></div>
+    <div class="main-col">
+      <section id="brief" class="brief" aria-live="polite"></section>
 
-      <div class="col-head" id="news-stream">
-        <h2>News stream</h2>
-        <input id="search" type="search" placeholder="Search companies, features, offers…" />
+      <div class="filters-bar" role="group" aria-label="Filters">
+        <select id="fGeo" class="select" aria-label="Filter by geography"></select>
+        <select id="fCompany" class="select" aria-label="Filter by company"></select>
+        <select id="fType" class="select" aria-label="Filter by development type"></select>
+        <select id="fTier" class="select" aria-label="Filter by tier">
+          <option value="all">All tiers</option>
+          <option value="1">Top developments</option>
+          <option value="2">Broader signals</option>
+        </select>
+        <input id="search" type="search" placeholder="Search…" aria-label="Search" />
       </div>
 
-      <!-- three filter boxes: update type, company type (+ company), region -->
-      <div id="controls">
-        <div class="filters" role="group" aria-labelledby="fl-type">
-          <span class="label" id="fl-type">Update type</span>
-          <button class="chip active" data-group="cat" data-value="all">All</button>
-          <button class="chip" data-group="cat" data-value="product">Product updates</button>
-          <button class="chip" data-group="cat" data-value="offer">Offers</button>
-          <button class="chip" data-group="cat" data-value="service">Service updates</button>
-        </div>
-        <div class="filters" role="group" aria-labelledby="fl-sector">
-          <span class="label" id="fl-sector">Company type</span>
-          <button class="chip active" data-group="sector" data-value="all">All sectors</button>
-          <button class="chip" data-group="sector" data-value="bank">Banks</button>
-          <button class="chip" data-group="sector" data-value="fintech">Fintech</button>
-          <button class="chip" data-group="sector" data-value="exchange">Exchanges &amp; trading</button>
-          <select id="bankFilter" class="select" aria-label="Filter by company">
-            <option value="all">All companies</option>
-          </select>
-        </div>
-        <div class="filters" role="group" aria-labelledby="fl-region">
-          <span class="label" id="fl-region">Region</span>
-          <button class="chip active" data-group="region" data-value="all">All regions</button>
-          <button class="chip" data-group="region" data-value="NA">N. America</button>
-          <button class="chip" data-group="region" data-value="SA">S. America</button>
-        </div>
-      </div>
+      <section class="tier" id="tier1">
+        <h2>Top Strategic Developments</h2>
+        <div class="list" id="list1"></div>
+      </section>
+      <section class="tier tier-2" id="tier2">
+        <h2>Broader Strategic Signals</h2>
+        <div class="list" id="list2"></div>
+      </section>
+    </div>
 
-      <div id="news" class="list"></div>
-    </section>
-
-    <section class="col events-col">
-      <div class="col-head" id="events-calendar"><h2>Events calendar</h2></div>
-      <div id="eventControls" class="filters"></div>
-      <div id="events" class="list"></div>
-    </section>
-
-    <!-- easter egg view: tap the emoji for a money explosion -->
-    <section class="col money-col" id="money">
-      <button id="moneyBtn" class="money-btn" type="button" aria-label="Make it rain money">💰</button>
-      <p class="money-hint">Tap for payday</p>
-    </section>
+    <aside class="rail">
+      <h2>Upcoming Strategic Calendar</h2>
+      <div class="list" id="events"></div>
+    </aside>
   </main>
 
   <footer>
-    <span id="footnote"></span>
-  </footer>
-
-  <!-- tab bar (all screen sizes), fixed above the feedback bar -->
-  <nav id="jumpMenu" class="jump-menu" aria-label="Sections">
-    <a href="#brief">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
-      <span>Daily brief</span>
-    </a>
-    <a href="#news-stream">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
-      <span>News</span>
-    </a>
-    <a href="#events-calendar">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
-      <span>Events</span>
-    </a>
-    <a href="#money">
-      <span class="tab-emoji" aria-hidden="true">💰</span>
-      <span>Money</span>
-    </a>
-    <!-- the label names the switch and makes the whole tab clickable -->
-    <label class="tab-theme" for="themeToggle">
-      <button id="themeToggle" class="theme-switch" type="button" role="switch">
-        <span class="ts-stars"></span>
-        <span class="ts-clouds"></span>
-        <span class="ts-knob"></span>
-      </button>
-      <span>Dark mode</span>
+    <label class="archive">Previous editions
+      <select id="archive" class="select"></select>
     </label>
-  </nav>
+    <p class="method">Curated against a fixed relevance bar for Simplii leaders. Routine earnings excluded. Sources linked on every item.</p>
+    <p id="updated"></p>
+    <!-- easter egg: tap for a money explosion -->
+    <button id="moneyBtn" class="money-btn" type="button" aria-label="Make it rain money">💰</button>
+  </footer>
 
   <div id="feedbackBar" class="feedback-bar" role="note">
     If you have any feedback or recommendations for Bank Radar, contact Ray Khan.

@@ -1,166 +1,29 @@
 {
-  "_comment": "Edit to tune aggregation. feeds = RSS/Atom URLs (Google News search feeds are reliable + targetable). companies (by sector: bank / fintech / exchange) and topics steer AI classification + discovery. No code changes needed.",
-  "maxAgeDays": 120,
-  "maxNewsItems": 150,
+  "_comment": "RSS/Atom feeds that supply candidate stories. Google News search feeds are reliable and targetable. What qualifies is decided by prompt.md, so these can be broad. No code changes needed.",
   "feeds": [
     {
-      "url": "https://news.google.com/rss/search?q=(%22RBC%22%20OR%20%22TD%20Bank%22%20OR%20%22Scotiabank%22%20OR%20%22BMO%22%20OR%20%22CIBC%22%20OR%20%22Simplii%20Financial%22%20OR%20%22Tangerine%22%20OR%20%22EQ%20Bank%22%20OR%20%22Wealthsimple%22%20OR%20%22Koho%22%20OR%20%22Neo%20Financial%22)%20(launch%20OR%20%22new%20feature%22%20OR%20app%20OR%20%22interest%20rate%22%20OR%20offer%20OR%20promotion%20OR%20rewards)%20when%3A45d&hl=en-CA&gl=CA&ceid=CA:en",
+      "url": "https://news.google.com/rss/search?q=(%22RBC%22%20OR%20%22TD%20Bank%22%20OR%20%22Scotiabank%22%20OR%20%22BMO%22%20OR%20%22CIBC%22%20OR%20%22National%20Bank%22%20OR%20%22Desjardins%22%20OR%20%22Simplii%22)%20(launch%20OR%20fees%20OR%20%22interest%20rate%22%20OR%20partnership%20OR%20acquisition%20OR%20account%20OR%20card%20OR%20rewards)%20when%3A10d&hl=en-CA&gl=CA&ceid=CA:en",
       "source": "Google News · Canadian banks"
     },
     {
-      "url": "https://news.google.com/rss/search?q=(%22Chime%22%20OR%20%22SoFi%22%20OR%20%22Varo%22%20OR%20%22Current%22%20OR%20%22Chase%22%20OR%20%22Bank%20of%20America%22%20OR%20%22Wells%20Fargo%22%20OR%20%22Capital%20One%22%20OR%20%22Ally%20Bank%22%20OR%20%22PNC%22%20OR%20%22US%20Bank%22)%20(launch%20OR%20%22new%20feature%22%20OR%20app%20OR%20savings%20OR%20offer%20OR%20promotion)%20when%3A45d&hl=en-CA&gl=CA&ceid=CA:en",
-      "source": "Google News · US banks"
+      "url": "https://news.google.com/rss/search?q=(%22Tangerine%22%20OR%20%22EQ%20Bank%22%20OR%20%22Wealthsimple%22%20OR%20%22KOHO%22%20OR%20%22Neo%20Financial%22%20OR%20%22Questrade%22%20OR%20%22Mogo%22%20OR%20%22Brim%20Financial%22)%20(launch%20OR%20fees%20OR%20rate%20OR%20partnership%20OR%20acquisition%20OR%20account%20OR%20card%20OR%20expands)%20when%3A10d&hl=en-CA&gl=CA&ceid=CA:en",
+      "source": "Google News · Canadian digital & fintech"
     },
     {
-      "url": "https://news.google.com/rss/search?q=(bank%20OR%20neobank%20OR%20%22credit%20card%22)%20(%22welcome%20bonus%22%20OR%20%22sign-up%20bonus%22%20OR%20%22savings%20rate%22%20OR%20%22GIC%20rate%22%20OR%20%22cash%20bonus%22%20OR%20promotion)%20(Canada%20OR%20%22United%20States%22)%20when%3A45d&hl=en-CA&gl=CA&ceid=CA:en",
-      "source": "Google News · Offers & promos"
+      "url": "https://news.google.com/rss/search?q=(%22open%20banking%22%20OR%20%22consumer-driven%20banking%22%20OR%20%22Real-Time%20Rail%22%20OR%20%22Payments%20Canada%22%20OR%20FCAC%20OR%20OSFI%20OR%20%22Competition%20Bureau%22%20OR%20interchange)%20Canada%20bank%20when%3A10d&hl=en-CA&gl=CA&ceid=CA:en",
+      "source": "Google News · Canadian regulation & payments"
     },
     {
-      "url": "https://news.google.com/rss/search?q=(%22Nubank%22%20OR%20%22Mercado%20Pago%22%20OR%20%22Ual%C3%A1%22%20OR%20%22Bancolombia%22%20OR%20%22Nequi%22%20OR%20%22Banco%20do%20Brasil%22%20OR%20%22Ita%C3%BA%22%20OR%20%22Bradesco%22)%20(launch%20OR%20%22new%20feature%22%20OR%20app%20OR%20product%20OR%20expands)%20when%3A45d&hl=en-CA&gl=CA&ceid=CA:en",
-      "source": "Google News · LatAm banks"
+      "url": "https://news.google.com/rss/search?q=(Chime%20OR%20SoFi%20OR%20Current%20OR%20Revolut%20OR%20Monzo%20OR%20Starling%20OR%20Nubank%20OR%20N26%20OR%20Klarna%20OR%20Wise%20OR%20Affirm%20OR%20Robinhood)%20(launch%20OR%20%22new%20product%22%20OR%20subscription%20OR%20%22bank%20charter%22%20OR%20expands%20OR%20acquisition%20OR%20partnership)%20when%3A10d&hl=en-CA&gl=CA&ceid=CA:en",
+      "source": "Google News · International digital banks"
     },
     {
-      "url": "https://news.google.com/rss/search?q=(%22Nubank%22%20OR%20%22Ita%C3%BA%22%20OR%20%22Bradesco%22%20OR%20%22Banco%20do%20Brasil%22%20OR%20%22Banco%20Inter%22%20OR%20%22C6%20Bank%22%20OR%20%22PicPay%22%20OR%20%22Mercado%20Pago%22)%20(lan%C3%A7a%20OR%20%22novo%20recurso%22%20OR%20app%20OR%20cart%C3%A3o%20OR%20conta%20OR%20produto%20OR%20oferta)%20when%3A45d&hl=pt-BR&gl=BR&ceid=BR:pt-419",
-      "source": "Google News · Brasil (PT)"
-    },
-    {
-      "url": "https://news.google.com/rss/search?q=(%22Nubank%22%20OR%20%22Mercado%20Pago%22%20OR%20%22Ual%C3%A1%22%20OR%20%22Bancolombia%22%20OR%20%22Nequi%22%20OR%20%22Banco%20Galicia%22%20OR%20%22BBVA%20M%C3%A9xico%22%20OR%20%22Banorte%22%20OR%20%22Davivienda%22)%20(lanza%20OR%20%22nueva%20funci%C3%B3n%22%20OR%20app%20OR%20tarjeta%20OR%20cuenta%20OR%20producto%20OR%20promoci%C3%B3n)%20when%3A45d&hl=es-419&gl=MX&ceid=MX:es-419",
-      "source": "Google News · LatAm (ES)"
-    },
-    {
-      "url": "https://news.google.com/rss/search?q=(Stripe%20OR%20PayPal%20OR%20Venmo%20OR%20%22Cash%20App%22%20OR%20%22Block%20Inc%22%20OR%20Affirm%20OR%20Plaid%20OR%20Interac%20OR%20Wealthsimple%20OR%20Koho%20OR%20Chime%20OR%20SoFi%20OR%20MoneyLion)%20(launch%20OR%20%22new%20feature%22%20OR%20app%20OR%20product%20OR%20partnership%20OR%20fees%20OR%20rewards)%20when%3A45d&hl=en-CA&gl=CA&ceid=CA:en",
-      "source": "Google News · Fintech"
-    },
-    {
-      "url": "https://news.google.com/rss/search?q=(Coinbase%20OR%20Kraken%20OR%20Robinhood%20OR%20Nasdaq%20OR%20NYSE%20OR%20%22CME%20Group%22%20OR%20Cboe%20OR%20%22TMX%20Group%22%20OR%20%22Interactive%20Brokers%22%20OR%20%22Charles%20Schwab%22%20OR%20Questrade%20OR%20Kalshi%20OR%20%22Gemini%20exchange%22)%20(launch%20OR%20%22new%20feature%22%20OR%20listing%20OR%20lists%20OR%20%22trading%20hours%22%20OR%20product%20OR%20fees%20OR%20expands)%20when%3A45d&hl=en-CA&gl=CA&ceid=CA:en",
-      "source": "Google News · Exchanges & trading"
-    },
-    {
-      "url": "https://news.google.com/rss/search?q=(%22B3%22%20OR%20%22XP%20Investimentos%22%20OR%20%22BTG%20Pactual%22%20OR%20%22Mercado%20Bitcoin%22%20OR%20Foxbit%20OR%20PagBank%20OR%20StoneCo%20OR%20Ebanx%20OR%20PicPay)%20(%22lan%C3%A7a%22%20OR%20%22novo%20produto%22%20OR%20app%20OR%20%22negocia%C3%A7%C3%A3o%22%20OR%20taxa%20OR%20parceria%20OR%20cripto)%20when%3A45d&hl=pt-BR&gl=BR&ceid=BR:pt-419",
-      "source": "Google News · Fintech & bolsa (PT)"
-    },
-    {
-      "url": "https://news.google.com/rss/search?q=(Bitso%20OR%20Stori%20OR%20dLocal%20OR%20%22Ual%C3%A1%22%20OR%20Klar%20OR%20%22Bolsa%20Mexicana%20de%20Valores%22%20OR%20BYMA%20OR%20%22Bolsa%20de%20Santiago%22%20OR%20Rappi)%20(lanza%20OR%20%22nuevo%20producto%22%20OR%20app%20OR%20tarjeta%20OR%20%22comisi%C3%B3n%22%20OR%20alianza%20OR%20cripto)%20when%3A45d&hl=es-419&gl=MX&ceid=MX:es-419",
-      "source": "Google News · Fintech & bolsa (ES)"
+      "url": "https://news.google.com/rss/search?q=(%22Apple%20Pay%22%20OR%20%22Google%20Wallet%22%20OR%20%22Amazon%22%20OR%20Visa%20OR%20Mastercard%20OR%20Interac%20OR%20%22American%20Express%22%20OR%20Plaid%20OR%20Stripe%20OR%20PayPal)%20(bank%20OR%20payments%20OR%20debit%20OR%20%22account-to-account%22%20OR%20wallet%20OR%20interchange)%20(launch%20OR%20announces%20OR%20partnership)%20when%3A10d&hl=en-CA&gl=CA&ceid=CA:en",
+      "source": "Google News · Big Tech & payments"
     },
     {
       "url": "https://www.finextra.com/rss/headlines.aspx",
       "source": "Finextra"
-    },
-    {
-      "url": "https://finovate.com/feed/",
-      "source": "Finovate"
     }
-  ],
-  "companies": {
-    "bank": [
-      "Simplii Financial",
-      "CIBC",
-      "RBC",
-      "Royal Bank of Canada",
-      "TD",
-      "TD Bank",
-      "Scotiabank",
-      "BMO",
-      "Bank of Montreal",
-      "National Bank",
-      "Tangerine",
-      "EQ Bank",
-      "Desjardins",
-      "Chase",
-      "JPMorgan",
-      "Bank of America",
-      "Wells Fargo",
-      "Citi",
-      "Citibank",
-      "Capital One",
-      "US Bank",
-      "PNC",
-      "Truist",
-      "Ally",
-      "Banco do Brasil",
-      "Itaú",
-      "Bradesco",
-      "Bancolombia",
-      "Banco Inter",
-      "C6 Bank",
-      "Banco Galicia",
-      "BBVA México",
-      "Banorte",
-      "Davivienda",
-      "Banco Inter US"
-    ],
-    "fintech": [
-      "Wealthsimple",
-      "Koho",
-      "Neo Financial",
-      "Chime",
-      "SoFi",
-      "Varo",
-      "Current",
-      "Nubank",
-      "Mercado Pago",
-      "Ualá",
-      "Nequi",
-      "PicPay",
-      "Interac",
-      "Stripe",
-      "PayPal",
-      "Venmo",
-      "Block",
-      "Cash App",
-      "Square",
-      "Affirm",
-      "Plaid",
-      "Dave",
-      "MoneyLion",
-      "OnePay",
-      "PagBank",
-      "StoneCo",
-      "Ebanx",
-      "dLocal",
-      "Stori",
-      "Klar",
-      "RappiPay"
-    ],
-    "exchange": [
-      "Coinbase",
-      "Kraken",
-      "Gemini",
-      "Robinhood",
-      "Nasdaq",
-      "NYSE",
-      "CME Group",
-      "Cboe",
-      "TMX Group",
-      "TSX",
-      "Interactive Brokers",
-      "Charles Schwab",
-      "Questrade",
-      "Webull",
-      "Public.com",
-      "Kalshi",
-      "B3",
-      "XP Investimentos",
-      "Mercado Bitcoin",
-      "Foxbit",
-      "Bitso",
-      "Bolsa Mexicana de Valores",
-      "BYMA",
-      "Bolsa de Santiago"
-    ]
-  },
-  "topics": [
-    "new product or feature launch",
-    "platform or mobile app update",
-    "new service offering",
-    "promotional offer, discount, bonus, or interest-rate change",
-    "partnership or acquisition affecting consumer banking, payments or trading products",
-    "new trading product, asset listing, trading-hours or market-access change at an exchange or brokerage",
-    "payments, wallet, lending or investing feature at a fintech"
-  ],
-  "regions": {
-    "NA": "North America (Canada, United States, Mexico)",
-    "SA": "South America / Latin America (Brazil, Argentina, Colombia, Chile, etc.)"
-  }
+  ]
 }

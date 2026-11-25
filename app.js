@@ -1,45 +1,186 @@
-// Static dashboard: reads data/*.json, renders news (filterable) + events.
-const state = { news: [], events: [], cat: "all", region: "all", sector: "all", bank: "all", q: "", evType: "all" };
-
-// event-type chip labels; unknown types fall back to a capitalized version
-const EV_LABELS = { conference: "Conferences", keynote: "Keynotes", earnings: "Earnings calls", "investor-call": "Investor calls" };
-const evLabel = (t) => EV_LABELS[t] || (t ? t[0].toUpperCase() + t.slice(1) : "Other");
-
-// own brand = Simplii (Ray's team); match on bank field or title
-const SECTOR_LABELS = { bank: "Bank", fintech: "Fintech", exchange: "Exchange" };
-
-const OWN = "Simplii Financial";
-const isOwn = (n) => /simplii/i.test(`${n.bank || ""} ${n.title || ""}`);
+// Static dashboard: reads data/*.json (built by scripts/aggregate.mjs) and renders the Weekly Brief
+// or the Last 7 Days view, ranked in two tiers, plus the upcoming strategic calendar.
+const state = { view: "weekly", data: null, index: [], rolling: null, theme: null, geo: "all", company: "all", type: "all", tier: "all", q: "" };
+const editions = {}; // edition id -> loaded edition
+let lastVisit = null; // ISO time of the previous visit, for the "new since last view" dot
 
 const $ = (s) => document.querySelector(s);
-const esc = (s) => (s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const fmtDate = (iso) => new Date(iso + "T00:00:00").toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" });
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmtDate = (iso, o = { month: "short", day: "numeric" }) => new Date(iso + "T12:00:00").toLocaleDateString("en-CA", o);
+const getJson = (path, fallback) => fetch(path).then((r) => (r.ok ? r.json() : fallback)).catch(() => fallback);
+const GEO_ORDER = ["Canada", "U.S.", "U.K. & Europe", "Other international"];
 
 async function load() {
-  const [news, events, meta, brief] = await Promise.all([
-    fetch("data/news.json").then((r) => r.json()).catch(() => []),
-    fetch("data/events.json").then((r) => r.json()).catch(() => []),
-    fetch("data/meta.json").then((r) => r.json()).catch(() => ({})),
-    fetch("data/summary.json").then((r) => r.json()).catch(() => null),
+  const [index, rolling, cal] = await Promise.all([
+    getJson("data/editions/index.json", []),
+    getJson("data/rolling.json", null),
+    getJson("data/calendar.json", { events: [] }),
   ]);
-  state.news = news;
-  state.events = events;
-  renderBrief(brief);
-
-  const when = meta.updated ? new Date(meta.updated).toLocaleString("en-CA") : "—";
-  $("#meta").innerHTML = `<span>Updated ${esc(when)}</span><span>${news.length} news · ${events.length} events · AI ${meta.aiEnabled ? "on" : "off"}</span>`;
-  $("#footnote").innerHTML = meta.seed
-    ? `<span class="seedbadge">SAMPLE DATA</span> Seeded for demo. Add an ANTHROPIC_API_KEY and run <code>npm run refresh</code> for live aggregation.`
-    : "Live data from RSS + AI aggregation. Click any card for the source.";
-
-  populateBanks();
-  mirrorChips($("#controls"));
-  populateEventTypes();
-  renderNews();
-  renderEvents();
-  showView(viewFromHash());
+  state.index = index;
+  state.rolling = rolling;
+  // read the previous visit, then record this one (browser-only; never reorders anything)
+  try { lastVisit = localStorage.getItem("lastVisit"); localStorage.setItem("lastVisit", new Date().toISOString()); } catch { /* private mode */ }
+  renderCalendar(cal.events || []);
+  renderArchive();
+  $("#updated").textContent = rolling?.updated ? `Last refreshed ${new Date(rolling.updated).toLocaleString("en-CA", { dateStyle: "medium", timeStyle: "short" })}` : "";
+  await route();
   hideLoader();
 }
+
+// URL hash picks the view: "" = latest Weekly Brief, #last-7-days, #week-YYYY-MM-DD = an archived edition
+async function route() {
+  const h = location.hash;
+  if (h === "#last-7-days") return show("rolling");
+  const m = h.match(/^#week-(\d{4}-\d{2}-\d{2})$/);
+  return show("weekly", m && state.index.some((e) => e.id === m[1]) ? m[1] : state.index[0]?.id);
+}
+addEventListener("hashchange", route);
+
+async function show(view, editionId) {
+  state.view = view;
+  if (view === "weekly") {
+    if (editionId && !editions[editionId]) editions[editionId] = await getJson(`data/editions/${editionId}.json`, null);
+    state.data = editionId ? editions[editionId] : null;
+  } else {
+    state.data = state.rolling;
+  }
+  state.theme = null;
+  document.querySelectorAll(".view-toggle button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === view)));
+  $("#archive").value = view === "weekly" && editionId ? editionId : "";
+  populateFilters();
+  render();
+}
+
+document.querySelector(".view-toggle").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]");
+  if (b) location.hash = b.dataset.view === "rolling" ? "#last-7-days" : "";
+});
+
+function editionLabel() {
+  const d = state.data;
+  if (state.view === "rolling") {
+    return d ? `Last 7 days · ${fmtDate(d.from)} – ${fmtDate(d.to, { month: "short", day: "numeric", year: "numeric" })}` : "Last 7 days";
+  }
+  if (!d) return "Weekly Brief";
+  return d.id === state.index[0]?.id ? d.label : `${d.label} · previous edition`;
+}
+
+function render() {
+  $("#edition").textContent = editionLabel();
+  renderBrief();
+  const d = state.data;
+  const items = d?.items || [];
+  const shown = items.filter(matches);
+  const t1 = shown.filter((i) => i.tier === 1), t2 = shown.filter((i) => i.tier === 2);
+  $("#tier1").hidden = state.tier === "2";
+  $("#tier2").hidden = state.tier === "1" || (!items.length && !!d);
+  let empty;
+  if (!d) {
+    empty = state.view === "weekly"
+      ? "The first Weekly Brief publishes on Monday morning. Last 7 Days shows the latest developments in the meantime."
+      : "The Last 7 Days view hasn't been built yet.";
+  } else if (!items.length) {
+    empty = "A quiet period: no developments met the bar for senior leaders.";
+  } else {
+    empty = "No items match these filters.";
+  }
+  $("#list1").innerHTML = t1.length ? t1.map(card).join("") : `<div class="empty">${!items.length ? empty : t2.length ? "No top developments match these filters." : empty}</div>`;
+  $("#list2").innerHTML = t2.length ? t2.map(card).join("") : `<div class="empty">No broader signals${items.length ? " match these filters" : ""}.</div>`;
+}
+
+function renderBrief() {
+  const d = state.data;
+  if (!d?.summary) { $("#brief").innerHTML = ""; return; }
+  const chips = (d.themes || []).map((t, n) =>
+    `<button type="button" class="theme" data-theme-index="${n}" aria-pressed="${state.theme === n}">${esc(t.label)}</button>`).join("");
+  $("#brief").innerHTML = `
+    <h2 class="brief-head">${state.view === "weekly" ? "Week in brief" : "Last 7 days in brief"}</h2>
+    <p class="brief-tldr">${esc(d.summary)}</p>
+    ${chips ? `<div class="brief-themes" role="group" aria-label="Filter by theme">${chips}</div>` : ""}`;
+}
+
+// theme chips filter the page to the items they cover; tap again to clear
+$("#brief").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-theme-index]");
+  if (!b) return;
+  const n = Number(b.dataset.themeIndex);
+  state.theme = state.theme === n ? null : n;
+  render();
+});
+
+function matches(it) {
+  if (state.theme !== null && !state.data.themes[state.theme]?.ids.includes(it.id)) return false;
+  if (state.geo !== "all" && it.geography !== state.geo) return false;
+  if (state.company !== "all" && !it.companies.includes(state.company)) return false;
+  if (state.type !== "all" && it.type !== state.type) return false;
+  if (state.tier !== "all" && String(it.tier) !== state.tier) return false;
+  const q = state.q.trim().toLowerCase();
+  if (q && !`${it.statement} ${it.companies.join(" ")} ${it.sources.map((s) => s.publisher).join(" ")}`.toLowerCase().includes(q)) return false;
+  return true;
+}
+
+// dropdown options come from the items in the current view; a choice that no longer exists resets to "all"
+function populateFilters() {
+  const items = state.data?.items || [];
+  const fill = (sel, key, all, values) => {
+    if (!values.includes(state[key])) state[key] = "all";
+    $(sel).innerHTML = `<option value="all">${all}</option>` +
+      values.map((v) => `<option value="${esc(v)}"${v === state[key] ? " selected" : ""}>${esc(v)}</option>`).join("");
+  };
+  const uniq = (a) => [...new Set(a.filter(Boolean))];
+  fill("#fGeo", "geo", "All geographies", GEO_ORDER.filter((g) => items.some((i) => i.geography === g)));
+  fill("#fCompany", "company", "All companies", uniq(items.flatMap((i) => i.companies)).sort((a, b) => a.localeCompare(b)));
+  fill("#fType", "type", "All development types", uniq(items.map((i) => i.type)).sort());
+}
+for (const [sel, key] of [["#fGeo", "geo"], ["#fCompany", "company"], ["#fType", "type"], ["#fTier", "tier"]]) {
+  $(sel).addEventListener("change", (e) => { state[key] = e.target.value; render(); });
+}
+$("#search").addEventListener("input", (e) => { state.q = e.target.value; render(); });
+
+function card(it) {
+  const isNew = !!lastVisit && it.firstSeen > lastVisit;
+  const marks = [
+    it.update && `<span class="mark">Update</span>`,
+    state.view === "rolling" && it.newThisWeek && `<span class="mark">New this week</span>`,
+  ].filter(Boolean).join("");
+  const tags = [it.geography, it.type, it.peerGroup].filter(Boolean).map((t) => `<span class="pill">${esc(t)}</span>`).join("");
+  const sources = it.sources.map((s) => `<a class="src-link" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.publisher)}</a>`).join(", ");
+  return `<article class="card item">
+    <p class="stmt">${isNew ? `<span class="new-dot" title="New since your last visit"></span><span class="sr-only">New since your last visit: </span>` : ""}${esc(it.statement)}</p>
+    <div class="item-meta">
+      <span class="item-date">${esc(fmtDate(it.date))}</span>${marks}${tags}
+      <span class="srcs">Source: ${sources}</span>
+    </div>
+  </article>`;
+}
+
+function renderCalendar(events) {
+  $("#events").innerHTML = events.length ? events.map((e) => {
+    const d = new Date(e.date + "T12:00:00");
+    const range = e.endDate && e.endDate !== e.date ? `${fmtDate(e.date)} – ${fmtDate(e.endDate)}` : fmtDate(e.date);
+    const inner = `<div class="event">
+      <div class="when"><div class="m">${d.toLocaleDateString("en-CA", { month: "short" })}</div><div class="d">${d.getDate()}</div></div>
+      <div class="body">
+        <h3>${esc(e.name)}</h3>
+        <p>${esc([e.tbc ? `${range} (TBC)` : range, e.organization, e.location].filter(Boolean).join(" · "))}</p>
+        ${e.watch ? `<p class="watch">Watch for: ${esc(e.watch)}</p>` : ""}
+        <span class="pill">${esc(e.type)}</span>
+      </div>
+    </div>`;
+    return e.url ? `<a class="card" href="${esc(e.url)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="card">${inner}</div>`;
+  }).join("") : `<div class="empty">No strategic events in the next four weeks.</div>`;
+}
+
+function renderArchive() {
+  const past = state.index.slice(1);
+  $("#archive").closest(".archive").hidden = !past.length;
+  $("#archive").innerHTML = `<option value="">Choose a week…</option>` +
+    state.index.map((e) => `<option value="${esc(e.id)}">${esc(e.label)}</option>`).join("");
+}
+$("#archive").addEventListener("change", (e) => {
+  if (e.target.value) location.hash = e.target.value === state.index[0]?.id ? "" : `#week-${e.target.value}`;
+  scrollTo({ top: 0 });
+});
 
 // fade out the radar loading overlay; held for at least one sweep so a fast load doesn't just flash it
 function hideLoader() {
@@ -50,240 +191,27 @@ function hideLoader() {
   }, Math.max(0, 2400 - performance.now()));
 }
 
-// daily AI brief above the news stream (hidden if none was generated)
-function renderBrief(b) {
-  const el = $("#brief");
-  const empty = !b || (!b.tldr && !(b.themes || []).length && !(b.highlights || []).length);
-  $('#jumpMenu a[href="#brief"]').hidden = empty; // no brief today -> nothing to jump to
-  if (empty) { el.innerHTML = ""; return; }
-  const when = b.updated ? new Date(b.updated).toLocaleDateString("en-CA", { weekday: "long", year: "numeric", month: "long", day: "numeric" }) : "";
-  const themes = (b.themes || []).map((t) => `<span class="theme">${esc(t)}</span>`).join("");
-  const highlights = (b.highlights || [])
-    .map((h) => `<li><span class="hl-head">${esc(h.headline)}</span>${h.why ? ` <span class="hl-why">${esc(h.why)}</span>` : ""}</li>`)
-    .join("");
-  el.innerHTML = `
-    <div class="brief-head"><span class="label">Daily brief${when ? `<span class="brief-sep"> · </span><span class="brief-date">${esc(when)}</span>` : ""}</span></div>
-    ${b.tldr ? `<p class="brief-tldr">${esc(b.tldr)}</p>` : ""}
-    ${themes ? `<div class="brief-themes">${themes}</div>` : ""}
-    ${highlights ? `<ul class="brief-highlights">${highlights}</ul>` : ""}`;
-}
-
-// On narrow screens each chip group shows as a dropdown instead (styles.css swaps them).
-// The chips stay the source of truth: a dropdown change clicks the matching chip, and
-// the chip click handlers keep the dropdown in step.
-const ALL_LABELS = { cat: "All types", region: "All regions", sector: "All sectors", evType: "All event types" };
-const GROUP_NAMES = { cat: "type", region: "region", sector: "sector", evType: "event type" };
-function mirrorChips(container) {
-  container.querySelectorAll(".chip-select").forEach((s) => s.remove());
-  const groups = new Set([...container.querySelectorAll(".chip[data-group]")].map((c) => c.dataset.group));
-  for (const g of groups) {
-    const chips = [...container.querySelectorAll(`.chip[data-group="${g}"]`)];
-    const sel = document.createElement("select");
-    sel.className = "select chip-select";
-    sel.dataset.group = g;
-    sel.setAttribute("aria-label", `Filter by ${GROUP_NAMES[g] || g}`);
-    sel.innerHTML = chips.map((c) => {
-      const label = c.dataset.value === "all" ? ALL_LABELS[g] || c.textContent : c.textContent;
-      return `<option value="${esc(c.dataset.value)}"${c.classList.contains("active") ? " selected" : ""}>${esc(label)}</option>`;
-    }).join("");
-    sel.addEventListener("change", () => chips.find((c) => c.dataset.value === sel.value)?.click());
-    chips[0].before(sel);
-  }
-}
-
-// mark a chip active within its group and keep that group's dropdown in step
-function activateChip(btn) {
-  const group = btn.dataset.group;
-  btn.parentElement.querySelectorAll(`.chip[data-group="${group}"]`).forEach((c) => c.classList.remove("active"));
-  btn.classList.add("active");
-  const sel = btn.parentElement.querySelector(`.chip-select[data-group="${group}"]`);
-  if (sel) sel.value = btn.dataset.value;
-  state[group] = btn.dataset.value;
-  return group;
-}
-
-// fill the company dropdown from companies present in the data, limited to the selected
-// sector so the list stays short. Simplii Financial is always listed first under banks,
-// even on a day with no Simplii news.
-function populateBanks() {
-  const banks = [...new Set(state.news.filter(inSector).map((n) => n.bank).filter((b) => b && !/simplii/i.test(b)))]
-    .sort((a, b) => a.localeCompare(b));
-  if (state.sector === "all" || state.sector === "bank") banks.unshift(OWN);
-  $("#bankFilter").innerHTML =
-    `<option value="all">All companies</option>` +
-    banks.map((b) => `<option value="${esc(b)}"${b === state.bank ? " selected" : ""}>${esc(b)}</option>`).join("");
-  if (!banks.includes(state.bank)) state.bank = "all";
-}
-
-// items without a sector predate it and were all bank news
-const sectorOf = (n) => n.sector || "bank";
-const inSector = (n) => state.sector === "all" || sectorOf(n) === state.sector;
-
-function renderNews() {
-  const q = state.q.toLowerCase();
-  const items = state.news.filter((n) => {
-    if (state.cat !== "all" && n.category !== state.cat) return false;
-    if (state.region !== "all" && n.region !== state.region) return false;
-    if (!inSector(n)) return false;
-    // Simplii also matches stories that only mention it in the headline
-    if (state.bank === OWN ? !isOwn(n) : state.bank !== "all" && (n.bank || "") !== state.bank) return false;
-    if (q && !(`${n.title} ${n.titleOriginal || ""} ${n.summary} ${n.bank} ${n.source}`.toLowerCase().includes(q))) return false;
-    return true;
-  });
-  $("#news").innerHTML = items.length
-    ? items.map(card).join("")
-    : `<div class="empty">No items match these filters.</div>`;
-}
-
-// "pt" -> "Portuguese"; falls back to the code where Intl.DisplayNames isn't available
-const langName = (code) => { try { return new Intl.DisplayNames(["en"], { type: "language" }).of(code); } catch { return code; } };
-
-function card(n) {
-  const cat = n.category || "news";
-  const translated = n.lang && n.lang !== "en" && n.titleOriginal;
-  return `<a class="card${isOwn(n) ? " own" : ""}" href="${esc(n.url)}" target="_blank" rel="noopener">
-    <div class="row1">
-      <span class="tag ${cat}">${cat === "news" ? "News" : cat}</span>
-      ${n.bank ? `<span class="bank">${esc(n.bank)}</span>` : ""}
-      <span class="date">${esc(fmtDate(n.date))}</span>
-    </div>
-    <h3>${esc(n.title)}</h3>
-    ${n.summary ? `<p>${esc(n.summary)}</p>` : ""}
-    <div class="src">${esc(SECTOR_LABELS[sectorOf(n)] || "")} · ${esc(n.source || "")}${n.region ? " · " + (n.region === "SA" ? "S. America" : "N. America") : ""}${translated ? ` · <span title="Original: ${esc(n.titleOriginal)}">Translated from ${esc(langName(n.lang))}</span>` : ""}</div>
-  </a>`;
-}
-
-// build event-type chips from the types actually present (most common first)
-function populateEventTypes() {
-  const counts = {};
-  state.events.forEach((e) => { if (e.type) counts[e.type] = (counts[e.type] || 0) + 1; });
-  const types = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
-  const chip = (v, label, active) =>
-    `<button class="chip${active ? " active" : ""}" data-group="evType" data-value="${esc(v)}">${esc(label)}</button>`;
-  $("#eventControls").innerHTML =
-    chip("all", "All", true) + types.map((t) => chip(t, evLabel(t), false)).join("");
-  mirrorChips($("#eventControls"));
-}
-
-function renderEvents() {
-  const today = new Date().toISOString().slice(0, 10);
-  const matched = state.evType === "all"
-    ? state.events
-    : state.events.filter((e) => (e.type || "") === state.evType);
-  const sorted = [...matched].sort((a, b) => a.date.localeCompare(b.date));
-  const upcoming = sorted.filter((e) => (e.endDate || e.date) >= today);
-  const recent = sorted.filter((e) => (e.endDate || e.date) < today).reverse();
-  const section = (label, list, past) =>
-    list.length ? `<div class="ev-group">${label}</div>` + list.map((e) => eventRow(e, past)).join("") : "";
-  const html = section("Upcoming", upcoming, false) + section("Recent", recent, true);
-  $("#events").innerHTML = html
-    || `<div class="empty">${state.evType === "all" ? "No events yet." : "No events match this filter."}</div>`;
-}
-
-function eventRow(e, past) {
-  const d = new Date(e.date + "T00:00:00");
-  const range = e.endDate && e.endDate !== e.date
-    ? `${fmtDate(e.date)} – ${fmtDate(e.endDate)}` : fmtDate(e.date);
-  const inner = `<div class="event ${past ? "past" : ""}">
-    <div class="when"><div class="m">${d.toLocaleDateString("en-CA", { month: "short" })}</div><div class="d">${d.getDate()}</div></div>
-    <div class="body">
-      <h3>${esc(e.name)}</h3>
-      <p>${esc(range)}${e.location ? " · " + esc(e.location) : ""}</p>
-      <span class="pill">${esc(e.type || "event")}</span>
-      ${e.region === "SA" ? `<span class="pill">S. America</span>` : ""}
-    </div>
-  </div>`;
-  return e.url ? `<a class="card" href="${esc(e.url)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="card">${inner}</div>`;
-}
-
-// filter wiring: chip groups (cat / sector / region) via data-group + data-value
-$("#controls").addEventListener("click", (ev) => {
-  const btn = ev.target.closest(".chip[data-group]");
-  if (!btn) return;
-  if (activateChip(btn) === "sector") populateBanks();
-  renderNews();
-});
-// event-type chips (same data-group/data-value pattern, scoped to the events column)
-$("#eventControls").addEventListener("click", (ev) => {
-  const btn = ev.target.closest(".chip[data-group]");
-  if (!btn) return;
-  activateChip(btn);
-  renderEvents();
-});
-// news + event cards: show a QR code for the link in a popup instead of opening it
-// (cmd/ctrl/middle-click still open it in a new tab)
+// source links + event cards: show a QR code for the link in a popup instead of opening it
+// (cmd/ctrl/shift-click still open it in a new tab)
 const qrModal = $("#qrModal");
 function openQR(ev) {
-  const a = ev.target.closest("a.card");
+  const a = ev.target.closest("a.src-link, a.card");
   if (!a || ev.metaKey || ev.ctrlKey || ev.shiftKey || !window.qrcode) return; // no library -> plain link
   ev.preventDefault();
-  const qr = qrcode(0, "L"); // lowest error correction = fewest modules; Google News links are long
+  const qr = qrcode(0, "L"); // lowest error correction = fewest modules; long links stay scannable
   qr.addData(a.href);
   qr.make();
   $("#qrCode").innerHTML = qr.createSvgTag({ cellSize: 4, margin: 4, scalable: true });
-  $("#qrTitle").textContent = a.querySelector("h3")?.textContent || "";
+  $("#qrTitle").textContent = a.closest(".card")?.querySelector(".stmt, h3")?.textContent.replace(/^New since your last visit: /, "") || "";
   $("#qrUrl").textContent = a.hostname.replace(/^www\./, "");
-  $("#qrHint").textContent = ev.currentTarget.id === "events"
-    ? "Scan to learn more about this event"
-    : "Scan to open & read the article";
+  $("#qrHint").textContent = a.classList.contains("src-link") ? "Scan to open & read the source" : "Scan to learn more about this event";
   qrModal.showModal();
 }
-$("#news").addEventListener("click", openQR);
-$("#events").addEventListener("click", openQR);
+$("main").addEventListener("click", openQR);
 qrModal.querySelector(".qr-close").addEventListener("click", () => qrModal.close());
 qrModal.addEventListener("click", (e) => { if (e.target === qrModal) qrModal.close(); }); // backdrop click
 
-$("#bankFilter").addEventListener("change", (e) => { state.bank = e.target.value; renderNews(); });
-$("#search").addEventListener("input", (e) => { state.q = e.target.value; renderNews(); });
-
-// theme toggle (initial theme is set pre-paint by the inline script in <head>)
-const toggle = $("#themeToggle");
-function syncToggle() {
-  const dark = (document.documentElement.getAttribute("data-theme") || "dark") !== "light";
-  toggle.setAttribute("aria-checked", String(dark)); // on = dark
-  toggle.title = dark ? "Switch to light" : "Switch to dark";
-}
-toggle.addEventListener("click", () => {
-  const next = (document.documentElement.getAttribute("data-theme") === "light") ? "dark" : "light";
-  document.documentElement.setAttribute("data-theme", next);
-  try { localStorage.setItem("theme", next); } catch (e) { /* ignore */ }
-  syncToggle();
-});
-syncToggle();
-
-// views: on every screen size the tab bar shows one section at a time (brief, news, events or money).
-// The view lives in the URL hash, so the back button steps between views. Each view keeps
-// its own scroll position.
-const TABS = [...document.querySelectorAll("#jumpMenu a")];
-const VIEWS = { "#brief": "brief", "#news-stream": "news", "#events-calendar": "events", "#money": "money" };
-const scrollPos = {};
-history.scrollRestoration = "manual"; // views restore their own scroll position
-function showView(view) {
-  if (view === "brief" && $('#jumpMenu a[href="#brief"]').hidden) view = "news"; // no brief today
-  const prev = document.body.dataset.view;
-  if (prev === view) return;
-  if (prev) scrollPos[prev] = scrollY;
-  document.body.dataset.view = view;
-  TABS.forEach((a) => VIEWS[a.getAttribute("href")] === view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
-  // next frame, so it lands after the browser's own jump to the #hash target
-  requestAnimationFrame(() => scrollTo({ top: scrollPos[view] || 0, behavior: "instant" }));
-}
-const viewFromHash = () => VIEWS[location.hash] || "brief";
-$("#jumpMenu").addEventListener("click", (e) => {
-  const a = e.target.closest("a");
-  if (!a) return;
-  e.preventDefault();
-  const view = VIEWS[a.getAttribute("href")];
-  if (view === document.body.dataset.view) { scrollTo({ top: 0 }); return; } // tapping the current tab goes to its top
-  history.pushState(null, "", a.getAttribute("href"));
-  showView(view);
-});
-addEventListener("popstate", () => showView(viewFromHash()));
-
-// the header is sticky, so jump targets land below it: keep --header-h at its current height
-const topbar = $(".topbar");
-new ResizeObserver(() => document.documentElement.style.setProperty("--header-h", topbar.offsetHeight + "px")).observe(topbar);
-// same for the fixed feedback bar: content and the tab bar sit above it (it wraps on phones)
+// the fixed feedback bar wraps on phones: keep --fb-h at its height so content stays clear of it
 const feedbackBar = $("#feedbackBar");
 new ResizeObserver(() => document.documentElement.style.setProperty("--fb-h", feedbackBar.offsetHeight + "px")).observe(feedbackBar);
 
@@ -353,7 +281,7 @@ moneyBtn.addEventListener("click", () => {
     el.textContent = pickMoney();
     el.style.fontSize = Math.round(rand(32, 60)) + "px";
     document.body.appendChild(el);
-    // button sits mid-screen in the money view, so burst in every direction
+    // burst in every direction from the button
     const angle = rand(0, 2 * Math.PI), speed = rand(450, 1200);
     pieces.push({
       el, x: cx, y: cy, rot: rand(0, 360), spin: rand(-540, 540),

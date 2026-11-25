@@ -23,11 +23,6 @@
   --shadow: 0 12px 34px rgba(0, 0, 0, .4);
   --bg-image: linear-gradient(180deg, #2b2733 0%, #1b201a 45%);
   --bg-overlay: transparent;
-
-  --tag-product: #c3c9f7;   --tag-product-bg: rgba(215, 219, 248, .12);
-  --tag-offer: #bccbab;     --tag-offer-bg: rgba(160, 180, 140, .16);
-  --tag-service: #e7a6fb;   --tag-service-bg: rgba(208, 89, 248, .18);
-  --tag-news: #c3c8c0;      --tag-news-bg: rgba(160, 168, 156, .16);
 }
 
 html[data-theme="light"] {
@@ -45,11 +40,6 @@ html[data-theme="light"] {
   --shadow: 0 12px 30px rgba(11, 40, 61, .08);
   --bg-image: linear-gradient(180deg, #dfe3fa 0%, #f1e4f8 20%, #f5fafc 50%);
   --bg-overlay: transparent;
-
-  --tag-product: #0b283d;   --tag-product-bg: rgba(11, 40, 61, .08);
-  --tag-offer: #3f5a2e;     --tag-offer-bg: rgba(75, 110, 55, .12);
-  --tag-service: #8a1fb3;   --tag-service-bg: rgba(208, 89, 248, .12);
-  --tag-news: #4b5147;      --tag-news-bg: rgba(75, 81, 71, .1);
 }
 
 * { box-sizing: border-box; }
@@ -60,7 +50,7 @@ body {
   font: 15px/1.55 var(--sans);
   -webkit-font-smoothing: antialiased;
   transition: background .25s ease, color .25s ease;
-  padding-bottom: calc(64px + var(--fb-h, 40px)); /* keep the last content clear of the tab bar + feedback bar */
+  padding-bottom: var(--fb-h, 40px); /* keep the last content clear of the fixed feedback bar */
 }
 
 /* feedback bar: fixed to the bottom on every screen; app.js keeps --fb-h at its height */
@@ -69,15 +59,6 @@ body {
   padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
   text-align: center; font-size: 13px; font-weight: 600; line-height: 1.4;
   color: var(--accent-ink); background: var(--accent);
-}
-
-/* micro-label: uppercase mono, wide tracking (Wealthora's "RETIRE 67" labels) */
-.label {
-  font-family: var(--mono);
-  text-transform: uppercase;
-  letter-spacing: .14em;
-  font-size: 11px;
-  color: var(--muted);
 }
 
 .topbar {
@@ -92,7 +73,6 @@ body {
 .brand h1 { font-family: var(--serif); font-weight: 500; font-size: 24px; margin: 0; letter-spacing: -.01em; line-height: 1; }
 .brand .sub { margin: 3px 0 0; font-size: 12px; color: var(--muted); line-height: 1; }
 
-.topbar-right { display: flex; align-items: center; gap: 14px; }
 
 /* loading overlay: radar sweep (one turn = 2.4s; blips flash as the sweep passes them) */
 .loader {
@@ -147,150 +127,73 @@ body {
   .loader { transition: none; }
 }
 
-/* money view: big emoji button + emoji confetti */
-.money-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* money easter egg: small emoji button in the footer, bursts emoji confetti */
 .money-btn {
-  background: none; border: 0; padding: 12px; cursor: pointer; line-height: 1;
-  font-size: 120px; border-radius: 50%; transition: transform .12s ease;
+  background: none; border: 0; padding: 6px; cursor: pointer; line-height: 1;
+  font-size: 22px; border-radius: 50%; transition: transform .12s ease;
 }
-.money-btn:hover { transform: scale(1.12); }
+.money-btn:hover { transform: scale(1.15); }
 .money-btn:active { transform: scale(.9); }
 .money-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.money-hint { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
 /* positioned each frame by the physics loop in app.js */
 .money-piece {
   position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; user-select: none;
   will-change: transform; line-height: 1;
 }
-.meta { font-family: var(--mono); font-size: 10.5px; line-height: 1.5; color: var(--muted); text-align: right; letter-spacing: .03em; }
-.meta span { display: block; }
-/* sky toggle: sun on a day sky (light) <-> moon on a starry night (dark) */
-.theme-switch {
-  position: relative; flex: 0 0 auto; width: 58px; height: 30px; padding: 0;
-  border-radius: 999px; border: 1px solid #22345c; cursor: pointer; overflow: hidden;
-  background: linear-gradient(180deg, #2b3d66, #15213c); /* night (default/dark) */
-  transition: background .3s ease, border-color .3s ease;
-  -webkit-appearance: none; appearance: none;
+/* view toggle: Weekly Brief | Last 7 Days */
+.view-toggle { display: inline-flex; padding: 3px; gap: 2px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
+.view-toggle button {
+  border: 0; background: none; color: var(--muted); font: 600 13px/1 var(--sans);
+  padding: 9px 16px; border-radius: 999px; cursor: pointer; white-space: nowrap;
 }
-html[data-theme="light"] .theme-switch {
-  background: linear-gradient(180deg, #6fc3ef, #a9ddf5); /* day */
-  border-color: #8ccaec;
-}
-.theme-switch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.ts-knob {
-  position: absolute; top: 2px; left: 2px; width: 24px; height: 24px; border-radius: 50%;
-  transform: translateX(28px); /* dark: moon sits on the right */
-  background: radial-gradient(circle at 35% 30%, #f6f5ef, #cecbc2);
-  box-shadow: 0 0 6px rgba(255, 255, 255, .45);
-  transition: transform .35s cubic-bezier(.4, .15, .2, 1), background .3s ease, box-shadow .3s ease;
-}
-html[data-theme="light"] .ts-knob {
-  transform: translateX(0); /* light: sun sits on the left */
-  background: radial-gradient(circle at 35% 30%, #ffe279, #f4b31a);
-  box-shadow: 0 0 9px rgba(245, 185, 26, .7);
-}
-.ts-knob::before, .ts-knob::after { /* moon craters, hidden in light */
-  content: ""; position: absolute; border-radius: 50%; background: rgba(60, 60, 70, .18);
-  transition: opacity .3s ease;
-}
-.ts-knob::before { width: 6px; height: 6px; top: 5px; left: 13px; }
-.ts-knob::after  { width: 4px; height: 4px; top: 14px; left: 6px; }
-html[data-theme="light"] .ts-knob::before,
-html[data-theme="light"] .ts-knob::after { opacity: 0; }
-.ts-stars { /* visible in dark, on the left */
-  position: absolute; inset: 0; transition: opacity .3s ease;
-  background-image:
-    radial-gradient(1px 1px at 9px 8px, #fff, transparent),
-    radial-gradient(1px 1px at 19px 17px, #fff, transparent),
-    radial-gradient(1.4px 1.4px at 25px 9px, #fff, transparent),
-    radial-gradient(1px 1px at 8px 21px, rgba(255, 255, 255, .85), transparent);
-}
-html[data-theme="light"] .ts-stars { opacity: 0; }
-.ts-clouds { /* visible in light, on the right */
-  position: absolute; right: 7px; bottom: 6px; width: 12px; height: 5px; border-radius: 999px;
-  background: #fff; box-shadow: -4px -2px 0 -1px #fff, 4px -1px 0 -1px #fff; opacity: 0;
-  transition: opacity .3s ease;
-}
-html[data-theme="light"] .ts-clouds { opacity: .95; }
+.view-toggle button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.view-toggle button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-main {
-  /* one view at a time (see the tab bar), so a single column; capped so lines stay readable on desktop */
-  display: grid; gap: 24px;
-  max-width: 960px; margin: 0 auto; padding: 26px 30px;
+/* main content + calendar rail; the rail sits beside the content on wide landscape screens */
+main { display: grid; gap: 28px; max-width: 1240px; margin: 0 auto; padding: 26px 30px; }
+@media (min-width: 1100px) and (orientation: landscape) {
+  main { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+  .rail { position: sticky; top: 100px; /* clears the sticky header */ }
 }
-
-.col-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-.col-head h2 { font-family: var(--mono); font-size: 15px; text-transform: uppercase; letter-spacing: .12em; color: var(--header); margin: 0; font-weight: 600; }
-#search {
-  background: var(--panel); border: 1px solid var(--line); color: var(--text);
-  padding: 9px 13px; border-radius: 10px; width: 260px; max-width: 50vw; font-size: 13px; font-family: var(--sans);
+.tier h2, .rail h2, .brief-head {
+  font-family: var(--mono); font-size: 14px; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--header); margin: 0 0 12px; font-weight: 600;
 }
-#search:focus { outline: none; border-color: var(--accent); }
-#search::placeholder { color: var(--muted); }
+.tier + .tier { margin-top: 30px; }
+[hidden] { display: none !important; }
 
-/* daily AI brief */
+/* week in brief */
 .brief:empty { display: none; }
 .brief {
   background: linear-gradient(135deg, var(--accent-soft), var(--panel) 60%);
   border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
-  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 22px;
+  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 18px;
 }
-.brief-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
-.brief-head .label { font-size: 15px; font-weight: 600; letter-spacing: .12em; color: var(--header); }
-.brief-tldr { font-family: var(--serif); font-size: 18px; line-height: 1.4; margin: 0 0 12px; color: var(--text); letter-spacing: -.01em; }
-.brief-themes { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.theme { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; padding: 3px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--text); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
-.brief-highlights { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
-.brief-highlights li { font-size: 13px; line-height: 1.45; }
-.brief-highlights li::marker { color: var(--accent); }
-.hl-head { font-weight: 600; color: var(--text); }
-.hl-why { color: var(--muted); }
+.brief-tldr { font-size: 18px; line-height: 1.45; margin: 0 0 14px; letter-spacing: -.01em; }
+.brief-themes { display: flex; flex-wrap: wrap; gap: 6px; }
+.theme {
+  font: 600 11px/1.2 var(--mono); text-transform: uppercase; letter-spacing: .06em; cursor: pointer;
+  padding: 6px 11px; border-radius: 999px; background: var(--accent-soft); color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.theme:hover { border-color: var(--accent); }
+.theme[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.theme:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* news filters: one box each for update type, company type and region */
-#controls { margin-bottom: 18px; display: flex; flex-direction: column; gap: 12px; }
-.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-#controls .filters { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
-#controls .label { flex-basis: 100%; }
+/* filter bar: lightweight, one row on wide screens */
+.filters-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
 .select {
   background: var(--panel); border: 1px solid var(--line); color: var(--text);
-  padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-family: var(--sans); cursor: pointer; max-width: 200px;
+  padding: 7px 12px; border-radius: 999px; font-size: 12.5px; font-family: var(--sans); cursor: pointer; max-width: 220px;
 }
 .select:focus { outline: none; border-color: var(--accent); }
-.chip {
-  background: var(--panel); border: 1px solid var(--line); color: var(--muted);
-  padding: 6px 13px; border-radius: 999px; font-size: 12.5px; cursor: pointer; transition: .13s; font-family: var(--sans);
+#search {
+  flex: 1 1 160px; background: var(--panel); border: 1px solid var(--line); color: var(--text);
+  padding: 7px 13px; border-radius: 999px; font-size: 13px; font-family: var(--sans);
 }
-.chip:hover { color: var(--text); border-color: var(--muted); }
-.chip.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
-
-/* jump targets (mobile menu) land just below the sticky header */
-#brief, #news-stream, #events-calendar { scroll-margin-top: calc(var(--header-h, 80px) + 12px); }
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-
-/* tab bar (every screen size): fixed to the bottom, sitting on the feedback bar; tabs stay
-   centred within 720px on wide screens instead of stretching edge to edge */
-.jump-menu {
-  position: fixed; left: 0; right: 0; bottom: var(--fb-h, 40px); z-index: 20;
-  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px;
-  padding: 6px max(8px, calc((100% - 720px) / 2));
-  background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(12px);
-  border-top: 1px solid var(--line);
-}
-.jump-menu a, .jump-menu .tab-theme {
-  display: flex; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-  min-height: 48px; border-radius: 12px; color: var(--muted); text-decoration: none;
-  font-size: 11.5px; letter-spacing: .02em; -webkit-tap-highlight-color: transparent;
-}
-.jump-menu a[hidden] { display: none; }
-.jump-menu svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.jump-menu .tab-emoji { font-size: 20px; line-height: 22px; }
-.jump-menu .theme-switch { zoom: .75; } /* 30px switch -> ~22px, the height of the tab icons */
-.jump-menu a[aria-current] { color: var(--header); background: var(--accent-soft); font-weight: 600; }
-.jump-menu a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-
-/* chip dropdowns: built by mirrorChips() in app.js, shown only on narrow screens */
-.chip-select { display: none; }
+#search:focus { outline: none; border-color: var(--accent); }
+#search::placeholder { color: var(--muted); }
 
 .list { display: flex; flex-direction: column; gap: 12px; }
 
@@ -298,27 +201,24 @@ main {
   background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
   padding: 16px 18px; display: block; text-decoration: none; color: inherit; transition: .14s; position: relative;
 }
-.card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
-/* own brand (Simplii) stands out subtly from competitors */
-.card.own { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: linear-gradient(105deg, var(--accent-soft), var(--panel) 55%); }
-.card .row1 { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
-
-.tag {
-  font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .1em;
-  padding: 3px 8px; border-radius: 6px; font-weight: 500;
+a.card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+/* development cards: one statement, then date, markers, tags and source links */
+.stmt { margin: 0; font-size: 16px; line-height: 1.5; }
+.item-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+.item-date { font-family: var(--mono); letter-spacing: .03em; }
+.mark {
+  font: 600 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em;
+  padding: 4px 7px; border-radius: 6px; background: var(--accent); color: var(--accent-ink);
 }
-.tag.product { color: var(--tag-product); background: var(--tag-product-bg); }
-.tag.offer { color: var(--tag-offer); background: var(--tag-offer-bg); }
-.tag.service { color: var(--tag-service); background: var(--tag-service-bg); }
-.tag.news { color: var(--tag-news); background: var(--tag-news-bg); }
-
-.bank { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--accent); font-weight: 500; text-transform: uppercase; }
-/* light mode: lime accent fails contrast on the cream card; use the darker header green (4.76:1) */
-html[data-theme="light"] .bank { color: var(--header); }
-.date { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: auto; letter-spacing: .03em; }
-.card h3 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 4px 0 7px; line-height: 1.3; letter-spacing: -.01em; }
-.card p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
-.card .src { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 10px; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+.srcs { flex-basis: 100%; }
+.src-link { color: var(--header); text-underline-offset: 2px; }
+.src-link:hover { color: var(--accent); }
+.new-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin: 0 8px 2px 0; vertical-align: middle; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* tier 2: lighter, more compact */
+.tier-2 .card { background: transparent; padding: 12px 16px; }
+.tier-2 .stmt { font-size: 14.5px; }
+.tier-2 h2 { color: var(--muted); }
 
 .ev-group { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .16em; color: var(--muted); margin: 10px 0 4px; }
 .event { display: flex; gap: 14px; align-items: flex-start; }
@@ -334,53 +234,19 @@ html[data-theme="light"] .event .when { background: var(--accent); border-color:
 html[data-theme="light"] .event .when .m { color: #000; font-weight: 700; }
 html[data-theme="light"] .event .when .d { color: #000; }
 .event .body h3 { font-family: var(--serif); font-weight: 500; margin: 0 0 3px; font-size: 16px; letter-spacing: -.01em; }
-.event .body p { font-size: 12px; margin: 0; }
-.pill { display: inline-block; font-family: var(--mono); font-size: 10px; border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; margin-top: 7px; margin-right: 5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.event .body p { font-size: 12px; margin: 0 0 6px; color: var(--muted); }
+.event .body .watch { color: var(--text); }
+.pill { display: inline-block; font-family: var(--mono); font-size: 10px; border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 .past { opacity: .55; }
 
 .empty { color: var(--muted); font-size: 13px; padding: 22px; text-align: center; border: 1px dashed var(--line); border-radius: var(--radius); font-family: var(--mono); letter-spacing: .04em; }
 
-footer { max-width: 960px; margin: 0 auto; padding: 10px 30px 36px; text-align: center; color: var(--muted); font-size: 11.5px; font-family: var(--mono); letter-spacing: .03em; }
-.seedbadge { color: var(--accent-ink); background: var(--accent); padding: 2px 8px; border-radius: 6px; font-weight: 600; letter-spacing: .06em; }
-footer code { font-family: var(--mono); color: var(--text); }
-
-/* views: one section at a time (brief, news or events), picked in the tab bar; body[data-view] is set by app.js */
-[data-view="brief"] .news-col > :not(#brief), [data-view="brief"] .events-col,
-[data-view="news"] #brief, [data-view="news"] .events-col,
-[data-view="events"] .news-col,
-[data-view="money"] .news-col, [data-view="money"] .events-col,
-body:not([data-view="money"]) .money-col, [data-view="money"] #footnote { display: none; }
-
-/* brief + money views: content sits in the middle of the screen (between header and tab bar); a brief
-   taller than the screen just starts at the top */
-/* viewport units get zoomed too, so undo the kiosk --zoom to keep this exactly one screen tall */
-[data-view="brief"], [data-view="money"] { min-height: calc(100dvh / var(--zoom, 1)); display: flex; flex-direction: column; }
-[data-view="brief"] main, [data-view="money"] main { flex: 1; width: 100%; align-content: center; }
-[data-view="brief"] footer, [data-view="money"] footer { width: 100%; }
-
-/* news + events views on wider screens: list on the left, filters in a panel on the right that stays
-   vertically centred in the visible area while the list scrolls. Phones keep their dropdowns above the list. */
-@media (min-width: 900px) {
-  [data-view="news"] .news-col, [data-view="events"] .events-col {
-    display: grid; grid-template-columns: minmax(0, 1fr) 240px; column-gap: 24px; align-items: start;
-  }
-  .news-col > .col-head, .events-col > .col-head { grid-column: 1 / -1; }
-  #news, #events { grid-column: 1; grid-row: 2; }
-  #controls, #eventControls {
-    grid-column: 2; grid-row: 2; margin: 0;
-    /* sticky top: 50% = middle of the viewport; nudge by the bars so it's the middle of the *visible* area */
-    position: sticky; top: calc(50% + (var(--header-h, 80px) - 64px - var(--fb-h, 40px)) / 2);
-    transform: translateY(-50%);
-  }
-  /* the news panel is the three filter boxes; the events panel is one box of full-width stacked chips */
-  #eventControls {
-    flex-direction: column; align-items: stretch;
-    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px;
-  }
-  #controls .select { width: 100%; max-width: none; }
-  /* each news filter box: chips stacked, all the box's width */
-  #controls .filters { flex-direction: column; align-items: stretch; }
+footer {
+  max-width: 1240px; margin: 0 auto; padding: 18px 30px 30px; border-top: 1px solid var(--line);
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; color: var(--muted); font-size: 12px;
 }
+footer p { margin: 0; }
+.archive { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text); }
 
 /* QR popup (native <dialog>; Esc and backdrop click close it) */
 .qr-modal {
@@ -401,35 +267,21 @@ body:not([data-view="money"]) .money-col, [data-view="money"] #footnote { displa
 .qr-close:hover { color: var(--text); background: var(--panel-2); }
 .qr-close:focus-visible { outline: 2px solid var(--accent); }
 
-/* phones: compact header, and filter chips become dropdowns */
+/* phones: compact header, filters two per row */
 @media (max-width: 640px) {
-  /* header: brand left, toggle right, update info on its own row below */
-  .topbar { flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 12px 16px; }
-  .topbar-right { display: contents; }
-  .brand { flex: 1; min-width: 0; gap: 10px; }
-  .brand h1 { font-size: 20px; }
-  .brand .sub { font-size: 11.5px; line-height: 1.3; }
-  /* daily brief: date on its own line under the "Daily brief" heading */
-  .brief-sep { display: none; }
-  .brief-date { display: block; margin-top: 4px; }
+  .topbar { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+  .brand { flex: 1 1 100%; gap: 10px; }
+  .brand h1 { font-size: 18px; line-height: 1.2; }
+  .brand .sub { font-size: 12px; line-height: 1.3; }
+  .view-toggle { flex: 1; }
+  .view-toggle button { flex: 1; }
   .feedback-bar { font-size: 12px; padding-top: 8px; padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
-  .meta { flex-basis: 100%; display: flex; flex-wrap: wrap; column-gap: .6em; text-align: left; }
-  .meta span { white-space: nowrap; }
-
   main { padding: 18px 16px; }
-  .col-head { flex-wrap: wrap; }
-  #search { flex: 1 1 200px; width: auto; max-width: none; font-size: 16px; } /* 16px+ stops iOS zooming on focus */
-
-  /* news filters: two-column grid of dropdowns (type + sector, company + region) */
-  #controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  #controls .filters { display: contents; }
-  .filters .chip, #controls .label { display: none; }
-  .chip-select { display: block; width: 100%; max-width: none; padding: 9px 12px; font-size: 16px; }
-  #bankFilter { width: 100%; max-width: none; padding: 9px 12px; font-size: 16px; order: 3; }
-  .chip-select[data-group="cat"] { order: 1; }
-  .chip-select[data-group="sector"] { order: 2; }
-  .chip-select[data-group="region"] { order: 4; }
-  #eventControls { margin-bottom: 14px; }
+  footer { padding: 18px 16px 24px; }
+  .filters-bar { display: grid; grid-template-columns: 1fr 1fr; }
+  .select, #search { max-width: none; width: 100%; padding: 9px 12px; font-size: 16px; } /* 16px+ stops iOS zooming on focus */
+  #search { grid-column: 1 / -1; }
+  .brief-tldr { font-size: 16px; }
 }
 
 /* 55" portrait touchscreen (1080×1920, or 2160×3840 on 4K panels). Phones are never this wide, and
@@ -442,26 +294,17 @@ body:not([data-view="money"]) .money-col, [data-view="money"] #footnote { displa
 
   main { padding: 22px 24px; }
 
-  /* tab bar: bigger targets and labels than on phones */
-  .jump-menu { padding-block: 8px; gap: 12px; }
-  .jump-menu a, .jump-menu .tab-theme { min-height: 64px; font-size: 14px; gap: 5px; }
-  .jump-menu .theme-switch { zoom: .95; }
-  .jump-menu svg { width: 28px; height: 28px; }
-  .jump-menu .tab-emoji { font-size: 26px; line-height: 28px; }
-  body { padding-bottom: calc(84px + var(--fb-h, 40px)); }
-
-  /* header: subtitle and update info won't fit beside each other at 720px, so the meta drops a row */
+  /* header: title on its own row, toggle below */
   .topbar { flex-wrap: wrap; gap: 10px 16px; }
   .brand { flex: 1 1 100%; }
-  .topbar-right { flex: 1; justify-content: space-between; }
-  .meta { text-align: left; }
+  .view-toggle button { padding: 12px 22px; font-size: 15px; }
 
   /* finger-sized targets */
-  .chip, .select { padding: 10px 18px; font-size: 14px; }
-  #search { padding: 12px 16px; font-size: 14px; width: 300px; }
+  .select, .theme { padding: 10px 16px; font-size: 14px; }
+  #search { padding: 10px 16px; font-size: 14px; }
 
   /* touch has no hover: stop tapped cards staying lifted */
-  .card:hover { transform: none; box-shadow: none; }
+  a.card:hover { transform: none; box-shadow: none; }
 }
 /* 4K panels: same 720 CSS px layout, twice the pixels */
 @media (orientation: portrait) and (min-width: 2000px) { :root { --zoom: 3; } }
