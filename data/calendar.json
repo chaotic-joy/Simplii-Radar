@@ -1,0 +1,38 @@
+{
+  "updated": "2026-11-25T16:52:04.040Z",
+  "events": [
+    {
+      "date": "2026-12-08",
+      "endDate": "2026-12-08",
+      "tbc": false,
+      "name": "Nu Holdings Investor Day",
+      "organization": "Nu Holdings (Nubank)",
+      "location": "New York City",
+      "type": "Investor day",
+      "watch": "First investor day: expansion plans, product roadmap, digital-bank economics",
+      "url": "https://natlawreview.com/press-releases/nu-holdings-announces-investor-day-december-8-2026"
+    },
+    {
+      "date": "2026-12-09",
+      "endDate": "2026-12-09",
+      "tbc": false,
+      "name": "CIBC Investor Day",
+      "organization": "CIBC",
+      "location": "Toronto",
+      "type": "Investor day",
+      "watch": "Medium-term targets, personal banking strategy, digital priorities, Simplii's role",
+      "url": "https://ca.finance.yahoo.com/news/cibc-host-investor-day-december-092700443.html"
+    },
+    {
+      "date": "2026-12-09",
+      "endDate": "2026-12-09",
+      "tbc": false,
+      "name": "Bank of Canada interest rate announcement",
+      "organization": "Bank of Canada",
+      "location": "Ottawa",
+      "type": "Industry event",
+      "watch": "Policy rate decision (currently 2.50%); effect on deposit and savings pricing",
+      "url": "https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/"
+    }
+  ]
+}

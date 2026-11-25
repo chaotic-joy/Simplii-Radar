@@ -1,0 +1,204 @@
+{
+  "updated": "2026-11-25T16:52:04.040Z",
+  "from": "2026-11-19",
+  "to": "2026-11-25",
+  "summary": "Canadian policy led the week. OSFI proposed capital relief to help smaller banks compete with the Big Six, and Ottawa named FDX and OBSI to run key parts of consumer-driven banking. BMO is raising its chequing fee-waiver balances. Outside Canada, Klarna reached more merchants through Visa, the FCA warned that AI agents may need authorisation, and N26 added a premium tier.",
+  "themes": [
+    {
+      "label": "Competition and open banking policy",
+      "ids": [
+        "2d1595ca59f1",
+        "a1f2c0a472f1"
+      ]
+    },
+    {
+      "label": "Chequing fees and premium tiers",
+      "ids": [
+        "4735c3eeb661",
+        "2a20b6e851e0"
+      ]
+    },
+    {
+      "label": "BNPL at checkout",
+      "ids": [
+        "9b7d705f3f7e"
+      ]
+    },
+    {
+      "label": "Oversight of AI agent payments",
+      "ids": [
+        "e9dde219136d"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "2d1595ca59f1",
+      "tier": 1,
+      "rank": 1,
+      "statement": "OSFI launched its Competitive Prudential Initiative. It proposes lower capital requirements for mortgage, SME and corporate lending at small and medium-sized banks, narrowing their capital gap with large banks by 50% to two-thirds, and removing their NVCC requirements.",
+      "date": "2026-11-19",
+      "geography": "Canada",
+      "companies": [
+        "OSFI"
+      ],
+      "peerGroup": "Regulator",
+      "type": "Regulation & policy",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPNl8yb2E1MkhIX2JYNFZqb0JfTWt3dDdjZ0E3UDVTVFVIdUtVTzRsaGZRYjBmTzducUVLTjhiamt6dTJ1X1Ayck5fTExPRWVtSVc5dTBDTy1lbVJiX2Q5a1lRNG5tYUprOE9hVEs3UlpqdjBwUHp1cHBQVGZKbVZITmNzaTJrMmNlZE1rS2g3TGEtcHBES1F3bTloMUZ3WWV4LUNGUFQ1dTB5R3J3WmZ5MkRVS2dEWGlYUzMwejQ0eXJtV0ttVHdMdHQ4M0VDWG1L?oc=5",
+          "publisher": "Reuters"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQVFFic2ZLckRtNXJqZWE1bGRuVE81Q0ZkRXdTdzJvUnRyYlZ4UGdlNmRkT1gyQzVwYmRZX09DS0tEV1ZWMWc0dTVBWU41SGZWMm9DYmkwWHJWTHB5enlzU1d3bTZaa3BrNlpmam4wQVBGZkZ0WWZYbXA5dTVSdVUycGRNUHJ6RkMxb0lEbkxxX01IZzFkX0V2ZmlfQ2xlWkRMSUkwbWpOLVA3TDJhZldubkhxMUVIcW5uWlE?oc=5",
+          "publisher": "The Globe and Mail"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:53:21.824Z",
+      "newThisWeek": false
+    },
+    {
+      "id": "a1f2c0a472f1",
+      "tier": 1,
+      "rank": 2,
+      "statement": "Finance Canada named Financial Data Exchange (FDX), a U.S.-based open banking standards body, as the technical standards body for consumer-driven banking, and named OBSI the framework's external complaints body. Together, the two designations set up key parts of how open banking will run.",
+      "date": "2026-11-20",
+      "geography": "Canada",
+      "companies": [
+        "Finance Canada",
+        "FDX",
+        "OBSI"
+      ],
+      "peerGroup": "Regulator",
+      "type": "Regulation & policy",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQVk1ZQWVxNHhMUjdBbFNNYU1JRmhZWXhCMU5zZlpuVlZoTm45RHc5THZPUEphLVNabUg5MzR5cFRrRVJjTUZTMWJrTzlDRGhZa0Z5UU9laVFyUHF3RHdMMWtQakYzTlAyNHQ0OGVsZ055MDNDNThOSTlmREp6dWlOWjFXcjh4OTZZV3IwMmhEb2twcWU2enNmSHpvbmtwTFh4SWtwUENuYm9qS1FfeGFGWDMyQ0xqQQ?oc=5",
+          "publisher": "BetaKit"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNQWtRMk1pMkM1WDVDSHktNXpCRG42NW1kY3ZNRTR6d1cweE1rUVVtOGh1QVFGWF96V3RpMmx4U2RJUXBORnJOUHdDUDdvNVhGd3lGNl9ySVF5dW1sTTlXYk13T1RWT1d5ZmNjc01mVDN4QUZUVFV2cXZuUDNoV09FV3hxYjd1VldEVnhxU2kyMmZtYm42dTJzYzNQc05MNFZLM3c?oc=5",
+          "publisher": "Investment Executive"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:53:21.824Z",
+      "newThisWeek": false
+    },
+    {
+      "id": "4735c3eeb661",
+      "tier": 1,
+      "rank": 3,
+      "statement": "BMO will raise the minimum balances customers must keep to have monthly fees waived on its everyday banking plans, effective February 1, 2027. For example, the Plus Plan waiver threshold rises from $3,000 to $3,500.",
+      "date": "2026-11-24",
+      "geography": "Canada",
+      "companies": [
+        "BMO"
+      ],
+      "peerGroup": "Canadian bank",
+      "type": "Pricing & value",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://www.bmo.com/pdfs/pricechange2027.pdf",
+          "publisher": "BMO"
+        },
+        {
+          "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1vS3F1angwZmk2cWpMc0xzN3ZyVmhYampmbmJVR0hvZVQwU2NwYTRPenNkb1hHUFg0aTZCcXpCSVRXUzB2M2dBLVhSd3E5SFlUbzRjTHF6eGtlTXhrZ0xYY2ZNRXNQbnc?oc=5",
+          "publisher": "MoneySense"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:54:53.027Z",
+      "newThisWeek": true
+    },
+    {
+      "id": "9b7d705f3f7e",
+      "tier": 2,
+      "rank": 1,
+      "statement": "Klarna expanded its Visa partnership. Merchants on the Visa Acceptance Platform in the U.S., Canada, the U.K. and Europe can now offer Klarna's flexible payment options at checkout through their existing setup, with no separate technical integration.",
+      "date": "2026-11-23",
+      "geography": "U.S.",
+      "companies": [
+        "Klarna",
+        "Visa"
+      ],
+      "peerGroup": "International digital & fintech",
+      "type": "Partnership & M&A",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://www.investing.com/news/company-news/klarna-expands-visa-partnership-for-merchant-access-93CH-5045701",
+          "publisher": "Investing.com"
+        },
+        {
+          "url": "https://www.electronicpaymentsinternational.com/news/klarna-expands-visa-partnership-across-north-america-and-europe/",
+          "publisher": "Electronic Payments International"
+        },
+        {
+          "url": "https://finance.yahoo.com/technology/articles/klarna-expands-collaboration-visa-bringing-133000131.html",
+          "publisher": "Yahoo Finance"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:54:53.027Z",
+      "newThisWeek": true
+    },
+    {
+      "id": "e9dde219136d",
+      "tier": 2,
+      "rank": 2,
+      "statement": "The U.K. Financial Conduct Authority warned technology and social media firms that AI agents that carry out financial transactions may need regulatory authorisation. The statement came the same day Meta launched its Muse AI assistant, which has retail and payment features, in the U.K.",
+      "date": "2026-11-24",
+      "geography": "U.K. & Europe",
+      "companies": [
+        "Financial Conduct Authority",
+        "Meta"
+      ],
+      "peerGroup": "Regulator",
+      "type": "Regulation & policy",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://www.finextra.com/newsarticle/48807/as-metas-muse-arrives-in-the-uk-fca-issues-agentic-ai-warning-to-tech-firms",
+          "publisher": "Finextra"
+        },
+        {
+          "url": "https://fintech.garden/news/2026-11-24-fca-puts-tech-and-social-media-firms-on-notice-over-ai-agents-as-metas-muse-goes/",
+          "publisher": "Fintech Garden"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:54:53.027Z",
+      "newThisWeek": true
+    },
+    {
+      "id": "2a20b6e851e0",
+      "tier": 2,
+      "rank": 3,
+      "statement": "N26 launched N26 Aura, a €55-a-month premium account for eligible personal and business customers in Germany. Aura bundles banking, travel and subscription benefits and becomes N26's fifth and most expensive tier, above Metal.",
+      "date": "2026-11-19",
+      "geography": "U.K. & Europe",
+      "companies": [
+        "N26"
+      ],
+      "peerGroup": "International digital & fintech",
+      "type": "Business model",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://n26.com/en-eu/press/press-release/n26-unveils-new-signature-bank-account-n26-aura",
+          "publisher": "N26"
+        },
+        {
+          "url": "https://thepaypers.com/fintech/news/n26-launches-n26-aura-premium-account-for-customers-in-germany",
+          "publisher": "The Paypers"
+        },
+        {
+          "url": "https://finovate.com/n26-pursues-higher-value-customer-with-new-premium-account/",
+          "publisher": "Finovate"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:54:53.027Z",
+      "newThisWeek": true
+    }
+  ]
+}

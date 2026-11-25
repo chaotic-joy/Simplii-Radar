@@ -1,0 +1,150 @@
+{
+  "id": "2026-11-16",
+  "label": "Week of Nov 16–20, 2026",
+  "from": "2026-11-14",
+  "to": "2026-11-20",
+  "published": "2026-11-25T16:52:04.040Z",
+  "summary": "Canadian regulators took the main steps this week. OSFI proposed capital relief to help smaller banks compete with the Big Six, and Ottawa named FDX and OBSI to key roles in consumer-driven banking. Outside Canada, Visa brought merchants and acquirers into its AI agent payments program, and Google Wallet launched on iPhone in the U.S.",
+  "themes": [
+    {
+      "label": "Capital relief to boost bank competition",
+      "ids": [
+        "2d1595ca59f1"
+      ]
+    },
+    {
+      "label": "Open banking implementation",
+      "ids": [
+        "a1f2c0a472f1"
+      ]
+    },
+    {
+      "label": "Agentic commerce",
+      "ids": [
+        "c4e085463a0a"
+      ]
+    },
+    {
+      "label": "Digital wallet competition",
+      "ids": [
+        "6adc3544247d"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "2d1595ca59f1",
+      "tier": 1,
+      "rank": 1,
+      "statement": "OSFI launched its Competitive Prudential Initiative. It proposes lower capital requirements for mortgage, SME and corporate lending at small and medium-sized banks, narrowing their capital gap with large banks by 50% to two-thirds, and removing their NVCC requirements.",
+      "date": "2026-11-19",
+      "geography": "Canada",
+      "companies": [
+        "OSFI"
+      ],
+      "peerGroup": "Regulator",
+      "type": "Regulation & policy",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://www.newswire.ca/news-releases/osfi-launches-its-competitive-prudential-initiative-putting-resilience-to-work-to-support-greater-competition-across-canada-s-banking-sector-854934911.html",
+          "publisher": "OSFI via Newswire"
+        },
+        {
+          "url": "https://www.bnnbloomberg.ca/business/economics/2026/11/19/canadas-banking-regulator-proposes-easing-capital-rules-for-small-banks-in-competition-push/",
+          "publisher": "BNN Bloomberg"
+        },
+        {
+          "url": "https://www.canadianmortgagetrends.com/newsdesk/2026/11/19/osfi-proposes-mortgage-capital-relief-for-smaller-banks/",
+          "publisher": "Canadian Mortgage Trends"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:53:21.824Z"
+    },
+    {
+      "id": "a1f2c0a472f1",
+      "tier": 1,
+      "rank": 2,
+      "statement": "Finance Canada named Financial Data Exchange (FDX), a U.S.-based open banking standards body, as technical standards body for consumer-driven banking, and named OBSI the framework's external complaints body. Together, the two designations set up key parts of how open banking will run.",
+      "date": "2026-11-20",
+      "geography": "Canada",
+      "companies": [
+        "Department of Finance Canada",
+        "Financial Data Exchange",
+        "OBSI"
+      ],
+      "peerGroup": "Regulator",
+      "type": "Regulation & policy",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://www.canada.ca/en/department-finance/news/2026/11/canada-takes-next-steps-in-implementing-the-consumer-driven-banking-framework.html",
+          "publisher": "Department of Finance Canada"
+        },
+        {
+          "url": "https://www.globenewswire.com/news-release/2026/11/20/3407801/0/en/obsi-designated-external-complaints-body-for-canada-s-consumer-driven-banking-framework.html",
+          "publisher": "OBSI via GlobeNewswire"
+        },
+        {
+          "url": "https://betakit.com/canada-to-appoint-us-based-financial-data-exchange-to-set-technical-standards-for-open-banking/",
+          "publisher": "BetaKit"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:53:21.824Z"
+    },
+    {
+      "id": "c4e085463a0a",
+      "tier": 2,
+      "rank": 1,
+      "statement": "Visa expanded its Agentic Ready program to merchants, acquirers and payment providers. Adyen, Checkout.com, Fiserv, Global Payments, PayPal, Stripe and over 140 initial participants joined to prepare for AI agent-initiated payments, adding to more than 175 enrolled issuers.",
+      "date": "2026-11-17",
+      "geography": "U.S.",
+      "companies": [
+        "Visa"
+      ],
+      "peerGroup": "Big Tech & payments",
+      "type": "Payments & cards",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://usa.visa.com/about-visa/newsroom/press-releases.releaseId.22986.html",
+          "publisher": "Visa"
+        },
+        {
+          "url": "https://www.benzinga.com/markets/large-cap/26/11/63379063/visa-targets-secure-ai-agent-payments-through-expanded-industry-partnership",
+          "publisher": "Benzinga"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:53:21.824Z"
+    },
+    {
+      "id": "6adc3544247d",
+      "tier": 2,
+      "rank": 2,
+      "statement": "Google launched the Google Wallet app on iPhone for U.S. users. It supports payment cards, passes and agentic purchase tracking, but it does not offer tap-to-pay, so in-store iPhone payments still go through Apple Pay.",
+      "date": "2026-11-17",
+      "geography": "U.S.",
+      "companies": [
+        "Google"
+      ],
+      "peerGroup": "Big Tech & payments",
+      "type": "Payments & cards",
+      "update": false,
+      "sources": [
+        {
+          "url": "https://thepaypers.com/payments/news/google-launches-google-wallet-for-ios-users-in-the-us",
+          "publisher": "The Paypers"
+        },
+        {
+          "url": "https://www.engadget.com/2319673/google-wallet-is-launching-on-ios/",
+          "publisher": "Engadget"
+        },
+        {
+          "url": "https://www.digitaltrends.com/phones/google-wallet-iphone-ios-us-launch/",
+          "publisher": "Digital Trends"
+        }
+      ],
+      "firstSeen": "2026-11-25T16:53:21.824Z"
+    }
+  ]
+}

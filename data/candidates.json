@@ -1,0 +1,938 @@
+[
+  {
+    "title": "Closing the Dispute Gap: How Closer Collaboration Can Reduce Chargebacks",
+    "url": "https://www.finextra.com/event-info/646/closing-the-dispute-gap-how-closer-collaboration-can-reduce-chargebacks?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "What is driving the growing chargeback challenge based on new Mastercard sponsored research ‘Chargebacks: The Case for Coordination’, and where does the current dispute process create friction?",
+    "date": "2027-02-17",
+    "id": "c984e412aade",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Who controls payment initiation? The battle for the future of payments",
+    "url": "https://www.finextra.com/event-info/648/who-controls-payment-initiation-the-battle-for-the-future-of-payments?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "How can the Nordics balance open competition and global interoperability with strategic autonomy, resilience and the development of strong regional payment infrastructure?",
+    "date": "2027-01-26",
+    "id": "67aa65122c49",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Agentic commerce at scale: Why trust is the new foundation for payments",
+    "url": "https://www.finextra.com/event-info/650/agentic-commerce-at-scale-why-trust-is-the-new-foundation-for-payments?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "How will the ecosystem in Europe adapt as agentic commerce payments move from experimentation towards real world acceptance?",
+    "date": "2027-01-21",
+    "id": "ca1d61082685",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "How SMEs can simplify cross-border money movement while reducing costs and complexity",
+    "url": "https://www.finextra.com/event-info/641/how-smes-can-simplify-cross-border-money-movement-while-reducing-costs-and-complexity?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "How can financial institutions build trust through payment certainty, transparent pricing, and consistent execution?",
+    "date": "2027-01-20",
+    "id": "53f0d8f446a8",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Trade-based financial crime in 2027: Exploring threats, AI and portable trust",
+    "url": "https://www.finextra.com/event-info/651/trade-based-financial-crime-in-2027-exploring-threats-ai-and-portable-trust?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "How are financial institutions combatting increasingly complex trade-based financial crime?",
+    "date": "2027-01-19",
+    "id": "edb226dcc873",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "An industry in motion: Why real-time becomes the foundation for everything in 2027",
+    "url": "https://www.finextra.com/event-info/649/an-industry-in-motion-why-real-time-becomes-the-foundation-for-everything-in-2027?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "How can financial institutions unlock real-time intelligence?",
+    "date": "2026-12-03",
+    "id": "b7c3488a9746",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Financial messaging at a tipping point: A blueprint for modern platforms",
+    "url": "https://www.finextra.com/event-info/647/financial-messaging-at-a-tipping-point-a-blueprint-for-modern-platforms?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "What does the next phase of payments transformation look like?",
+    "date": "2026-12-02",
+    "id": "fc35a9ea494c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Self-service, AI-enabled payments: Putting corporates in control of exceptions",
+    "url": "https://www.finextra.com/event-info/644/self-service-ai-enabled-payments-putting-corporates-in-control-of-exceptions?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "How can banks deliver an AI-enabled, self-service payments experience to corporates?",
+    "date": "2026-12-01",
+    "id": "3e7f8ed442b8",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Federal regulator wants smaller banks to take on the Big Six — here’s what that could mean for your next mortgage - Money.ca",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQVE5vTmVsV2x1emZtbEM5dXBBYjRremRqYUx6QUlaTloxM21yVkt1TG9NRnNDWmhvVkhfM0NRZlFud3BIT0p4MHhOZ3lhelFTdHVBMmpkalpLMExXSjBCTEtSTlZXTkZTbHpyNjVYTnE2MkVacTFCZkxFYmItMkhuUUtpS3NoN2FvR2xtTlhLOXJKMjA?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Federal regulator wants smaller banks to take on the Big Six — here’s what that could mean for your next mortgage Money.ca",
+    "date": "2026-11-25",
+    "id": "620975463452",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Apple Wallet's Biggest Rival, Google Wallet, Is Finally Available On iOS - With A Frustrating Catch - BGR",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1BWEFNU2ZBSnJvTHN0b1NZT1FBY0ZKV1RRNHNndGs1OWxnTmtEeXdFUTlJWmI3R3NQN2xqbVFFZ1Y4a3daeWl5MmVkQldrbjVSbGlCdnh0bEJjUmhWUEs0TXJCT3BqSVRmWk9sLTVJTkZNUQ?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Apple Wallet's Biggest Rival, Google Wallet, Is Finally Available On iOS - With A Frustrating Catch BGR",
+    "date": "2026-11-25",
+    "id": "1823138896cf",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Utah drops criminal charges after Kalshi exits state",
+    "url": "https://www.finextra.com/newsarticle/48814/utah-drops-criminal-charges-after-kalshi-exits-state?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Utah has dropped criminal charges against Kalshi and its co-founders after the prediction market suspended operations in the state.",
+    "date": "2026-11-25",
+    "id": "f5e34e547d83",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Lloyds completes multiple digital trade collections between Bangladesh and the UK",
+    "url": "https://www.finextra.com/newsarticle/48813/lloyds-completes-multiple-digital-trade-collections-between-bangladesh-and-the-uk?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Lloyds has teamed up with Prime Bank and vendor Enigio to carry out multiple cross-border documentary collections for apparel shipments from Bangladesh to a UK garment wholesaler, entirely in digital form.",
+    "date": "2026-11-25",
+    "id": "f12fa138cf4a",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "AfricaNenda Foundation launches State of Inclusive Payments in Africa 2026",
+    "url": "https://www.finextra.com/newsarticle/48810/africanenda-foundation-launches-state-of-inclusive-payments-in-africa-2026?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "This year’s report highlighted that instant payments systems (IPS) in Africa are having a clear impact on financial inclusion, economic growth, and user trust.",
+    "date": "2026-11-25",
+    "id": "72838c5b1c4b",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Linux Foundation aims to combat fraud with Open Financial Trust Alliance",
+    "url": "https://www.finextra.com/newsarticle/48812/linux-foundation-aims-to-combat-fraud-with-open-financial-trust-alliance?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Last week, the Linux Foundation announced the Open Financial Trust Alliance (OFTA), focused on enabling an interoperable security network.",
+    "date": "2026-11-25",
+    "id": "ee2ae77c2d5a",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Black Friday shoppers can use Meta’s Muse at Walmart",
+    "url": "https://www.finextra.com/newsarticle/48811/black-friday-shoppers-can-use-metas-muse-at-walmart?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "As Black Friday approaches, the buzz around using AI agents to do shoppers’ bidding has become a hot topic - made even hotter by Walmart facilitating Muse into the shopping experience.",
+    "date": "2026-11-25",
+    "id": "1f46cd474478",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "South Korea proposes new stablecoin rules for local bank issuance",
+    "url": "https://www.finextra.com/newsarticle/48809/south-korea-proposes-new-stablecoin-rules-for-local-bank-issuance?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "South Korea’s financial regulator has announced new stablecoin rules that will allow local banks to issue won-pegged stablecoins.",
+    "date": "2026-11-25",
+    "id": "16df576ca71b",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "UK APP fraud losses continue to rise",
+    "url": "https://www.finextra.com/newsarticle/48799/uk-app-fraud-losses-continue-to-rise?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Losses to authorised push payment (APP) fraud in the UK rose 22% to £316 million in the first half of 2026, according to figures from UK Finance.",
+    "date": "2026-11-25",
+    "id": "a1d913a272a4",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Brits wary about letting AI agents make payments for them",
+    "url": "https://www.finextra.com/newsarticle/48808/brits-wary-about-letting-ai-agents-make-payments-for-them?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Brits are increasingly turning to AI to research purchases but scepticism remains when it comes to the checkout, with just 13% saying that they are likely to let an agent make a payment for them in the next year.",
+    "date": "2026-11-25",
+    "id": "61526546bcdc",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "nCino offers lending platform to Rabobank",
+    "url": "https://www.finextra.com/pressarticle/111778/ncino-offers-lending-platform-to-rabobank?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "nCino, the platform for agentic AI banking, today announced that it is offering the nCino Platform to Rabobank, a top three Dutch bank by asset size and leader in business banking, to transform its business lending operations.",
+    "date": "2026-11-25",
+    "id": "304f12639ef8",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Pine Labs extends agentic AI platform with business intelligence and marketing agents for India's SM",
+    "url": "https://www.finextra.com/pressarticle/111779/pine-labs-extends-agentic-ai-platform-with-business-intelligence-and-marketing-agents-for-indias-sm?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Pine Labs today announced Guide and Marketer Agent, the first of a series of AI agents from its Agentic Org platform—Pine Labs' AI infrastructure with built-in governance and human oversight at critical points. Integrated into Pine Labs One, the merchant operating app, and rolling out to millions of merchants in India.",
+    "date": "2026-11-25",
+    "id": "7f26e50cbc5d",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Stafford Building Society adopts AI-powered financial crime checks",
+    "url": "https://www.finextra.com/pressarticle/111780/stafford-building-society-adopts-ai-powered-financial-crime-checks?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "The Stafford Building Society has gone live with MV Shield, Mutual Vision’s financial crime compliance platform powered by Napier AI, as it looks to make the detection and investigation of financial crime faster and more efficient.",
+    "date": "2026-11-25",
+    "id": "b9e210564f9c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Ant International and BNY ink MoU to explore 24/7 FX and payments innovation",
+    "url": "https://www.finextra.com/pressarticle/111781/ant-international-and-bny-ink-mou-to-explore-247-fx-and-payments-innovation?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Ant International, a global digital payment, digitisation and financial technology provider, and BNY (NYSE: BNY), a global financial services company, today announced a strategic collaboration aimed at exploring next-generation treasury, 24/7 FX and interoperable global payments solutions.",
+    "date": "2026-11-25",
+    "id": "116bec9cc8f7",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "FX risk management platform Bound secures $50m deb facility",
+    "url": "https://www.finextra.com/pressarticle/111782/fx-risk-management-platform-bound-secures-50m-deb-facility?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Bound, the AI-powered FX risk management platform, has secured a three-year $50m debt facility to bolster its rapidly-growing trading book and advance its growth ambitions.",
+    "date": "2026-11-25",
+    "id": "12523a1d6f85",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Lendable rebrands as Zable",
+    "url": "https://www.finextra.com/pressarticle/111783/lendable-rebrands-as-zable?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Lendable has become the UK’s number one issuer of new credit cards, just six years after launching its first card, and now leads the personal loans market by both number of loans and value lent [1]. The milestone comes as the company rebrands to Zable.",
+    "date": "2026-11-25",
+    "id": "d18af99e8b90",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "LSEG and Tradeweb launch RepoAgent",
+    "url": "https://www.finextra.com/pressarticle/111784/lseg-and-tradeweb-launch-repoagent?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "LSEG and Tradeweb today announce the launch of RepoAgent, a new solution designed to streamline post-trade processing for the non-cleared repo market.",
+    "date": "2026-11-25",
+    "id": "28d9d9238623",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Threasury secures FCA agent registration",
+    "url": "https://www.finextra.com/pressarticle/111785/threasury-secures-fca-agent-registration?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "UK fintech, Threasury has secured registration as an agent of Finexer Ltd for Account Information Services and Payment Initiation Services, marking an important step in the development of its Commitment Banking platform.",
+    "date": "2026-11-25",
+    "id": "035cb68095b8",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Transak secures MiCA licence",
+    "url": "https://www.finextra.com/pressarticle/111787/transak-secures-mica-licence?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Transak, the payments infrastructure company connecting traditional money with stablecoins and crypto, today announced that its Vienna-based entity, Transak GmbH, has been authorised by Austria's Financial Market Authority (FMA) under the EU's Markets in Crypto-Assets Regulation (MiCA).",
+    "date": "2026-11-25",
+    "id": "7be893389e7a",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "What defines the issuer of tomorrow?",
+    "url": "https://www.finextra.com/event-info/642/what-defines-the-issuer-of-tomorrow?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Modern issuing doesn’t only evolve technological change; it requires operating model transformation.",
+    "date": "2026-11-25",
+    "id": "4fbd96ba219b",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Stablecoins vs Traditional Payment Rails: What Changes for Businesses?",
+    "url": "https://www.finextra.com/blogposting/33572/stablecoins-vs-traditional-payment-rails-what-changes-for-businesses?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Author: A finextra community member",
+    "date": "2026-11-25",
+    "id": "45934550b42e",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Tokenized Deposits and Wholesale Settlement: Market Data and Institutional Shifts",
+    "url": "https://www.finextra.com/blogposting/33570/tokenized-deposits-and-wholesale-settlement-market-data-and-institutional-shifts?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Author: A finextra community member",
+    "date": "2026-11-25",
+    "id": "8ba13fe69337",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "The test for an AI-native neobank",
+    "url": "https://www.finextra.com/blogposting/33568/the-test-for-an-ai-native-neobank?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Author: A finextra community member",
+    "date": "2026-11-25",
+    "id": "9f1bd0f06c22",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Scotiabank, CIBC launch new offices abroad - The Globe and Mail",
+    "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPS0xqaUJhbHNSenJWdnF2UWx0VTZFYTN5TVJLbWhNTncydWVnZnFqR0d5dWlTZ19uZFpFZlI2U1U5bm8ybVNQSzdtM1NMM0VNVC1MVW53akhSalJsTHIzb3BwU245NzhhU0NNM243ak9CcV84SlNjekRMbVN3TXpNdC0zOTdveXVlODdiNXF0azJfV2Iwbnc?oc=5",
+    "source": "Google News · Canadian banks",
+    "summary": "Scotiabank, CIBC launch new offices abroad The Globe and Mail",
+    "date": "2026-11-24",
+    "id": "cfdbfaec00bd",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "BMO raising chequing fee waiver balances: What changes in February - MoneySense",
+    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1vS3F1angwZmk2cWpMc0xzN3ZyVmhYampmbmJVR0hvZVQwU2NwYTRPenNkb1hHUFg0aTZCcXpCSVRXUzB2M2dBLVhSd3E5SFlUbzRjTHF6eGtlTXhrZ0xYY2ZNRXNQbnc?oc=5",
+    "source": "Google News · Canadian banks",
+    "summary": "BMO raising chequing fee waiver balances: What changes in February MoneySense",
+    "date": "2026-11-24",
+    "id": "a58135ad8bcf",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada Selects FDX to Establish Open Banking Standards - Payments Industry Intelligence",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNTllyd2dUQTRBYUVINUZsWWlQMWdSbW9IZ0ljaFFBNG9oXy1weGpobVZWNWttOTA3ZWVIbkxNelJ3Vk10X005TzFEY1I0WW1KODZJS1JYdEhJMlp3YVhkaVlORkxMbENoaDBQcDU1Q0dVQnVCQkZ6ZU9VV1ExMUhzUVRkdWRaRmp0Qlh6dlNTRmJ3U2xZMDNwY1M0Mmw?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada Selects FDX to Establish Open Banking Standards Payments Industry Intelligence",
+    "date": "2026-11-24",
+    "id": "396b55de8ab4",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Klarna expands Visa partnership across North America and Europe - Electronic Payments International",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOME4xZWRxRzh2N2h2LW1VTHlEbHBNems3ZXlFRXE0OVRfc2x3SGFIcUZVbHJuU3lScWoxMHFzMll2YlhPZXBsS2Y5eWFGRERqcHFDWTZISVZONnJibUtfR2FaRTYtYU92MWtSQlAtdWRsRkt3bGFzQS16WGxzV1lObGt2dUxNUTFELVcxdnhMeDItWTRScUY4S2RwcnJQR0FNOU5Yb2VFaVhIaTN2cFJ0N1lOZ2RhQnNz?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Klarna expands Visa partnership across North America and Europe Electronic Payments International",
+    "date": "2026-11-24",
+    "id": "f6635fc920a1",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "N26 Aura: New bank account with free ceramic Mastercard, eSIM and Amazon Prime - Notebookcheck",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPV0wycDQyZTVTd2ozT1JMVFB2VlEwRUZPczY3YUVfTnNhcF8tazk0MGxpSWNqelY5SlVCbXFfMUtOMW01LVNZOWwxazNmSUlBMFVraE5RY3QzRGNxU0F6Y29PaTJmMU1XMkxfaVJkUTZpU0NmTmlxMW4tczIzMDFjTjNJaWJOejFCdUtqMFF3QXVJVko3QWFOS0EyMjlnM1pSVXlvMU1qeUgxZEk2b2o0UG83Z1lnU0ZuS3hMUXVB?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "N26 Aura: New bank account with free ceramic Mastercard, eSIM and Amazon Prime Notebookcheck",
+    "date": "2026-11-24",
+    "id": "cef7acff9310",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Google Search AI Mode Can Now Read Google Wallet, With Drive Coming Next - Technology Org",
+    "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPX3Bpb3BJWGxxaXhnUU9MWDN0NENIYW5sREFsVzNUMHpJR0JKNnpOSFo1cldlR3MzRVRFZ1JLbHpfY2FDd0M1UlliLTdRSFh0ZlVaamFpZ25aV3ltSDFOOXZ0YzNxTmFYaVJCZm5NRWttOVhiODF0QnlhX05vQTk3Nkc3OFJwTjh0WGpIYlRuVmNRSWdGalJLRVJSVW1yVzczNzNSNA?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Google Search AI Mode Can Now Read Google Wallet, With Drive Coming Next Technology Org",
+    "date": "2026-11-24",
+    "id": "703e5842398b",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Google Wallet is getting a handy update that saves you from typing your CVV - Android Authority",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9hLXQydGgzdkI2SzBjZHBRbG9YalN6dHJmcFJXS2luZ0ctek1TMnNSRzZobFpvWWIyTzlrS0p3WUVyaW44ZG80WFd4VWFKT0hKaF8yYjRXZ2JITExoMHJiMnhlODc5UnhmRnlmNHFZdDlkTTlxNnJN?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Google Wallet is getting a handy update that saves you from typing your CVV Android Authority",
+    "date": "2026-11-24",
+    "id": "c52f8e5c9026",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Mukuru Brings PayPal-to-Wallet Withdrawals To Users In Botswana - Tech Build Africa",
+    "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1IalJ3MF9zWDV1czQ2NmZMNF9TQXB1UlZmNTI3WGVsbEtTaXdaOHVWMVZITElWZzBsT3dLZzl3YWVwZ1JFcHpieWJPLXVNbXBZSDAxLW9DRTRUOF9WREM3UHNQWjk0RFFXYnRqcFFFeUZ1NXZPMlp2S0ZlUGU3UQ?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Mukuru Brings PayPal-to-Wallet Withdrawals To Users In Botswana Tech Build Africa",
+    "date": "2026-11-24",
+    "id": "d47afab6c228",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "PayPal Excludes AI Agent Virtual Card Payments From Seller Protection Before Black Friday - Tech Times",
+    "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQY3FKQnF2dDJoRDNYODdZRXZ1d2xYekZLVWxQc1lDNHRCbmVTX0VXSnItcUVsSUdJMzhZN3pJcDdhbVM2Y3dxblJNVXFsTFROVEZQVlZEM2tNOEVsNTNGMEY2ZWdSZWdRczBjX1d6bURQYkdSdmZnQXBMNkZvRDk2UjN6bi1yb0YxaHJxZElHVWFsZnBqTTJJVFp4a3g4NGRCa2EtOFoyOUt0VnFqOC1TbURxOWpUR2RQOEpSMnRVS0I3d0VwQmU0R1U3RGctRGJqa1FSWjBR?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "PayPal Excludes AI Agent Virtual Card Payments From Seller Protection Before Black Friday Tech Times",
+    "date": "2026-11-24",
+    "id": "bf0b3b604471",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "As Meta's Muse arrives in the UK, FCA issues agentic AI warning to tech firms",
+    "url": "https://www.finextra.com/newsarticle/48807/as-metas-muse-arrives-in-the-uk-fca-issues-agentic-ai-warning-to-tech-firms?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "On the day that Meta's Muse launched in the UK, the Financial Conduct Authority has warned technology companies and social media platforms that AI agents offering money-related services could face regulatory scrutiny.",
+    "date": "2026-11-24",
+    "id": "e7fb2348751c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "NAB CEO hits out at Instagram account's salacious claims",
+    "url": "https://www.finextra.com/newsarticle/48806/nab-ceo-hits-out-at-instagram-accounts-salacious-claims?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "The CEO of NAB says the Australian bank will act to protect staff from \"unfair and damaging posts\" on Instagram by a self-described \"customer advocate\" who has made a string of claims concerning drug use, affairs, bullying and corruption at the lender.",
+    "date": "2026-11-24",
+    "id": "ffcde5b58d29",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "JP Morgan, HSBC and StoneX pilot digital gold trades",
+    "url": "https://www.finextra.com/newsarticle/48805/jp-morgan-hsbc-and-stonex-pilot-digital-gold-trades?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "HSBC, JP Morgan and StoneX have carried out the first live trades of fractions of physical gold bars, using it as collateral in legally binding wholesale market transaction.",
+    "date": "2026-11-24",
+    "id": "5274ac64507f",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "CommerzVentures launches €50m fund for AI fintechs",
+    "url": "https://www.finextra.com/newsarticle/48804/commerzventures-launches-50m-fund-for-ai-fintechs?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "German fintech investor CommerzVentures has launched a €50 million fund that will back early-stage firms working on the intersection of AI and financial services.",
+    "date": "2026-11-24",
+    "id": "58d549d15037",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Rain launches instant-issue physical cards",
+    "url": "https://www.finextra.com/pressarticle/111776/rain-launches-instant-issue-physical-cards?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "For a business launching or scaling a card program, physical cards are one of the most valuable tools to drive spend. On Rain, physical card transactions average nearly 2.5 times the value of virtual card transactions, while total spending per physical cardholder is 3.6 times higher.",
+    "date": "2026-11-24",
+    "id": "1bd7ace62819",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Farsight launches AI-powered integration in Capital IQ Pro",
+    "url": "https://www.finextra.com/pressarticle/111777/farsight-launches-ai-powered-integration-in-capital-iq-pro?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "Farsight, the platform bringing firm-native AI to global financial services firms, today announced that its integration with S&P Capital IQ Pro, the flagship platform from S&P Global Market Intelligence, is now live.",
+    "date": "2026-11-24",
+    "id": "3bde5f38d5a5",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada names FDX to deliver its technical standard - Open Banking Expo",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNTS1IZjA0b1NQUW9WVmlOd0NQM2tFV0tNLUo0NTFrRGlwMjlTZTZSNFFXbzcwWWxLbS1IM3ZhaE4wdnZ2YnhvclhkVGt5Rmw5VHBvSWkxRFh6ZVVQNUhHWjdjMm9OQkxNanFfeGhFdW1EeEgtdC04dkZiZjhBc3YzMVZZbkRwTFd4b2hCM1o5SGpEUQ?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada names FDX to deliver its technical standard Open Banking Expo",
+    "date": "2026-11-23",
+    "id": "98141ed34f57",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Why Canada's banks may not get more capital breathing room yet - Wealth Professional",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPb0R5NC1fSzI1dmttLXc4Zk82ellYeXFzdUNxbTNuZjdPRUJJZnMwYWktNTBlcUZJeWF5RTEzdUdRdlNDYzUzN2VfUC1JVEJYX21icDBCZlRuUWREUE8wT3BhU05Bd3NtbTZhaHNaM0RIeWFmOE1WcmdXVzJHZzI3N0t5UnRVbkd5aHdHVGdEaVhUMHhGdmJsQnB2RXJCQmNRM1dLQWU0eUxLWUI0TGtSREhkTVNTM0xPNEtuU0FR?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Why Canada's banks may not get more capital breathing room yet Wealth Professional",
+    "date": "2026-11-23",
+    "id": "ae1d9f2893a2",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "C.D. Howe panel urges OSFI to hold big-bank capital buffer at 3 per cent in December - ThinkPol",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPMHFNWXExUU5MZC14TGptcDZ0RG1NWjBUaWtScU02WGJMVExNeWxtbUliV3NyaHFTZzBwSnd5QlgtaUdPWHpEbnBycHo3dUFFd2NMZ3YycGNXR2VOdHlPa3h4TnVDb2t0aUo1ckQ1aGlTWXhvY2RHVDFHUVdfYlBTVFBkZXZFcGVRei1NZ2tQZGVLSXROYVVCcElDYnNNaG81ZTZlMDZrTW9hMy14OXZqRVhTbktrQQ?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "C.D. Howe panel urges OSFI to hold big-bank capital buffer at 3 per cent in December ThinkPol",
+    "date": "2026-11-23",
+    "id": "06be564ce2de",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Klarna Expands Visa Partnership to Offer Flexible Payments to More Merchants - marketscreener.com",
+    "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOWkc2ZDFFbnpFa2RTWnJiVmlFUVNZSGxwUk9FU2tTSm80ajlpMDVRVXpuMHA5NnRGTVlqXzZpXzBNV0pIRnNsblFBQXVpT3pHdWlUdjRQX0xjaHllS2pFT3lwZXhYRnppX1p3Ui02M0Z0UFZ6YkhMdUxxeWRMOWctNXV0MWhYYWZKbi01MGp3MVRmYmVaS3cyWFd2UEJrV1BrMU5tX055X2xGcTg4RjlBcExackZBZW1TSDBVUWdydG5VQ1BEcmlkaA?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Klarna Expands Visa Partnership to Offer Flexible Payments to More Merchants marketscreener.com",
+    "date": "2026-11-23",
+    "id": "603622d29117",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Klarna Expands Visa Partnership, Bringing Flexible Payments to More Merchants - TradingView",
+    "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNdVBPT1MxNy04cVBVX0w4cmszal9JTTBEdXZ3RnZBbFRrRFRYbjFhZVl3MnRQM0tpMllrckJYNnRvbjc0RS1HM3ViQmkycGVKdndjTUUxcjdFWlNZLXhIMkRTOFNvRmxKZFJxSVZfc3BwVmVwUTM5bUFHdzI1TkJfMXBRLWEwVlBscDRsTy03OExJX0I1Rlo0aTRFTEFFWWxiRnU1aGdPN2VudkNMd2pndFBDcE1TemdaNWRZeGlKUWF3RW1lQ1FqYzJiemNrTzY5ZTBOejdnOHpDLURwb0o4?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Klarna Expands Visa Partnership, Bringing Flexible Payments to More Merchants TradingView",
+    "date": "2026-11-23",
+    "id": "ee62404e5bae",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Klarna expands Visa partnership for merchant access - Investing.com",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQT1AyaEJELU1hQ2lXZ3FXRHRGOXlZNU1SN0hwWlVDZlhzVXEwdUJYNXFRVTNBLVp2dWc3UjBjTmJrZDVZYkdTeHZsZGpLZXZ4NGllUEIyVW5wZ3A4VXZ2dHV0NzZxSkpHdTZoT2lqM1dnVDkxUmJDU2xScm4tazE1WTlHZ3JLXzNyX0RpVFJ5bWpJMmlqaHdlcWNoN2JYNnU1RWZPZzN0UnRTT05f?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Klarna expands Visa partnership for merchant access Investing.com",
+    "date": "2026-11-23",
+    "id": "ba85e6810d17",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Klarna Expands Collaboration With Visa, Bringing Flexible Payments to Merchants Using Visa Acceptance Platform - STT Info",
+    "url": "https://news.google.com/rss/articles/CBMiigJBVV95cUxQVzlqQWZodjNsVmZJaEdjSlF3VjYwUVV0VlZrUzV2c3ppYmZlSkVGQV9xRHQzR19OWkxrMWFNVXFUN3J4OHp6MmpydnZwZE9KbTRDVUY5elh0ZVlkMHJtWWtEWGc1WmxibmtxaVViN3NnOGRReHc5VURqdmV4NkdPVzZ1ZWlvQTZPQVMzNVJWaFhBaFQzb2lIOHJEcE9iUGNrV241SUNCQl9vS1JDUS1Pd3ZGUHMxT1UxVnM0aGZDejg5dWFBQ2dMbnBIUHZCMlNEUHZLV3d4eTlHdlVfQ09VWjdhVkxBclFPNzRyblpmZ015UHZIaElSRlg2WnJ1Z2paVXlFdURtRXFUdw?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Klarna Expands Collaboration With Visa, Bringing Flexible Payments to Merchants Using Visa Acceptance Platform STT Info",
+    "date": "2026-11-23",
+    "id": "2f7930ee99c2",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Robinhood Expands Buybacks as Shares Hit a 12 Month Low - cwibc.co.id",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBTdFJpUjNqN01kLU80Q2JUSXYyNnAzNW8xN2gySzh3c3RkeWU0UFExa0VWZGwwVnQ1cjFQWFJZbG8xYm41MmhQWWhKUkNVVXAxbmVmcDFNNUV4Nnl2X0c1QW5uY2plQ2x1bzFiUmJnamdYQQ?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Robinhood Expands Buybacks as Shares Hit a 12 Month Low cwibc.co.id",
+    "date": "2026-11-23",
+    "id": "f7ae62e83037",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Robinhood Expands Buybacks as Shares Hit a Yearly Low - Demokratis.co.id",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1BbzlOdzN3WTl1bG1HSnFXN2RIYWlyRE9oNmEyQ0RMZ1RlbXN6YjlSSUt6eTN5dWQ3QzV3VzFINGdUdWJ5UFhUV0xCOTBORldodVdxdktaZktQc0NuNXA0NXpBRFhGbnp4VzNhX1hETEo1MGQ3M2I0?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Robinhood Expands Buybacks as Shares Hit a Yearly Low Demokratis.co.id",
+    "date": "2026-11-23",
+    "id": "e702aaf6fe94",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Robinhood Expands Buybacks as Shares Extend Their Decline - bsinews.id",
+    "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBNZEZNcGlVdEZPWFY3bWZLa210X2NXY3o3STl4QmFua2hUbjhDUXFzMmNmeVpnQ1JiUjU4b0ZlajlmMVVyQmVTY3dZWGZUcXFvc2pCS0FHOFRySHJJaldMeHA4Ym8?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Robinhood Expands Buybacks as Shares Extend Their Decline bsinews.id",
+    "date": "2026-11-23",
+    "id": "77fae2c84157",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "XTransfer Aims to Become the Visa of Cross-Border Payments for Businesses - Caixin Global",
+    "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQMnRNOUxMRjZVZUlpcGVvTjl4alV2VGFMRFluVEhtQ0RsMzJMcERCTHctYTFFZEhGMGVMUW9fT0NuZ05hU3BzX1J1eGZTY1R0MmRvMzlLUlNZMEtDb2lyZzNsUkFuWDV5aFJDVDZPWTlxekU5MWJ2U01KNkdEb2FTSzduZXVyd3FyemVzc0dlZDdWandRRXlFdXNHMzE0TWlxa2k4M1lLdHhwSTlYOE9PWVUwcVZwZGpFZVE0Z3hFRFNsaXY3U25r?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "XTransfer Aims to Become the Visa of Cross-Border Payments for Businesses Caixin Global",
+    "date": "2026-11-23",
+    "id": "c71632d32ed7",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Visa Crypto Labs launches new wallet that lets AI work and earn for you - Crypto News",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9md3RnQVNkS3pzTWp3cWZ4OUZGVEpqMGppMGtxakxnTEwwbkxtV0V5TDg1bkJfZHZpb3lwd2ttSnBfT1dlTlY0LVRDNWNjT0hRRUpST0ZqU3VCenlDaU90VHRnWkc4RzJ5Ym5mRHBMYlgwQTVUQV9v?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Visa Crypto Labs launches new wallet that lets AI work and earn for you Crypto News",
+    "date": "2026-11-23",
+    "id": "fe73875ae960",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Visa launches experimental AI agent wallet for eligible US users to earn OUSD from paid tasks - The Block",
+    "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxOclQ1YmJSNE9IR096WUg3WE02bnJBeTlMbkhxbW1QWDRkTlNYNEk5cmVHM1h1Y2pla0x4WnNfVl9vQU5odnNHQ05KLXp3VUM4QjUxbkJ3ZmhJOHRzbUtIN0Z1NXhyOWVtbjhmd0ttV3B3RDZra0ZWa1pnZzY4WVNOZExiejNpYjBZV1Rwdll3OFBzSkwyc1pqN1pwTExyM3UwVmJsbDVpTlpDQU94QkQwbEVNWldrcmFiRGl2UFNEQUtKcW5uVE5pUUNFOU1JT200T2t1Zy1KbXZmaXJNZnNwOEJQZw?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Visa launches experimental AI agent wallet for eligible US users to earn OUSD from paid tasks The Block",
+    "date": "2026-11-23",
+    "id": "fd1f0ea4ee20",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Visa Crypto Labs launches AI agent wallet that pays in OUSD - Cryptonews.net",
+    "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5YeHgyNnRfVVhFU1pVMFJjbktXdW5EdGVYeUM2Y1YxelNGREF3emZUZWE1MS1YRFVOcTJSbTZwc2tTdmVHbWkwYmNIQkp1cXQ3aGJrMFZsaw?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Visa Crypto Labs launches AI agent wallet that pays in OUSD Cryptonews.net",
+    "date": "2026-11-23",
+    "id": "c2f042a0f420",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Google Search PI: Wallet, Drive, Gemini Links (Nov 2026) - explainx.ai",
+    "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNTk5ZSGhTeXQ5UTRpa3VMOE5vNENUUEZvb0Y5QlVjODZXS193WEliTVFlZXVydFdBMWVDUV83QXdxNnA4YTV6U0lva1dwUGZRTHItQUpaN3NJR3A4V1pUblFsdHFRZXhWelQ0UXFZSnBUSGNhN1ZuUXVTT2lIclVrMlV2WUY?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Google Search PI: Wallet, Drive, Gemini Links (Nov 2026) explainx.ai",
+    "date": "2026-11-23",
+    "id": "9aa6973cedc2",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Temu and Mastercard Expand Payments Collaboration - 365 Retail",
+    "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5mSWR5M1ZyeWxIN2Z0YjBqT0tZRzZrOEt0VmZZdTlMUjNTOU53Nm1fdnZ0a3FiSG5vdEZ2YlVfVmVXWU04Wlp2dDBTRmlua200ZzVHTlpxeDlrb1BEOENRRHZ2c210d09OV3RkUlRzSkh3YVp2UV92WUxB?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Temu and Mastercard Expand Payments Collaboration 365 Retail",
+    "date": "2026-11-23",
+    "id": "acf5da865a57",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada gives open banking its rulebook as FDX becomes technical standards authority - Digital Journal",
+    "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNYXFYWU1sWWpKQzlEOEtuUlp2NWlSUXhpUUVpYV9vTm54RXdfaTVZSFo4OThLN01VVnUtNFYtdVdKeVZkR214QUlVcUNwUjlFeDJXeG9YSGE4TS11enRsUXVmanVabUNfc1V1cjZSbFlWV1pSWU5Bam0wYXVodHNUV2VYNjNWRVEyUm8xNTQ1a3lCZmNsT2E5eDA0NXNrdzJjbld0Y2xuSnU2Z1dNUlFMcEFFMnR6Uk9TMlQ4Yy1pYjA?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada gives open banking its rulebook as FDX becomes technical standards authority Digital Journal",
+    "date": "2026-11-22",
+    "id": "0c0356389bf7",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada appoints US-based Financial Data Exchange to set technical standards for open banking - BetaKit",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQVk1ZQWVxNHhMUjdBbFNNYU1JRmhZWXhCMU5zZlpuVlZoTm45RHc5THZPUEphLVNabUg5MzR5cFRrRVJjTUZTMWJrTzlDRGhZa0Z5UU9laVFyUHF3RHdMMWtQakYzTlAyNHQ0OGVsZ055MDNDNThOSTlmREp6dWlOWjFXcjh4OTZZV3IwMmhEb2twcWU2enNmSHpvbmtwTFh4SWtwUENuYm9qS1FfeGFGWDMyQ0xqQQ?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada appoints US-based Financial Data Exchange to set technical standards for open banking BetaKit",
+    "date": "2026-11-21",
+    "id": "e6c28edeec66",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada Consumer-Driven Banking Act: Bank of Canada Rules - JournalArta",
+    "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOWEMwM2RxRkYyeW90d0xVbkoxMm11b2pRSHNqLVAyajBHWktQNnU1dUMtdV9JaDBjT3p4eU5vb0JueUhQRlF2LXdjemsyZHh3ZUsyalFPdTZ5UmJORHFGbENITWlQNzhZOGNQUUpnZGhsVlFXWTRqd2NHSFRfTkJNSmg4UDlObGNnSG94QTViTUJWLWNQdGpyaXNCRlUyUQ?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada Consumer-Driven Banking Act: Bank of Canada Rules JournalArta",
+    "date": "2026-11-21",
+    "id": "eb85bcfaacd2",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Small banks get a hand from OSFI - Investment Executive",
+    "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOMi00QUFaT0w5WWtDaHhsLWZyTVp0S042SFVKZ1FnQ3E5V1g0Rnh4VDVzRmNlZE8weUQwak8tdzBVTnZ4WmdCbkVHMXFRUWhNSTgyYm5PQ05jVWtUTGpQYVJCMnRKTWljR0JqSVZ5Yjgwa2dXRWwtUWY1cEV1UzNnWXNnNzZ4dVhWb2pmSGhn?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Small banks get a hand from OSFI Investment Executive",
+    "date": "2026-11-20",
+    "id": "35b6d43d6f84",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Ottawa Taps FDX to Set Canada’s Open Banking Standard - Fintech.ca |",
+    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPeW1zSTBYb1ZNMTVpZUhqREtXemVTTlpMLXZnNkZ5NURjb0hkaFBldl8tMWttaVpBS25pSTNRQnIzTXVXNE5jUWx5Yl94ZWpTYk5jT21GTHp3dll4TXdtUDljX0Nvb1RPQThTV3pNLUdzMmFKb0RfQ1JDMjBrSXNrSGhIdF93My1mUklfdXpiZUw?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Ottawa Taps FDX to Set Canada’s Open Banking Standard Fintech.ca |",
+    "date": "2026-11-20",
+    "id": "8e642b19439c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Ottawa names FDX as open banking standards body - Investment Executive",
+    "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNQWtRMk1pMkM1WDVDSHktNXpCRG42NW1kY3ZNRTR6d1cweE1rUVVtOGh1QVFGWF96V3RpMmx4U2RJUXBORnJOUHdDUDdvNVhGd3lGNl9ySVF5dW1sTTlXYk13T1RWT1d5ZmNjc01mVDN4QUZUVFV2cXZuUDNoV09FV3hxYjd1VldEVnhxU2kyMmZtYm42dTJzYzNQc05MNFZLM3c?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Ottawa names FDX as open banking standards body Investment Executive",
+    "date": "2026-11-20",
+    "id": "581ef8b12ab2",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "OBSI Designated External Complaints Body for Canada’s Consumer-Driven Banking Framework - The Manila Times",
+    "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxQWTFtSTN0OHZMQmNzSFd5UzhOblcxVkk4WE5nRkt2aXVQZFpEaHRkb2RObWt4WFROaThRTzlYdDkxSDdkTlBLem42QXE3dmVKckg2OXcyZkZzczE3RUZhWld0YWwxdEs4UV83TDI0M3BDYnNUSEpUZUdnWVNibUQ3c2xES3JPaUpuV1A2YlVLUEdpRHZ1bDNSbXhWNlZURDVKWTU0cDBBcHdlYVpoRkVHMl9qbUZ1aXJoVHNiTXpIT2U4UEFFcC1EalBwT0pBX0dHMHJCcmIyWm82R1g1Xy1YYkFkWGsyQUtibC0zeHlXR2pxQdIB9wFBVV95cUxNQWhjc1JWR2h0QnNycFRYeU0xYUNrMEdYaHd4LWF3VFhCUERLSEZOSWZNc09HMXRPcVM1ak9EeGhEc0RlNGJwb3FmckxIOXpWVFAtdFJaV0xjNF9JVzlNWUtPRm91VTliSXhtWkpqVmJEXzd0bmpIUlc1cVNXeTFGZVloR2FkanFPZDZRTHl4a3p5MHJpX2UwSzk4bUV0NE0xSFdUUl8xQVZxT005R1pxUU1iZ3NmRVAtMERBbkVqZlE4Y0xXS1g2OHJYbG5pYW16cXJ4WkI4cXdKT0VBTm5yZEdCUUhNVUE3Y08yY0gtaWN4R2ZoOG1Z?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "OBSI Designated External Complaints Body for Canada’s Consumer-Driven Banking Framework The Manila Times",
+    "date": "2026-11-20",
+    "id": "e4098ec5df37",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada Designates OBSI as Banking Complaints Body - Wisevoter",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOQm04Ujk5ZHMxYnJsc1VYWE16VTlkS08zdTJDbUFfNktUdHl6aEdQY1FRVDJTSzV3ZUNWTm5ocmtNX0FpUVgyT0p6cTU4VEltZ0FEQzdTTFpEaU1FMlFJSjZUVHIyNDlmT0labkoyLUFWTzc2d0JzbmNnckY5T2xiZUt1WkJtQXVLM3FZUlFfbnVzUQ?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada Designates OBSI as Banking Complaints Body Wisevoter",
+    "date": "2026-11-20",
+    "id": "59e8916e7163",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Cyberattack may have exposed Chase Bank and Mastercard customer data - The Washington Post",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQOWw5Ml9NYmZNeTNiSlV4QUhBc0JuTzY1ZEVBX295eW5xYVlIeGpGY3J5Ulc0UEhvSW9iQnFtVVZNQ2p0UFdoLUJPTHh2OVNvTFlhRVlVV0ZMdU5rcE5pdzZtV0pYVnlDUENlNWlSMUhUbzBueWxIcHpEdWtJUmlXbjVhN1ZKOXFIa09HMGNsdTZtS01TbXJDdFBfTlVocDAxXzhsNkRiVzVQVWRRS3NZQmc0aFI?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Cyberattack may have exposed Chase Bank and Mastercard customer data The Washington Post",
+    "date": "2026-11-20",
+    "id": "413e8494a855",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "BC court expands class action targeting RBC over closet indexing fees - Wealth Professional",
+    "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPbDVxSXQzMDBKc00zOExJVkxvT3FzVW54c0xmdUVDSVRDR0V5TDNsTVA3V21qbFc3Q1BYUGxMOFFGa09sRkVFMVA3S2RKbDlERmppUU1wbndtdjBNMkNRN01RQ2xVUzcyWjBOTHc0eHNScWsyY25mTlZBQlZRUExIQ21Sd2x6aUxSdDZEQUNYV0xsbUxRWTc0dTROVlI1dkxIV3A2TmVxVlNfWE5SUGc5ZlhjZEU0eFF3YkpyWFhVS0xEcTdzb19jWQ?oc=5",
+    "source": "Google News · Canadian banks",
+    "summary": "BC court expands class action targeting RBC over closet indexing fees Wealth Professional",
+    "date": "2026-11-19",
+    "id": "2681853f209a",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada's banking regulator proposes easing capital rules for small banks in competition push - Reuters",
+    "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPNl8yb2E1MkhIX2JYNFZqb0JfTWt3dDdjZ0E3UDVTVFVIdUtVTzRsaGZRYjBmTzducUVLTjhiamt6dTJ1X1Ayck5fTExPRWVtSVc5dTBDTy1lbVJiX2Q5a1lRNG5tYUprOE9hVEs3UlpqdjBwUHp1cHBQVGZKbVZITmNzaTJrMmNlZE1rS2g3TGEtcHBES1F3bTloMUZ3WWV4LUNGUFQ1dTB5R3J3WmZ5MkRVS2dEWGlYUzMwejQ0eXJtV0ttVHdMdHQ4M0VDWG1L?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada's banking regulator proposes easing capital rules for small banks in competition push Reuters",
+    "date": "2026-11-19",
+    "id": "d57dfd89d727",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "OSFI cuts capital rules for small banks to boost mortgage competition - Mortgage Professional America",
+    "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNVHZOZm9jSzVjQmtkLVp6dEltazZVa0ZOaXV3QUtYblJ5WFpKb3gtVVFQeUloa0FrYlRHOUdVSUlaM2VSLWkzRmlYOW5oU1JNOHJFOVo2eGhpcHQ1c19DSU4wRzZmU2xoSmU0dDhKaUNZeU95MS1iSnM2bkcwdzlEYVBQdHpDeHVFV3BYb21qVDZHTTRlaVEtWVlKNVFvX2ZzM2QyNERwNmIwR21KNUt2VGxzV0dwU0FHMmMzeXp3Wk54RHdNcl9CUlFXVDlFdy1maWc?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "OSFI cuts capital rules for small banks to boost mortgage competition Mortgage Professional America",
+    "date": "2026-11-19",
+    "id": "a08fcbdb0b9c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "OSFI eases rules for smaller lenders to boost competition - Canadian Mortgage Trends",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNU3ZuUENXSDBlS3p3NGNKMGQ4QmttSk9rbXdRbFdlcHpiNHdEYkpDV3p6YUY3WFNSd0xUMC1oYmF2TFk1RHhHUlNLLUdmS0lxVUcwWEdmajUzcHhLR3RjWHJVYzV5UEtzaVJOcjVHWW5KM1ViS0tYNkJHeHpadEUzT0lRclhBaExiN2tGOEw1SkZ6RDhIZ2Q4ZFpxc211bjBwRGl0dENrZGU?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "OSFI eases rules for smaller lenders to boost competition Canadian Mortgage Trends",
+    "date": "2026-11-19",
+    "id": "0e5917ce09d6",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Anthropic’s Mythos signals AI risks are coming fast, says Canada’s top banking regulator - Financial Post",
+    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQSkpxT0NHRS1ZbFEyRi1aUW1LcVczQ080OUQzYW5uZUJZaGlJaXBVd1R5LVI4QW83U0dzUU5EOUpmY29TUnRBWW5oUU1wMU5BMHQxYlFsR0dmbVBjZnBVZDRJQlNLVk5peC1lUHJyeFZtRzlRZ3BBY3p1d2NJTzhkTEVMQzRuOVcwLUx5eHBvYzVzX0tvX0MzRUVB?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Anthropic’s Mythos signals AI risks are coming fast, says Canada’s top banking regulator Financial Post",
+    "date": "2026-11-19",
+    "id": "79767d7ea776",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Banking regulator trying to improve small banks’ ability to compete with the Big Six - Yahoo! Finance Canada",
+    "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPdXZXMk9aSlU5eTNvM3oweFNCbW1lSkdCbDZhZ2JmUFRqRG9IT1dCOU1XcGZ3RHh6YmhBdlpVdmdvTFJVY2xVbHRXZVVQNzNnbDBuWkVRbDJpcFJHWXl5WkMwaWI3akZ1cTNSdThQMEJqRXl0NnBCbUpVU3RONVZkTE1XOGNRa29sclh1VkVLUHg?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Banking regulator trying to improve small banks’ ability to compete with the Big Six Yahoo! Finance Canada",
+    "date": "2026-11-19",
+    "id": "9e19ffa7deac",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Bank of Canada's Macklem says he has spoken to Fed chair about risks from Anthropic's Mythos AI model - Financial Post",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPTGdUeGpzbG9VZHNKc21iM2pBYXRzNkZYVDlnMDlWMEc2VUp4ckJpb0pLS1FBdGlPTkhnMWlTTGdnQVdNYzFaRDhidXk0NDZ1aXEtSXhRbjZZZkVpMm9LZVZyZkZ6UmhpT1Rwd1lxVnZhdmk1cmpla01CR01heE5pUFhVQ2h6SGFaUWgybWZkaURMT00?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Bank of Canada's Macklem says he has spoken to Fed chair about risks from Anthropic's Mythos AI model Financial Post",
+    "date": "2026-11-19",
+    "id": "bcf222a71146",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "OSFI proposes mortgage capital relief for smaller banks - Canadian Mortgage Trends",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNSXJsMzNGMDliMGJPZmd6TTFPdmFnMG1SOWh4Z0tWckJqcXhxV0U5eHluYnVVbjFYdC1kQWg5V0JiNVlORDN2M3VFOGRtWTdBdnNNVzRRWk5SS0YzWHdDeThXUGFQX0RzYnViMzE0RThNUlc5RXR4RkJlb3pHMk0wX3VSaFBoSVFTNU9hd1V1OGZZNlZLZWpoRV9fdkd0WjhVX2ROYzhTNFhTZFV3S09FVGlfcnViQQ?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "OSFI proposes mortgage capital relief for smaller banks Canadian Mortgage Trends",
+    "date": "2026-11-19",
+    "id": "1e4a34da7935",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Banking regulator aims to level playing field between small and big banks - The Globe and Mail",
+    "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQVFFic2ZLckRtNXJqZWE1bGRuVE81Q0ZkRXdTdzJvUnRyYlZ4UGdlNmRkT1gyQzVwYmRZX09DS0tEV1ZWMWc0dTVBWU41SGZWMm9DYmkwWHJWTHB5enlzU1d3bTZaa3BrNlpmam4wQVBGZkZ0WWZYbXA5dTVSdVUycGRNUHJ6RkMxb0lEbkxxX01IZzFkX0V2ZmlfQ2xlWkRMSUkwbWpOLVA3TDJhZldubkhxMUVIcW5uWlE?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Banking regulator aims to level playing field between small and big banks The Globe and Mail",
+    "date": "2026-11-19",
+    "id": "89e28c40d92c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "OSFI B-10 Cloud Outsourcing Controls for Canadian Banks - JournalArta",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPbjNsYmtYYWp6ZFUwZUpoQlBISUxqMm1qLWNKUWNjcDRQeHNXbnJjOFFMRDlUZy1wTHRadWRaZm1LSnNHWm56c1U1YW5oSk9FbmFidC1VVUhQVGlJTVFXWG40Q1lfOHVTTm52U1BneXIzMnNXM2dhLUVVTnJaLWVfU0NMbHlidnpi?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "OSFI B-10 Cloud Outsourcing Controls for Canadian Banks JournalArta",
+    "date": "2026-11-19",
+    "id": "36d1bb35c5d5",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Google wallet returns to Apple - Payments Dive",
+    "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1NOWFxcmE0VHViTUJTeDRFTHQwbU5Zem80NmNsTzBSamx5eUxtcjZ1RWlwZmFETm0ybDdzZGlxQTBvV0dONVpneHBLRlhERlFDemxmd1BtOVdzWlplRERyS2stVlRYdUptSGVYbDJ4UXltMzdQaEJUT1AtZTk?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Google wallet returns to Apple Payments Dive",
+    "date": "2026-11-19",
+    "id": "06d78197e0f5",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "MiniPay Upgrades Its 20 Million Stablecoin Wallets on Celo to Stripe-Owned Privy Wallet Infrastructure - Celo.org",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQLWw4TXQ3dTY5ald0VzM5MnprejZzMVdVQlBuc3NJRngtX1ZWNGNCcDFQSV9xS01ZYS1TaWxVQ2Vza0ZraWdSaGtzS1E3cTdWM1gzSGZ2bkVCTjRadGFxSUV0XzU5cDV5ckQtNFVDS0F3S3JEOUM0OUdBbGkxUzd3OUZ5bW51SmFyaURHbTVBanNFRUxQVlVkT2UzRUpucVQ1VUk3VHJreUhWZzMyYVFITEpwbmd6YVVyYzdiVzF2MkhZZw?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "MiniPay Upgrades Its 20 Million Stablecoin Wallets on Celo to Stripe-Owned Privy Wallet Infrastructure Celo.org",
+    "date": "2026-11-19",
+    "id": "17d47157e3ed",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "What Controls Allow for Strong, Governable AI-Assisted Infrastructure Modernisation?",
+    "url": "https://www.finextra.com/videoarticle/3645/what-controls-allow-for-strong-governable-ai-assisted-infrastructure-modernisation?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "In this Sibos interview, ACI Worldwide's Bridget Hall discusses the progress of instant payments and AI modernisation, following a session talk.",
+    "date": "2026-11-19",
+    "id": "562a8820fde9",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Vegas Golden Knights Secure 10-Year Extension of RBC City National Bank Partnership - NHL.com",
+    "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPTkpTMzJkUE9MZFRRY1hVempXWE5iLUhvZjRqN0dSZmQwUWFhRTNqUGhJVWZyZlRqZ2ZGODFUUVRYRkZTc0I4VkRyRGg3Z2phTEw2QnAyWm40a0tITmtfakttX3pRVGFPRHRhSkxfQjhDc1BlbkhSSklicDMwaVU0WnpWQXowR00zUi01cm9aNzJKVzVZa1dMNEo5YXMxc0pGVlJvdVZDTGJwRjJUMzFMSmZ4NUhVQTNYODZHMllVZw?oc=5",
+    "source": "Google News · Canadian banks",
+    "summary": "Vegas Golden Knights Secure 10-Year Extension of RBC City National Bank Partnership NHL.com",
+    "date": "2026-11-18",
+    "id": "02a4d0ba6e4e",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada’s consumer-driven banking framework advances with draft accreditation guidelines - McCarthy Tétrault",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxONHRNUG1qajg2WjlNcUJsdmhvRVJmazZLY0J1MnJ6TlNoT1V0Sjc4ZUk5TW9RTkt6RmVPQjZGNXJ0WXpUWS1iMkxpaXMzOXNOZmlFR0ZNTGNFNklpZnMySGJZZXc5UFFNeUJ4SVU2eURnRXVuRGZFaUZuSGduZTIxWjRDeGMxWUVqVFRqSWRRUXBybF84Q2NzelJNdHNISGJlV0VoOVR6dG1IZDZpNWsyRDRYUWZxYlRwakstbFBFSFhqQW1MNmVUMl9nakp4OVJQYlQ0?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada’s consumer-driven banking framework advances with draft accreditation guidelines McCarthy Tétrault",
+    "date": "2026-11-18",
+    "id": "30ede1e540d2",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Cardano's Visa Debit Card Goes Dark as Wirex Exits Custody, ADA Sits 95% Below Peak - BigGo Finance",
+    "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1WVXZmWFdacXNGbzRSTEFxT1I4RzZxY2JQOWJaU2k1ZXBjemJXSExxUjFRN0tubHVULUhqRTQzQy02NUtKN0lobHhVbTd5VGtMcllOdEQ2aDRwMkZraVJMVURWRVJTV2RTTWQySnYyaHBaZ1BQcmc?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Cardano's Visa Debit Card Goes Dark as Wirex Exits Custody, ADA Sits 95% Below Peak BigGo Finance",
+    "date": "2026-11-18",
+    "id": "235ae7589d06",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Google Wallet comes to your iPhone – but without this feature - ZDNET",
+    "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE5RR0dKSWtNVVR2Q1cyTW5kb3JITDRPVnlfMXRRZDR6VnB0dC1kMnZ1c0hsS0FTdDRBUFNjRFJHMGZGczItLXRvdndZZVdNLWtSb0ZwbWRWOHJYWkUzQVBlSVl4ZDdJbW5yRlZVcGY1aXNuSThF?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Google Wallet comes to your iPhone – but without this feature ZDNET",
+    "date": "2026-11-18",
+    "id": "6de39afbf271",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Visa Targets Secure AI Agent Payments Through Expanded Industry Partnership - Yahoo Finance",
+    "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOX09YX2lzd0lIZmJVbXRGYUluaC13djlmQmtDMllLSV9tMmhISjMwZXRXWDBPXzEyYzIzMk9sU3FmTGRpbEozSzBzMFhraTRGaVpWdjlxdlRHRW42bjQ1TGgwcmRIZDdtWmZXMmhBWDZrakp0RGVIU0hLanlVWWxvNVFaQ3NCOWEwdWlTbU9SUmJzWXVHdXU4?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Visa Targets Secure AI Agent Payments Through Expanded Industry Partnership Yahoo Finance",
+    "date": "2026-11-18",
+    "id": "ad11003dfddb",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Prospect Markets Launches College Football Event Contracts and Visa Debit Funding on U.S. Platform - TMX Newsfile",
+    "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPemdLcVpEOGtrWmJ2MVFiMTBHcTUxWWJpX1NxV1hfZ0VFOUJIQzVSUEpqRDEwRkZSQkdaanZraWdRRGRUQXcxYzl4dHk4cVZDVVlUOVFraHl0Rmlva0NNaDhJb2hfTUpnbG1RdVBlV0Y1ak9DOHJ6NFVGZGlFb1VLbDZGZ1VjdGg4NGxqT2JVT216aTk0UjRGNUROUk1uYmhIak54VFFlZ3hUQV9qeUxSRFRXc1BnVURhWlZZODdFTDNWUWEwQmJndU9tazB6dENudnlEMWFGQjR5QQ?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Prospect Markets Launches College Football Event Contracts and Visa Debit Funding on U.S. Platform TMX Newsfile",
+    "date": "2026-11-18",
+    "id": "7695805141f7",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "iFAST Global Bank Expands Multi-Currency Visa Debit Card Access to Overseas Customers - The Manila Times",
+    "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxORHQtVF9FckJSUWZNd3JMQnJ0bXVBRkpRVm5rX3BINks3YzZ5Mkh3YURzS19tbzVyNmwwTDJmejkzU2I2X2E1OEktV2lDTl9CS2thWTF6TlBvY2xJYTNuN3p2b21tMHpsNk9tXzVxZW9OQ0FtS1E4S2l1ZUt2clBsendsaFVHRVNQaGpmRDVvNE5oMFYtZFFXZExVdE1kN18yN09jTzRrRjhUSE5HaFk2LV9NN19jMDROalJDSm53WE5jckRHR29Valp2REY3SFRiZE1oU0RDN1p3NXRKbnRmcUFLQm05TVhrWV9NX21hUXHSAfYBQVVfeXFMTVhxOVRWWjF0aG5tTTc1aDM1clZ5YVhaUzlRbUxYanpJTmNLZkliZ1JBc2EtTDdYZUJLYTFnemw0cEFnS0wzSGpiWWpobjdrZTFaekUxTlN4eHphNmRYUW0ya3IwZzhwaDJSRmwyeVpWVnBobFJUUy1NNnZUVFh1UGpDYnpLeXpEN0hjTk1YdzhRcGhSZ2dvUjRZM0hxSVBRWlNaN3UzLVlIRC1WOUZubEhuczNGdmg0R2VrZEloV2pMOVk5bUxuWHFGNmhmYkJLRzVrYVlVOFl5cTF4OUNiVHlPYkJqdDVtVmtxRFpxM0RMUnRGeGhR?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "iFAST Global Bank Expands Multi-Currency Visa Debit Card Access to Overseas Customers The Manila Times",
+    "date": "2026-11-18",
+    "id": "d1d3f811bce1",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "How Stablecoin-Linked Cards Could Change the Future of Everyday Payment Funding",
+    "url": "https://www.finextra.com/videoarticle/3647/how-stablecoin-linked-cards-could-change-the-future-of-everyday-payment-funding?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "In this interview, Paymentology's Jeff Parker discusses the demand for and management of stablecoin-linked cards.",
+    "date": "2026-11-18",
+    "id": "c7abd82c2e16",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "1 in 10: How The Future of AI Usage in Payments Transactions Will Evolve",
+    "url": "https://www.finextra.com/videoarticle/3648/1-in-10-how-the-future-of-ai-usage-in-payments-transactions-will-evolve?utm_medium=rssfinextra&utm_source=finextrafeed",
+    "source": "Finextra",
+    "summary": "In this interview, Mastercard's Linda Kirkpatrick discusses the impact of trust on the AI conversation, and how, across decades in her role, she has witnessed the industry change.",
+    "date": "2026-11-18",
+    "id": "f387e0a6d392",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada’s real-time rail payment system has arrived. Here’s why most consumers will have to wait to use it - BetaKit",
+    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOR2ZTajVrQ0poZ2ZUSVlvZGI1ckl0ZHNPZHNIZ1BwNkZmNndpbUk2VE9qa1FuOTVubUpfSEl0Z1JCWjlrd1Q2bHBDRkdQeWpHUzZ6X1N3SkpoVWtHUzJpal9zWVdHRVI3ZGhSWWsxc0pxREdXdENaUlptRnBXamNoNWJJel83elVDeFJnSEhSWkh0OTI4dTMyS1NsYk84X0FMSXMtbGR6NURub0E5eDR4NVBKdEZVLXRFbXMwNU5YWE5JazA5VmtrRDJIOXVPdw?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada’s real-time rail payment system has arrived. Here’s why most consumers will have to wait to use it BetaKit",
+    "date": "2026-11-17",
+    "id": "a48d6a865bbe",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "What Canada's new real-time payment system means for the banks, your wages and your chequebook - Financial Post",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQSVRHSUpsR2hra0hhUW9nNXdDTWM2dk9DTVpPNDA3T0lZeFVQcDM0THRCaUFxN3RrczFWcnZYUERpSHhqbDRqY01IS2txRUF1a1lDSDFhd3o3UmkySVowdDNqa0dmYjJYOFVoUllKdXBpd0xFOUExTVRDRTZqT2duYll4c0Fla2I3Y1ZEXw?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "What Canada's new real-time payment system means for the banks, your wages and your chequebook Financial Post",
+    "date": "2026-11-17",
+    "id": "dc022c31b9c9",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Real-Time Rail Canada: Does It Speed Up Currency Exchange? - Knightsbridge Foreign Exchange",
+    "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQVmszdElOaWJJZmtSNFVTclNUSHVHd3V4XzNjaHUwaFZBQkp3TnM4Rkt0ZmpWS1ZlYjF3RDV6UHdMMVFlTjZIZWdGTjdKUEJXdy1wMDQxVF9UeXNzZENvRFdYMUNPdFJMR1FGRld5MkVoNHVlcVZTZWlobXBqam1UcE15VXV0VTlUZDh5YkRfVUJlVHVjZVN6amJ3?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Real-Time Rail Canada: Does It Speed Up Currency Exchange? Knightsbridge Foreign Exchange",
+    "date": "2026-11-17",
+    "id": "063fc30f2374",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Wise Expands Overseas Transfers Across Five Partnerships - Fintech Singapore",
+    "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE8zMllOREVhMXp1cjVJMEphczJ2dHhIR29nUTJ6VlF2ME9QZzVORWRqMlpEbEl0TzNwb29NYTUyUEFoNjdOMGYzTURFTDFSYXFWZ2s1VVBGUi1RR1FGdi05bDNpRk1VYllZQnBJZ2tGTVZkUWN4UEQ1bmJNdjU?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "Wise Expands Overseas Transfers Across Five Partnerships Fintech Singapore",
+    "date": "2026-11-17",
+    "id": "ac5c1e11306c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "The Google Wallet app is now available on iOS - 9to5Google",
+    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBPelZNdnRrU0JjWjRqdE9aUTJQMk1SNVVCd1g4dzZDYnlWZHU2NFVBblJGdmhQRlRzcG9qeUs2ak4zMnZnaEFWSkY3ZUJlSnNrODkyOXdkVTJEVkxvR3dYSVROS3NhdXc?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "The Google Wallet app is now available on iOS 9to5Google",
+    "date": "2026-11-17",
+    "id": "f3d3d48641ac",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Google Wallet is now available on iOS in the U.S. - blog.google",
+    "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOZ3d2UkNsX1V3WnhOT1RDQjlUVlkwcU00blZON1A2UDYyWkl2V0RxeEdkOVo2eHFJa2h6andWN1JqLTQtOGJEc19XWmlYbzBGT3VsTDdXTEU2SmJ5dnVNZlEzblF0OVlROUNhZGxYQlBXOUNQby11NXU1SUdNaWZocXVUa3JFeTY3ZU5EbGRROGpyd3dsUkNtYXQ1NW9vc2Rn?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Google Wallet is now available on iOS in the U.S. blog.google",
+    "date": "2026-11-17",
+    "id": "8a69bd969d5a",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Google Wallet arrives on iPhone, but you'll still need Apple Pay at the register - AppleInsider",
+    "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOd2FVWjFRekhzNEU0aGN0bEozd2o1d1AxVzVfQ016VjRLV3I1TnY2NmNrcUpJTlZTbjNBUGF4dHNucnFISGd4Z1NrcXF4WFVteDZLYmdOXzdvUEdRY3FTSUo2aWxvQTgwc3Y0cWJlNU5Gejc4ZURQX3QwbGlNU0o3Q0tlYmNYQ2E5VEIyRzhpbncwWVRRWVBLdkVzXzFOSzIzd3Rya3lZN00tY05LanBidkotaE9neURZQ3UtOEFn?oc=5",
+    "source": "Google News · Big Tech & payments",
+    "summary": "Google Wallet arrives on iPhone, but you'll still need Apple Pay at the register AppleInsider",
+    "date": "2026-11-17",
+    "id": "268d5dc7b1df",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Air Transat Launches New Loyalty Program with Desjardins and Visa - Milesopedia",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOOHVjYjMwYURvbUFubDl4MnFkak1UX2ZocDlQblplMTlfZS1DY01ab3hKb0pYX1hGZ1JrWlFXNHpDRWdjN05OeVREQ1dGR2NkRlNjWDI0VmFZeXhoRWhfV2l4dlM2Q2ZINFFmUzUwbWw2NXhoWkZwLVlJdmRzZmRuOXRkeHRLZmRJanlrT01XWEtVTTQ?oc=5",
+    "source": "Google News · Canadian banks",
+    "summary": "Air Transat Launches New Loyalty Program with Desjardins and Visa Milesopedia",
+    "date": "2026-11-16",
+    "id": "977aac9ea515",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "CIBC to launch Anthropic Canadian Depositary Receipt following U.S. IPO - Nov 16, 2026 - PR Newswire",
+    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQMmhPSzN5TTJVVHUyQVRjQ3d3VjRFcVlscm1ibzhJSUt0TTJpM0Y3bGFqMWp3OHpCZnZMaUJLNkhENjgyOXJnOTA2a291RmlpMDRMc29EUmExZGRjUWlIQmNPVjF2MjlaTHVmdnRSa0lzaTljb05sOGJOTEZwYXdKc3BmRmJtcWoxeVZkTWtRSTJJNVRvSWhrUENBNm1XeHFTTTRfbVZ1RWRhZGF2?oc=5",
+    "source": "Google News · Canadian banks",
+    "summary": "CIBC to launch Anthropic Canadian Depositary Receipt following U.S. IPO - Nov 16, 2026 PR Newswire",
+    "date": "2026-11-16",
+    "id": "70bdfdfa7f1c",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "Canada is finally getting real-time payments. Will your bank be ready? Here’s who’s already on board - Yahoo! Finance Canada",
+    "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNeE9WU0NFaUlxU2VhVFMwa1EtYkJuRG5WLVBPNmt0NjZzSEl1d3c2Z0wyc1dBMmk0QUlFZDBuY2FsQzlMN2g2aGhVM0x4Sm1QNzlZWW9MdHEyV2ZUcGVfM1dYRnZWTHV2ZmVNUVVIVERkaTN1VEJVbnVMS1BOd2xrRlZVTnJnSmQ3?oc=5",
+    "source": "Google News · Canadian regulation & payments",
+    "summary": "Canada is finally getting real-time payments. Will your bank be ready? Here’s who’s already on board Yahoo! Finance Canada",
+    "date": "2026-11-16",
+    "id": "279fe9ca4e1b",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  },
+  {
+    "title": "N26 and Franklin Templeton to Launch Digital Retirement Account in Germany - The Fintech Times",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNTUtpTEpsS3cyUEg1Y2F5aHVGV2lsX3FNSUFSdXp3aDl4TlF6ai05dmZ0UU5PaEFSNlR1eHZzcXlRcy1ZMkpRVTVJOUxFSVUzcVNqeVR0QTJjRDNoc0R3cFlXUUU4LVJxOGk1REJPNS1BVHhDNUlKVEFWNnVLejhOQmg3THRNUU1lTFRxdVY2SndOaVRubU95Vm5MN1hJWkpPN0pjVVVB?oc=5",
+    "source": "Google News · International digital banks",
+    "summary": "N26 and Franklin Templeton to Launch Digital Retirement Account in Germany The Fintech Times",
+    "date": "2026-11-16",
+    "id": "1c93dd53dbca",
+    "firstSeen": "2026-11-25T16:52:04.040Z"
+  }
+]
